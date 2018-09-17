@@ -1,43 +1,32 @@
 <template>
 	<div class="container">
-		<h5>Receiving</h5>
-		
+		<h4>Receiving</h4>
 		<div class="loading" v-if="loading">Loading&#8230;</div>
 
-
-		<div class="col-auto">
-      <div class="input-group mb-2">
-        <div class="input-group-prepend">
-          <div class="input-group-text">||||</div>
-        </div>
-					<input type="text" class="form-control border-secondary" v-model="barcode" v-on:keyup.enter="enterRoute()" placeholder="Enter barcode no." v-focus />
-      </div>
-    </div>
-
+		<el-input placeholder="Enter barcode no." v-model="barcode" @change="enterRoute()" autofocus="true">
+			<template slot="prepend">||||</template>
+		</el-input>
+		<hr>
 		<vue-good-table
 		:columns="columns"
 		:rows="temp"
-		:search-options="{
-					enabled: true,
-				}"
-				:pagination-options="{
-					enabled: true,
-					perPage: 10,
-				}"
+		styleClass="vgt-table condensed"
+		:search-options="{enabled: true,}"
+		:pagination-options="{ enabled: true, perPage: 10,}"
 		>
-				<template slot="table-row" slot-scope="props">
-					<span v-if="props.column.field == 'action'">
-						<div class="btn-group" role="group" aria-label="Basic example">
-							<router-link to="/view-routes" v-on:click.native="getRoute(props.row.document_code)" class="btn btn-secondary btn-sm">Route </router-link>
-						</div>
-					</span>
-					<span v-if="props.column.field == 'tr'">
-							{{ secondsToHms(props.row.routes.map(fields).reduce(sum, 0)) }}
-					</span>
-					<span v-else>
-						{{props.formattedRow[props.column.field]}}
-					</span>
-				</template>
+			<template slot="table-row" slot-scope="props">
+				<span v-if="props.column.field == 'action'">
+					<div class="btn-group" role="group" aria-label="Basic example">
+						<router-link to="/view-routes" v-on:click.native="getRoute(props.row.document_code)" class="btn btn-secondary btn-sm">Route </router-link>
+					</div>
+				</span>
+				<span v-if="props.column.field == 'tr'">
+						{{ secondsToHms(props.row.routes.map(fields).reduce(sum, 0)) }}
+				</span>
+				<span v-else>
+					{{props.formattedRow[props.column.field]}}
+				</span>
+			</template>
 		</vue-good-table>
 
 	</div>
@@ -101,14 +90,6 @@
 				}
 	    }
 	  },
-		directives: {
-		  focus: {
-		    // directive definition
-		    inserted: function (el) {
-		      	el.focus()
-		    }
-		  }
-		},
 	  mounted(){
 			this.initReceive();
 	  },

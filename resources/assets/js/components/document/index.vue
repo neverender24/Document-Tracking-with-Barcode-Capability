@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
-		<h4>My Documents <router-link to="/add-documents" class="btn btn-round btn-primary btn-sm">Add</router-link></h4>
-		
+		<!-- <h4>My Documents <router-link to="/add-documents" class="btn btn-round btn-primary btn-sm">Add</router-link></h4> -->
+		<h4>All Documents <a href="#" @click="openAddDocument = true">Add</a></h4>
 		<div class="loading" v-if="loading">Loading&#8230;</div>
 
 		<vue-good-table
@@ -40,54 +40,54 @@
 	export default
 	{
 	  data(){
-	    return{
-				columns: [
-					{
-						label: 'TR',
-						field: 'tr',
+	    return {
+			openAddDocument: false,
+			columns: [
+				{
+					label: 'TR',
+					field: 'tr',
+				},
+				{
+					label: 'Code',
+					field: 'document_code',
+					type: 'number',
+				},
+				{
+					label: 'Title',
+					field: 'document_title',
+					filterOptions: {
+						enabled: true,
 					},
-					{
-						label: 'Code',
-						field: 'document_code',
-						type: 'number',
+				},
+				{
+					label: 'Type',
+					field: 'document_type_prefix',
+					filterOptions: {
+						enabled: true,
 					},
-					{
-						label: 'Title',
-						field: 'document_title',
-						filterOptions: {
-							enabled: true,
-						},
-					},
-					{
-						label: 'Type',
-						field: 'document_type_prefix',
-						filterOptions: {
-							enabled: true,
-						},
-					},
-					{
-						label: 'Created On',
-						field: 'created_at',
-						type: 'date',
-						dateInputFormat: 'YYYY-MM-DD',
-						dateOutputFormat: 'MMM Do YY',
-					},
-					{
-						label: 'Action',
-						field: 'action',
-					},
-				],
-	      lists:{},
-	      loading: false,
-	      temp: [],
+				},
+				{
+					label: 'Created On',
+					field: 'created_at',
+					type: 'date',
+					dateInputFormat: 'YYYY-MM-DD',
+					dateOutputFormat: 'MMM Do YY',
+				},
+				{
+					label: 'Action',
+					field: 'action',
+				},
+			],
+			lists:{},
+			loading: false,
+			temp: [],
 	    }
-	  },
+	},
+	mounted(){
+	this.getResults();
+		this.getUser();
 
-	  mounted(){
-	  	this.getResults();
-			this.getUser();
-
-	  },
+	},
 	  methods:{
 	        getResults() {
 	          this.loading = !this.loading

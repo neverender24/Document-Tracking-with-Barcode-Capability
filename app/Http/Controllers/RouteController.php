@@ -72,7 +72,7 @@ class RouteController extends Controller
 			
 		$edit = Route::where('barcode', $barcode)->whereNull('receive_at')->where('release_to','=', \Auth::user()->office_id)->update([
 			'receive_by' => \Auth::user()->id,
-			'office_id' => \Auth::user()->office_id,
+//			'release_to' => \Auth::user()->office_id,
 			'receive_at' => \Carbon\Carbon::now()->toDateTimeString(),
 		]);
 
@@ -108,9 +108,9 @@ class RouteController extends Controller
 					$create = new \App\Route;
 					$create->release_at = \Carbon\Carbon::now()->toDateTimeString();
 					$create->barcode = $sub['code'];
-					$create->user_id = \Auth::user()->id;
+					//$create->user_id = \Auth::user()->id;
 					$create->released_by = \Auth::user()->id;
-					$create->office_id = \Auth::user()->office_id;
+					//$create->office_id = \Auth::user()->office_id;
 					$create->release_to = $office;
 					$create->remarks = $remarks;
 					$create->save();
@@ -123,7 +123,7 @@ class RouteController extends Controller
 
 	public function store(Request $request)
 	{
-		$request['user_id'] = \Auth::user()->id;
+		$request['released_by'] = \Auth::user()->id;
 		$request['office_id'] = \Auth::user()->office_id;
 		
 		$create = Route::create($request->all());

@@ -68,11 +68,11 @@
 			<div class="form-group">
 				<input type="text" class="form-control" v-model="list.document_code" readonly>
 			</div>
-			<div class="form-group">
+			<!-- <div class="form-group">
 				<barcode v-bind:value="list.document_code">
 			    	Scan barcode!
 			  	</barcode>
-			</div>
+			</div> -->
 
 			<div class="form-group">
 				<textarea type="text" class="form-control border-secondary" placeholder="Title keywords" v-model="list.document_title" rows="5"></textarea>
@@ -86,7 +86,6 @@
 			<div class="col-md-12 col-sm-12 col-xs-12 form-group">
 			  <span class="btn btn-primary" @click="validate">Save</span>
 				<span to="/print" class="btn btn-danger" @click="print">Print</span>
-			  <router-link to="/view-documents" class="btn btn-danger">Cancel</router-link>
 			  <span class="btn btn-success" @click="addSubDocuments" id="subDoc">Sub-Documents</span>
 				<span class="btn btn-success" @click="addSteps">Add Route</span>
 			</div>
@@ -99,9 +98,11 @@
 	import VueBarcode from 'vue-barcode';
 
 	export default{
+		props: {
+			list: {}
+		},
 		data() {
 		  return{
-		    list:{},
 		  	barcodeValue: 'test',
 				subDocuments: [],
 				process: [],
@@ -118,14 +119,6 @@
 		},
 		mounted(){
 			this.init();
-			//this.list = this.$root.list;
-			this.loading = !this.loading
-			axios.post('/edit-documents', {"id":this.$root.list.id})
-			.then(response => {
-				this.loading = !this.loading;
-				this.list = response.data
-				return response;
-			})
 			this.selectDocumentType();
 			this.selectOffice();
 		},
@@ -162,7 +155,7 @@
 					return false
 			},
 			save(){
-				 axios.patch(`/documents/${this.list.id}`,[this.$data.list, this.subDocuments, this.removed, this.removeRoute, this.process])
+				 axios.patch(`/documents/${this.list.id}`,[this.list, this.subDocuments, this.removed, this.removeRoute, this.process])
 				 .then((response)=>{
 						this.$router.push({ path: 'view-documents' })
 						this.$snotify.success('Document Updated Successfully')

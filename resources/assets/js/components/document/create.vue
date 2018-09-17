@@ -1,6 +1,5 @@
 <template>
-	<div class="container">
-
+	<div>
 		<div class="alert alert-danger d-none" role="alert">
 				<span v-if="errors.length">
 					<b>Please correct the following error(s):</b>
@@ -70,11 +69,11 @@
 			<div class="form-group">
 				<input type="text" class="form-control" v-model="list.document_code" readonly>
 			</div>
-			<div class="form-group">
+			<!-- <div class="form-group">
 				<barcode v-bind:value="list.document_code">
 			    	Scan barcode!
 			  	</barcode>
-			</div>
+			</div> -->
 
 			<div class="form-group" >
 				<textarea type="text" class="form-control border-secondary" placeholder="Title keywords" v-model="list.document_title" rows="5"></textarea>
@@ -89,7 +88,6 @@
 			<div class="col-md-12 col-sm-12 col-xs-12 form-group">
 			  <span class="btn btn-primary" @click="validate">Save</span>
 			  <span to="/print" class="btn btn-danger" @click="print">Print</span>
-				<router-link to="/view-documents" class="btn btn-danger">Cancel</router-link>
 			  <span class="btn btn-success" @click="addSubDocuments" id="subDoc">Sub-Documents</span>
 				<span class="btn btn-success" @click="addSteps" id="sub">Add Route</span>
 			</div>
@@ -161,8 +159,10 @@
 					return false
 			},
 			save(){		
+					this.loading = !this.loading
 			    axios.post('/documents',[this.$data.list, this.subDocuments, this.process]).then((response)=> 
 			        {
+								this.loading = !this.loading
 								this.$router.push({ path: 'view-documents' })
 								this.$snotify.success('Document Added Successfully')
 			          this.$parent.list.push(response.data);

@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-
+	<div class="loading" v-if="loading">Loading&#8230;</div>
 		<div class="alert alert-danger d-none" role="alert">
 			<span v-if="errors.length">
 				<b>Please correct the following error(s):</b>
@@ -13,11 +13,18 @@
 
 				<!-- Generate Sub-Documents -->
 			<div class="container document d-none">
-				<h6>Scan Documents</h6>
+				<h6 v-if="list.subDocuments.length > 0">Scan Documents <small style="color: red;">TIPS: Hit enter/barcode to add new document.</small></h6>
 				<table class="table">
 						<tbody>
 								<tr v-for="(row, index) in list.subDocuments">
-										<td><input type="text" class="code form-control form-control-sm border-secondary" @blur="removeEmptyDocument(row,index)" v-on:keyup.enter="addSubDocuments(row,index)" v-model="row.code" v-focus></td>
+										<td>
+											<input type="text"
+											  class="code form-control form-control-sm border-secondary" 
+												@blur="removeEmptyDocument(row,index)" 
+												v-on:keyup.enter="addSubDocuments(row,index)"
+												v-model="row.code"
+												v-focus>
+										</td>
 										<td><input type="text" class="form-control form-control-sm" v-model="row.title" disabled></td>
 										<td>
 												<a v-on:click="removeSubDocument(index);" style="cursor: pointer"><span class="fa fa-trash fa-lg" style="color:red"></span></a>
@@ -30,17 +37,27 @@
 
 			<!-- Generate First Route -->
 			<div class="container route d-none">
-				<h6>Route to</h6>
+				<h6  v-if="list.process.length > 0">Route to</h6>
 				<table class="table">
 							<tbody>
 									<tr v-for="(row, index) in list.process">
 											<td>
-												<select class="form-control form-control-sm border-secondary"  name="offices[]" v-model="row.office_id" v-focus>
+												<!-- <select class="form-control form-control-sm border-secondary"  name="offices[]" v-model="row.office_id">
 													<option value=''></option>
 													<option v-for="(value,key) in offices" v-bind:item="value" :value="value.id">
-														{{ value.office_name }}
+														{{ value.office_prefix }} - {{ value.office_name }}
 													</option>
-												</select>
+												</select> -->
+
+												 <el-select v-model="row.office_id" filterable placeholder="Select" size="mini">
+													<el-option
+														popper-class="select-office"
+														v-for="item in offices"
+														:key="item.id"
+														:label="item.office_prefix"
+														:value="item.id">
+													</el-option>
+												</el-select>
 											</td>
 											<td>
 													<a v-on:click="removeStep(index);" style="cursor: pointer"><span class="fa fa-trash fa-lg" style="color:red"></span></a>
@@ -51,24 +68,108 @@
 				</div>
 				<!-- End Generate Sub-Documents -->
 				</div>
-					<div class="col-md-6 order-md-1">
-					<h3>Releasing</h3>
-			<div class="form-group">
-				<textarea type="text" class="form-control border-secondary" v-model="list.remarks" placeholder="Enter Remarks" v-focus></textarea>
-			</div>
+			<div class="col-md-6 order-md-1">
 
-		
+				<h4>Releasing</h4>
 
-			<div class="col-md-12 col-sm-12 col-xs-12 form-group">
-			  <span class="btn btn-primary" @click="validate">Save</span>
-			  <router-link to="/view-documents" class="btn btn-danger">Cancel</router-link>
-			  <span class="btn btn-success" @click="addSubDocuments" id="subDoc">Add Document</span>
-				<span class="btn btn-success" @click="addSteps">Add Route</span>
-			</div>
+				<div style="margin-top: 20px">
+					<el-radio-group v-model="radio" size="small">
+						<el-radio-button label="Good"></el-radio-button>
+						<el-radio-button label="With Remarks"></el-radio-button>
+						<el-radio-button label="Return"></el-radio-button>
+					</el-radio-group>
+				</div>
+
+				<div v-if="radio=='With Remarks'">
+					<el-input
+						type="textarea"
+						:autosize="{ minRows: 5, maxRows: 10}"
+						placeholder="Enter remarks"
+						v-model="withRemarks"
+						>
+					</el-input>
+					<p style="color: red;"><small>TIPS: State any remarks separated by semicolon (;). You can type your return remarks here if not available in choices</small></p>
+				</div>
+
+				<div v-if="radio=='Return'">
+					<el-checkbox-group v-model="checkList" v-if="radio=='Return'">
+						<div class="row">
+							<div class="col-6">
+								<el-checkbox label="Incomplete Supporting Documents "></el-checkbox>
+							</div>
+							<div class="col-6">
+								<el-checkbox label="Incomplete Signatories "></el-checkbox>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<el-checkbox label="Uncertified Photocopies "></el-checkbox>
+							</div>
+							<div class="col-6">
+								<el-checkbox label="Inappropriate Charges "></el-checkbox>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<el-checkbox label="Incorrect mathematical computations "></el-checkbox>
+							</div>
+							<div class="col-6">
+								<el-checkbox label="Document not filled out completely "></el-checkbox>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<el-checkbox label="Invalid claims and transactions "></el-checkbox>
+							</div>
+							<div class="col-6">
+								<el-checkbox label="Insufficient fund "></el-checkbox>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<el-checkbox label="Unauthorized signatories "></el-checkbox>
+							</div>
+							<div class="col-6">
+								<el-checkbox label="Excessive claims "></el-checkbox>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<el-checkbox label="Not filled up completely "></el-checkbox>
+							</div>
+							<div class="col-6">
+								<el-checkbox label="Inconsistent details "></el-checkbox>
+							</div>
+						</div>
+					</el-checkbox-group>
+					
+					<el-input
+						type="textarea"
+						:autosize="{ minRows: 5, maxRows: 10}"
+						placeholder="Other reasons"
+						v-model="returnRemarks"
+						>
+					</el-input>
+					<p style="color: red;"><small>TIPS: Append/State any return remarks not stated above.</small></p>
+				</div>
+
 		</div>
 	</div>
+				<hr>
+			<div class="col-md-12 col-sm-12 col-xs-12 form-group">
+			  <span class="btn btn-primary" @click="validate">Save</span>
+			  <span class="btn btn-success" @click="addSubDocuments" v-if="list.subDocuments.length == 0">Add Document</span>
+				<span class="btn btn-success" @click="addSteps">Add Route</span>
+			</div>
 	</div>
 </template>
+
+<style>
+.select-office {
+	width: auto !important;
+}
+</style>
+
 <script>
 
 	import VueBarcode from 'vue-barcode';
@@ -76,6 +177,8 @@
 	export default{
 		data() {
 		  return{
+				loading: false,
+				checkList: [],
 		    list:{
 					remarks: '',
 		      subDocuments: [],
@@ -84,6 +187,9 @@
 		    errors:{},
 				offices:{},
 				document_type: {},
+				radio: 'Good',
+				withRemarks:'',
+				returnRemarks:''
 		  }
 		},
 		directives: {
@@ -101,7 +207,7 @@
 		methods:{
 				removeEmptyDocument: function(row, index) {
 					if(row.code == ''){
-						this.subDocuments.splice(index, 1)
+						this.list.subDocuments.splice(index, 1)
 					}
 				},
 				validate(){
@@ -119,31 +225,38 @@
 					if(filteredDocument.length){checkDocument = true}
 
 
-					if(this.list.remarks && checkRoute && checkDocument) return this.save();
+					if(checkRoute && checkDocument) return this.save();
 					this.errors = [];
 					this.$snotify.error('Fix some errors')
 					$('.alert').removeClass('d-none')
-					if(!this.list.remarks) this.errors.push("Just add some remarks.");
+
 					if(!checkRoute) this.errors.push("There should be at least 1 route.");
 					if(!checkDocument) this.errors.push("There should be at least 1 Document.");
 					return false
 			},
 			save(){
+
+					this.loading = !this.loading
+
+					if (this.radio == "Good") {
+
+						this.list.remarks = "Good"
+
+					} else if(this.radio == "With Remarks") {
+
+						this.list.remarks = "With Remarks: "+this.withRemarks
+
+					} else {
+						this.list.remarks = "Returned: "+_.toString(this.checkList)+" "+this.returnRemarks
+					}
+
 			    axios.post('/release',this.$data.list).then((response)=> 
 			        {
+								this.loading = !this.loading
+								this.list = ""
 								this.$snotify.success('Document marked as released')
-			          this.$parent.list.push(response.data);
-			          this.$parent.list.sort(function(a,b){
-			            if(a.created_at > b.created_at){
-			              return -1;
-			            }else if(a.created_at < b.created_at){
-			              return 1;
-			            }
-			          })
-			          this.list = ""
 			        })
 			      .catch((error)=> this.errors = error.response.data.errors)
-			    this.$router.push({ path: 'view-documents' })
 			},
 			addSubDocuments: function(row, index) {
 					$('.document').removeClass('d-none')

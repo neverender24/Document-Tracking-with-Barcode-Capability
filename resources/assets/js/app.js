@@ -6,15 +6,19 @@ import VueRouter from 'vue-router'
 import Snotify from 'vue-snotify'
 import 'vue-snotify/styles/material.css'
 import Vuelidate from 'vuelidate'
-
-import VueGoodTable from 'vue-good-table';
-// import the styles 
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
+import locale from 'element-ui/lib/locale/lang/en'
 import 'vue-good-table/dist/vue-good-table.css'
-Vue.use(VueGoodTable);
+import VueGoodTable from 'vue-good-table';
 
+
+Vue.use(ElementUI, { locale })
+Vue.use(VueGoodTable);
 Vue.use(Vuelidate)
 Vue.use(VueRouter)
 Vue.use(Snotify)
+Vue.use(require('vue-moment'));
 
 let Navbar = require('./components/navbar.vue');
 let Subnavbar = require('./components/subnavbar.vue'); 
@@ -38,6 +42,10 @@ let UnactedDocuments = require('./components/reports/UnactedDocuments.vue');
 let ChangePassword = require('./components/change_password.vue');
 
 const routes = [
+  {
+    path: '/',
+    component: AllDocuments
+  },
   { path: '/view-documents', component: ViewDocuments },
   { path: '/all-documents', component: AllDocuments },
   { path: '/add-documents', component: AddDocuments },

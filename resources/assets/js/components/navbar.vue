@@ -1,5 +1,6 @@
 <template>
-<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+<div>
+    <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
       <a class="navbar-brand" href="#">Document Tracker</a>
       <button class="navbar-toggler p-0 border-0" type="button" data-toggle="collapse"  data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -8,16 +9,18 @@
       <div class="navbar-collapse collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <router-link to="/all-documents" class="nav-link">All Documents</router-link>
+            <router-link to="/all-documents" class="nav-link">Documents</router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link to="/view-documents" class="nav-link">My Documents</router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link to="/receive" class="nav-link">Receive</router-link>
+            <!-- <a href="#"  @click="openReceive = true" class="nav-link">Receive</a> -->
           </li>
           <li class="nav-item">
             <router-link to="/release" class="nav-link">Release</router-link>
+            <!-- <a href="#"  @click="openRelease = true" class="nav-link">Release</a> -->
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -50,6 +53,7 @@
         </div>
       </div>
     </nav>
+    </div>
 </template> 
 <script>
 
@@ -59,7 +63,7 @@
         user: {
           name: '',
           office: ''
-        }
+        },
       }
     },
     mounted(){
@@ -67,12 +71,12 @@
     },
 		methods:{
 			logout(){
-				axios.post('/logout').then((response)=> 
+				axios.post('logout').then((response)=> 
 			        {
 								window.location.href = "/"
 			        })
 			      .catch((error)=> this.errors = error.response.data.errors)
-			    this.$router.push({ path: 'view-documents' })
+			    // this.$router.push({ path: 'view-documents' })
 			},
       getUser(){
          axios.post('get-user')

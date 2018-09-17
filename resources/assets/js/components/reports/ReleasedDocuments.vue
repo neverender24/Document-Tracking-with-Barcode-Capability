@@ -26,7 +26,7 @@
 				columns: [
 					{
 						label: 'Release to',
-						field: 'office.office_prefix',
+						field: this.getNullOffice,
 					},
 					{
 						label: 'Received at',
@@ -79,6 +79,9 @@
 					},
 					getNullReceived(rowObj){
 						return rowObj.received_by == null ? '':rowObj.received_by.name
+					},
+					getNullOffice(rowObj){
+						return rowObj.office == null ? '':rowObj.office.office_prefix
 					},
 	        getResults(page) {
 	          this.loading = !this.loading

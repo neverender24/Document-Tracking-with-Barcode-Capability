@@ -14,6 +14,7 @@ class DocumentController extends Controller
 	{
 		$this->middleware("auth");
 	}
+	
 	public function index()
 	{
 		return view('admin.index');
@@ -70,7 +71,7 @@ class DocumentController extends Controller
 			->leftjoin('routes','routes.barcode', '=', 'documents.document_code')
 		//	->where('user_id', \Auth::user()->id)
 			->where(function($query){
-				$query->where('routes.office_id', \Auth::user()->office_id);
+				//$query->where('routes.office_id', \Auth::user()->office_id);
 				$query->orWhere('routes.release_to', \Auth::user()->office_id);
 				$query->orWhere('documents.office_id', \Auth::user()->office_id);
 			})
@@ -113,7 +114,7 @@ class DocumentController extends Controller
 			$create->release_at = \Carbon\Carbon::now()->toDateTimeString();
 			$create->released_by = \Auth::user()->id;
 			$create->barcode = $save->document_code;
-			$create->user_id = \Auth::user()->id;
+			//$create->user_id = \Auth::user()->id;
 			$create->office_id = \Auth::user()->office_id;
 			$create->release_to = $office;
 			$create->save();
@@ -225,7 +226,7 @@ class DocumentController extends Controller
 		->leftjoin('users as received_by','received_by.id','=','routes.receive_by')
 		->leftjoin('users as released_by','released_by.id','=','routes.released_by')
 		->whereNull('routes.release_at')
-		->where('routes.user_id', \Auth::user()->id)
+		->where('routes.released_by', \Auth::user()->id)
 		->select(
 			'office_prefix',
 			'receive_at',
