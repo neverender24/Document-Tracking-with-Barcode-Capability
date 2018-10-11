@@ -1,141 +1,101 @@
 <template>
 	<div class="container">
-		<!-- <h4>My Documents <router-link to="/add-documents" class="btn btn-round btn-primary btn-sm">Add</router-link></h4> -->
-		<h4>All Documents <a href="#" @click="openAddDocument = true">Add</a></h4>
-		<div class="loading" v-if="loading">Loading&#8230;</div>
 
-		<vue-good-table
-		:columns="columns"
-		:rows="temp"
-		:search-options="{
-					enabled: true,
-				}"
-				:pagination-options="{
-					enabled: true,
-					perPage: 10,
-				}"
-		>
-				<template slot="table-row" slot-scope="props">
-					<span v-if="props.column.field == 'action'">
-						<div class="btn-group" role="group">
-							<router-link to="/edit-document" v-on:click.native="edit(props.row.id, props.row.document_code)" class="btn btn-warning btn-sm">Edit </router-link>
-							<router-link to="/view-routes" v-on:click.native="getRoute(props.row.document_code)" class="btn btn-secondary btn-sm">Route </router-link>
-						</div>
-					</span>
-					<span v-if="props.column.field == 'tr'">
-							{{ secondsToHms(props.row.routes.map(fields).reduce(sum, 0)) }}
-					</span>
-					<span v-else>
-						{{props.formattedRow[props.column.field]}}
-					</span>
-				</template>
-		</vue-good-table>
+		<el-row :gutter="20">
+			<el-col :span="5"><div class="grid-content"><h4>Documents</h4></div></el-col>
+			<el-col :span="1" :offset="16">
+				<div class="grid-content"><el-button type="primary" icon="el-icon-plus" @click="openAddDocument = true" round size="small">Add</el-button>
+				</div>
+			</el-col>
+		</el-row>
 
-		
+		<el-tabs v-model="activeName" @tab-click="loadMyDocuments">
+
+			<el-tab-pane label="All" name="first">
+				<all-documents :refreshDatatable="refreshDatatable"></all-documents>
+			</el-tab-pane>
+
+			<el-tab-pane label="Personal" name="second">	
+				<my-documents v-if="myDocuments" :refreshDatatable="refreshDatatable"></my-documents>
+			</el-tab-pane>
+
+			<el-tab-pane label="Returned" name="third" @tab-click="loadReturnedDocuments()">	
+				<returned-documents v-if="returnedDocuments" :refreshDatatable="refreshDatatable"></returned-documents>
+			</el-tab-pane>
+
+		</el-tabs>
+
+		<el-dialog
+			:close-on-click-modal="false" 
+			:close-on-press-escape ="false"
+			custom-class="routeModal"
+			:visible.sync="openAddDocument"
+			width="75%">
+			<add-document @closeCreate="closeCreateModal" :list="create" :subDocuments="subDocuments" :process="process"></add-document>
+			<span slot="footer" class="dialog-footer">
+				<el-button type="primary" @click="openAddDocument=false">Close</el-button>
+			</span>
+		</el-dialog>
+
 	</div>
 
 </template>
 
+
 <script>
+
+	import MyDocuments from './../document/MyDocuments.vue';
+	import ReturnedDocuments from './../document/ReturnedDocuments.vue';
+	import AllDocuments from './../document/AllDocuments.vue';
+	import AddDocument from './../document/create.vue';
+
 	export default
 	{
-	  data(){
+	  	components: {
+			MyDocuments,
+			AllDocuments,
+			ReturnedDocuments,
+			AddDocument
+	  	},
+	  data() {
 	    return {
-			openAddDocument: false,
-			columns: [
-				{
-					label: 'TR',
-					field: 'tr',
+				activeName: 'first',
+				myDocuments: false,
+				returnedDocuments: false,
+				openAddDocument: false,
+				refreshDatatable: false,
+				create:{
+					document_title: '',
+					document_code: Math.floor(Math.random() * 26) + Date.now(), 
+					document_date: '',
+					document_type_id: '',
 				},
-				{
-					label: 'Code',
-					field: 'document_code',
-					type: 'number',
-				},
-				{
-					label: 'Title',
-					field: 'document_title',
-					filterOptions: {
-						enabled: true,
-					},
-				},
-				{
-					label: 'Type',
-					field: 'document_type_prefix',
-					filterOptions: {
-						enabled: true,
-					},
-				},
-				{
-					label: 'Created On',
-					field: 'created_at',
-					type: 'date',
-					dateInputFormat: 'YYYY-MM-DD',
-					dateOutputFormat: 'MMM Do YY',
-				},
-				{
-					label: 'Action',
-					field: 'action',
-				},
-			],
-			lists:{},
-			loading: false,
-			temp: [],
-	    }
-	},
-	mounted(){
-	this.getResults();
-		this.getUser();
+				subDocuments: [],
+				process: [],
+			}
+		},
+		
+		methods: {
+			closeCreateModal: function(){
+				this.openAddDocument = false
+				this.refreshDatatable = !this.refreshDatatable
 
-	},
-	  methods:{
-	        getResults() {
-	          this.loading = !this.loading
-	            axios.get('view-documents')
-	            .then(response => {
-	              this.loading = !this.loading;
-	              this.lists = this.temp = response.data
-	              return response;
-	            })
-	        },
-					getRoute(barcode){
-						this.$root.document.barcode = barcode
-					},
-					getUser(){
-						axios.post('get-user') 
-							.then((response)=> {
-									this.$root.user.office_id = response.data.office_id
-									this.$root.user.user_id = response.data.id
-									this.$root.user.office_name = response.data.office.office_name
-								})
-							.catch((error)=> this.errors = error.response.data.errors);
-					},
-					edit(id, barcode){
-						this.$root.list.id = id;
-						this.$root.list.document_code = barcode;
-					},
-					fields(id){
-						
-						var rel = new Date(id.updated_at);
-						var rec = new Date(id.created_at);
+				this.create.document_title = ''
+				this.create.document_code = Math.floor(Math.random() * 26) + Date.now(),
+				this.create.document_date = ''
+				this.create.document_type_id = ''
+				this.subDocuments = []
+				this.process = []
+			},
+			loadMyDocuments(tab) {
+				if (tab.label == "Personal") {
+					this.myDocuments = true
+				}
 
-						var seconds = (rel.getTime() - rec.getTime()) / 1000; //1440516958
-						
-						return seconds
-
-					},
-					sum(item1, item2){
-						return item1+item2
-					},
-					secondsToHms(d) {
-							d = Number(d);
-
-							var h = Math.floor(d / 3600);
-							var m = Math.floor(d % 3600 / 60);
-							var s = Math.floor(d % 3600 % 60);
-
-							return ('0' + h).slice(-2) + ":" + ('0' + m).slice(-2) + ":" + ('0' + s).slice(-2);
-					},
-	    }
+				if (tab.label == "Returned") {
+					this.returnedDocuments = true
+				}
+			}
+		}
 	}
 </script>

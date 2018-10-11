@@ -11,4 +11,9 @@ class DocumentType extends Model
     protected $casts = [
         'process' => 'object',
     ];
+
+     public function documents()
+    {
+        return $this->hasMany('App\Document');
+    }
 }

@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Route;
 use DB;
+use App\Route;
+use App\Document;
+use Illuminate\Http\Request;
 
 class RouteController extends Controller
 {
-    public function __construct()
+    public function __construct(
+		Route $route
+	)
 	{
+		$this->model = $route;
 		$this->middleware("auth");
 	}
 
@@ -17,7 +21,7 @@ class RouteController extends Controller
 	{
 		$barcode = $request->barcode;
 
-		$parent = Route::with(['subDocument', 'office', 'receivedBy', 'releasedBy'])
+		$parent = $this->model->with(['subDocument', 'office', 'receivedBy', 'releasedBy'])
 		->whereHas('subDocument', function($query) use(&$barcode){
 			$query->where('documents.document_code', $barcode)
 				  ->orWhere('documents.document_id', $barcode);
@@ -25,7 +29,7 @@ class RouteController extends Controller
 		->sorted('asc');
 
 		
-		$child = Route::with(['document', 'office', 'receivedBy', 'releasedBy'])
+		$child = $this->model->with(['document', 'office', 'receivedBy', 'releasedBy'])
 			->barcode($barcode)
 			->sorted('asc')
 			->union($parent)
@@ -36,9 +40,7 @@ class RouteController extends Controller
 
 	public function populateRoutes(Request $request)
 	{
-		return Route::leftjoin('documents','documents.document_code','=','routes.barcode')
-		->leftjoin('offices','offices.id','=','release_to')
-		->where('barcode', $request->document_id)
+		return $this->model->where('barcode', $request->barcode)
 		->orderBy('routes.created_at', 'asc')
 		->select('release_to as office_id', 'routes.id')
 		->get();
@@ -46,45 +48,47 @@ class RouteController extends Controller
 
 	public function getReceive(Request $request)
 	{
-		return Route::leftjoin('documents','documents.document_code','=','routes.barcode')
-		->leftjoin('offices','offices.id','=','release_to')
-		->leftjoin('users as received_by','received_by.id','=','routes.receive_by')
-		->leftjoin('users as released_by','released_by.id','=','routes.released_by')
-		->where('routes.receive_at','!=','IS NULL')
-		->where('routes.receive_by', \Auth::user()->id)
+		$columns = ['barcode','receive_at', 'released_by',];
+
+		$length = $request->length;
+		$column = $request->column;
+		$dir = $request->dir;
+		$searchValue = $request->search;
+
+		$index = $this->model->with(['document', 'office', 'receivedBy', 'releasedBy'])
+		->notNull()
+		->receivedBy(auth()->user()->id)
 		->whereRaw('Date(receive_at) = CURDATE()')
-		->select(
-			'office_prefix',
-			'receive_at',
-			'release_at',
-			'barcode',
-			'document_title',
-			'released_by.name as released_by',
-			'received_by.name as received_by'
-		)
-		->orderBy('routes.created_at', 'desc')
-		->get();
+		->orderBy('routes.id', 'desc');
+
+		if ($searchValue) {
+			$index->where(function($query) use($searchValue){
+				$query->orWhere('document_code','LIKE','%'.$searchValue.'%');
+			});
+		}
+
+		$index = $index->paginate($length);
+
+    	return ['data'=>$index, 'draw'=> $request->draw];
+
 	}
 
 	public function storeReceive(Request $request)
 	{
 		$barcode = $request->barcode;
-			
-		$edit = Route::where('barcode', $barcode)->whereNull('receive_at')->where('release_to','=', \Auth::user()->office_id)->update([
-			'receive_by' => \Auth::user()->id,
-//			'release_to' => \Auth::user()->office_id,
-			'receive_at' => \Carbon\Carbon::now()->toDateTimeString(),
-		]);
 
-		return $edit;
+		return $this->model
+		->where('barcode', $barcode)
+		->whereNull('receive_at')
+		->where('release_to','=', auth()->user()->office_id)
+		->update([
+			'receive_by' => auth()->user()->id,
+			'receive_at' => now()->toDateTimeString(),
+		]);
 	}
 
 	public function release(Request $request)
 	{
-		$request['user_id'] = \Auth::user()->id;
-		$request['office_id'] = \Auth::user()->office_id;
-		$request['receive_at'] = \Carbon\Carbon::now()->toDateTimeString();
-
 		//loop through each routes defined in vue
 		foreach($request->process as $id => $data)
 		{
@@ -94,7 +98,25 @@ class RouteController extends Controller
 			//loop through subdocuments define in vue
 			foreach($request->subDocuments as $id => $sub)
 			{
-				if( is_null($sub["code"]) ){
+				$code = $sub["code"];
+
+				if ( is_null($code) ) {
+					continue;
+				}
+
+				$document = Document::where('document_code', $code)->get();
+
+				if ($document->count() == 0) {
+					continue;
+				}
+
+				$document = $this->model->where(function($query) use(&$code, &$office){
+					$query->where('barcode', $code)
+						->where('release_to','=',auth()->user()->office_id);
+				})
+				->get();
+
+				if ($document->count() == 0) {
 					continue;
 				}
 
@@ -102,15 +124,20 @@ class RouteController extends Controller
 				** Get duplicate route: if there is no route found with following parameters then add route
 				** Param: barcode, receive_at, release_to
 				*/
-				$edit = Route::where('barcode', $sub['code'])->whereNull('receive_at')->where('release_to','=',$office)->first();
+				$edit = $this->model->where(function($query) use(&$code, &$office){
+					$query->where('barcode', $code)
+						->whereNull('receive_at')
+						->where('release_to','=',auth()->user()->office_id);
+				})
+				->first();
+				// dd($edit);
 				if(is_null($edit))
 				{
 					$create = new \App\Route;
-					$create->release_at = \Carbon\Carbon::now()->toDateTimeString();
+					$create->release_at = now()->toDateTimeString();
 					$create->barcode = $sub['code'];
-					//$create->user_id = \Auth::user()->id;
-					$create->released_by = \Auth::user()->id;
-					//$create->office_id = \Auth::user()->office_id;
+					$create->released_by = auth()->user()->id;
+					$create->office_id = auth()->user()->office_id;
 					$create->release_to = $office;
 					$create->remarks = $remarks;
 					$create->save();
@@ -126,16 +153,25 @@ class RouteController extends Controller
 		$request['released_by'] = \Auth::user()->id;
 		$request['office_id'] = \Auth::user()->office_id;
 		
-		$create = Route::create($request->all());
+		$create = $this->model->create($request->all());
 
 		return $create;
 	}
 
 	public function update(Request $request, $id)
     {
-        $edit = Route::findOrFail($id);
+        $edit = $this->model->findOrFail($id);
         $edit->update($request->all());
 
         return $edit;
-    }
+	}
+	
+	public function deleteRoute(Request $request)
+	{
+
+		$delete = $this->model->whereNull('receive_at')->where('id',$request->id)->delete();
+
+		return $delete;
+		
+	}
 }

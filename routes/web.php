@@ -16,10 +16,15 @@ Auth::routes();
 
 Route::get('/', 'DocumentController@index');
 
+Route::post('delete-route', 'RouteController@deleteRoute');
+
 Route::resource('documents', "DocumentController");
 Route::get('view-documents', "DocumentController@getDocuments");
 Route::get('all-documents', "DocumentController@allDocuments");
 Route::post('edit-documents', "DocumentController@edit");
+Route::post('delete-document', "DocumentController@deleteDocument");
+Route::get('returned-documents', "DocumentController@returnedMyDocuments");
+Route::get('returned-all-documents', "DocumentController@returnedAllDocuments");
 
 Route::resource('document-types', "DocumentTypeController");
 Route::post('view-document-types', "DocumentTypeController@getDocumentTypes");
@@ -29,7 +34,7 @@ Route::resource('routes', "RouteController");
 Route::post('view-routes', "RouteController@getRoutes");
 Route::post('get-routes', "RouteController@populateRoutes");
 
-Route::post('view-receive', "RouteController@getReceive");
+Route::get('view-receive', "RouteController@getReceive");
 Route::post('store-receive', "RouteController@storeReceive");
 
 Route::post('release', "RouteController@release");

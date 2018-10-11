@@ -3,7 +3,10 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Register</div>
+                    <div class="panel-heading">
+                        <h4>Change Password</h4>
+                    </div>
+                    <hr>
                     <div class="panel-body">
                             <div class="form-group">
                                 <label class="col-md-4 control-label">Old Password</label>
@@ -44,9 +47,9 @@
 		data() {
 		  return{
 		    list:{
-		      old_password:'',
-              new_password:'',
-              confirm_password: ''
+                old_password:'',
+                new_password:'',
+                confirm_password: ''
 		  	},
 		    errors:{},
 		  }
@@ -57,13 +60,19 @@
 			save(){
 			    axios.post('/update-password',this.$data.list).then((response)=> 
 			        {
-					  this.$snotify.success('Password successfully changed');
+                      this.$message({
+                            type: 'success',
+                            message: 'Password successfully changed',
+                        });
 			          this.list = ""
                     this.$router.push({ path: 'documents' })
 			        })
 			      .catch(error=> {
                       this.errors = error.response
-                      this.$snotify.error(this.errors.data.message);
+                      this.$message({
+                            type: 'error',
+                            message: this.errors.data.message,
+                        });
                 })
 			}
 		}

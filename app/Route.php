@@ -42,7 +42,7 @@ class Route extends Model
         return $query->where('routes.receive_at','!=','IS NULL');
     }
 
-    public function scopeIsNotNull($query){
+    public function scopeIsNull($query){
         return $query->where('routes.receive_at','IS NULL');
     }
 
@@ -57,4 +57,5 @@ class Route extends Model
     public function scopeSorted($query, $type){
         return $query->orderBy('routes.created_at', $type);
     }
+
 }

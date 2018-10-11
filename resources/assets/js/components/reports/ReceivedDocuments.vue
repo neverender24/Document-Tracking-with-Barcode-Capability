@@ -1,99 +1,123 @@
 <template>
 	<div class="container">
+		<div class="loading" v-if="loading">Loading&#8230;</div>
 		<h5>Received Documents</h5>
-		
-				<div class="loading" v-if="loading">Loading&#8230;</div>
 
-		<vue-good-table
-		:columns="columns"
-		:rows="temp"
-		:search-options="{
-					enabled: true,
-				}"
-				:pagination-options="{
-					enabled: true,
-					perPage: 10,
-				}"
-		>
-		</vue-good-table>
-
+		<div class="input-group">
+			<div class="input-group-prepend">
+				<span class="input-group-text" id="basic-addon1"><div class="fa fa-search"></div></span>
+			</div>
+			<input type="text" class="form-control" v-model="tableData.search" placeholder="Search" @input="getResults()">
+			<select v-model="tableData.length" @change="getResults()">
+				<option value="10" selected="selected">10</option>
+				<option value="20">20</option>
+				<option value="30">30</option>
+			</select>
+		</div>
+		<datatable :columns="columns">
+			<tbody>
+				<tr v-for="item in lists" :key="item.id">
+					<td>{{ item.office == null ? '':item.office.office_prefix}}</td>
+					<td>{{ item.receive_at }}</td>
+					<td>{{ item.received_by == null ? '':item.received_by.name }}</td>
+					<td>{{ item.release_at }}</td>
+					<td>{{ item.released_by == null ? '':item.released_by.name }}</td>
+					<td>{{ item.barcode }}</td>
+					<td>{{ item.document == null ? '':item.document.document_title }}</td>
+				</tr>
+			</tbody>
+		</datatable>
+		<pagination :pagination="pagination"
+		 @prev="getResults(pagination.prevPageUrl)" 
+		 @next="getResults(pagination.nextPageUrl)"
+		 ></pagination>
 	</div>
 </template>
 
 <script>
+	import Datatable from '../helpers/datatable.vue';
+	import Pagination from '../helpers/Pagination.vue';
+
 	export default
 	{
+		components:{
+			datatable: Datatable,
+			pagination: Pagination
+		},
 	  data(){
+		  let sortOrders = {};
+
+		  let columns = [
+			  { width: '10%', label: 'Release to', name: 'Release to'},
+			  { width: '15%', label: 'Received at', name: 'Received at'},
+			  { width: '15%', label: 'Received by', name: 'Received by'},
+			  { width: '15%', label: 'Released at', name: 'Released at'},
+			  { width: '15%', label: 'Released by', name: 'Released by'},
+			  { width: '20%', label: 'Barcode', name: 'Barcode'},
+			  { width: '20%', label: 'Title', name: 'Title'}
+		  ]
+
+
 	    return{
-				columns: [
-					{
-						label: 'Release to',
-						field: 'office.office_prefix',
-					},
-					{
-						label: 'Received at',
-						field: 'receive_at',
-						type: 'number',
-					},
-					{
-						label: 'Received by',
-						field: this.getNullReceived,
-						filterOptions: {
-							enabled: true,
-						},
-					},
-					{
-						label: 'Released at',
-						field: 'release_at',
-						filterOptions: {
-							enabled: true,
-						},
-					},
-					{
-						label: 'Released by',
-						field: this.getNullReleased,
-						filterOptions: {
-							enabled: true,
-						},
-					},
-					{
-						label: 'barcode',
-						field: 'barcode',
-						type: 'number',
-					},
-										{
-						label: 'Title',
-						field: 'document.document_title',
-						type: 'number',
-					},
-				],
+			columns: columns,
+			tableData: {
+				draw: 0,
+				length: 10,
+				search: '',
+				column: 0,
+				dir: 'desc',
+			},
+			pagination: {
+				lastPage: '',
+				currentPage: '',
+				total: '',
+				lastPageUrl: '',
+				nextPageUrl: '',
+				prevPageUrl: '',
+				from: '',
+				to: ''
+			},
 	      lists:{},
 	      loading: false,
-	      temp: '',
+			temp: '',
+			totalRecords: 0,
 	    }
 	  },
 	  mounted(){
-	  	this.getResults();
+		  this.getResults();
+		  console.log(this.pagination)
 	  },
 	  methods:{
-					getNullReleased(rowObj){
-						return rowObj.released_by == null ? '':rowObj.released_by.name
-					},
-					getNullReceived(rowObj){
-						return rowObj.received_by == null ? '':rowObj.received_by.name
-					},
-	        getResults(page) {
-	          this.loading = !this.loading
-	            if (typeof page === 'undefined') {
-	              page = 1;
-	            }
-	            axios.get('received-documents')
+			  
+			configPagination(data) {
+				this.pagination.lastPage = data.last_page
+				this.pagination.currentPage = data.current_page
+				this.pagination.total = data.total
+				this.pagination.lastPageUrl = data.last_page_url
+				this.pagination.prevPageUrl = data.prev_page_url
+				this.pagination.nextPageUrl = data.next_page_url
+				this.pagination.from = data.from
+				this.pagination.to = data.to
+			},
+
+	    getResults(url = 'received-documents') {
+
+			  	this.loading = !this.loading
+			  
+				this.tableData.draw++;
+	            axios.get(url, {params: this.tableData})
 	            .then(response => {
-	              this.loading = !this.loading;
-	              this.lists = this.temp = response.data
-	              return response;
+				  this.loading = !this.loading;
+
+					let data = response.data
+
+					if (this.tableData.draw == data.draw) {
+						this.lists = data.data.data
+						this.configPagination(data.data)
+					}
+					
 	            })
-	        }
+				},
 	    }
 	}
 </script>

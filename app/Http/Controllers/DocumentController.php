@@ -45,12 +45,18 @@ class DocumentController extends Controller
         return view('admin.open_pdf');
     }
 
-    public function getDocuments()
+    public function getDocuments(Request $request)
 	{
+		$columns = ['document_code','document_code', 'document_title',];
+
+		$length = $request->length;
+		$column = $request->column;
+		$dir = $request->dir;
+		$searchValue = $request->search;
 
 		$index = Document::with('routes')
 			->leftjoin('document_types','documents.document_type_id', '=', 'document_types.id')
-			->where('documents.user_id', \Auth::user()->id)
+			->where('documents.user_id', auth()->user()->id)
 			->select(
 				'document_code', 
 				'document_title', 
@@ -60,27 +66,116 @@ class DocumentController extends Controller
 				'documents.document_type_id', 
 				'documents.document_id'
 			)
-			->orderBy('documents.created_at', 'desc')->get();
-    	return $index;
+			->orderBy($columns[$column], $dir);
+
+		if ($searchValue) {
+			$index->where(function($query) use($searchValue){
+				$query->orWhere('document_code','LIKE','%'.$searchValue.'%');
+			});
+		}
+
+		$index = $index->paginate($length);
+
+    	return ['data'=>$index, 'draw'=> $request->draw];
 	}
 
-	public function allDocuments()
+	public function returnedMyDocuments(Request $request)
 	{
+		$columns = ['document_code','document_code', 'document_title',];
+
+		$length = $request->length;
+		$column = $request->column;
+		$dir = $request->dir;
+		$searchValue = $request->search;
+
+		$index = Document::with('routes')
+			->leftjoin('routes','routes.barcode','=','documents.document_code')
+			->leftjoin('document_types','documents.document_type_id', '=', 'document_types.id')
+			->where('documents.user_id', auth()->user()->id)
+			->where('routes.remarks','LIKE', '%return%')
+			->select(
+				'document_code', 
+				'document_title', 
+				'document_type_prefix', 
+				'documents.created_at', 
+				'documents.id', 
+				'documents.document_type_id', 
+				'documents.document_id'
+			)
+			->orderBy('documents.created_at', 'desc');
+
+    	if ($searchValue) {
+			$index->where(function($query) use($searchValue){
+				$query->orWhere('document_code','LIKE','%'.$searchValue.'%');
+			});
+		}
+
+		$index = $index->paginate($length);
+
+    	return ['data'=>$index, 'draw'=> $request->draw];
+	}
+
+	public function returnedAllDocuments(Request $request)
+	{
+		$columns = ['document_code','document_code', 'document_title',];
+
+		$length = $request->length;
+		$column = $request->column;
+		$dir = $request->dir;
+		$searchValue = $request->search;
+
 		$index = Document::with('routes')
 			->leftjoin('document_types','documents.document_type_id', '=', 'document_types.id')
 			->leftjoin('routes','routes.barcode', '=', 'documents.document_code')
-		//	->where('user_id', \Auth::user()->id)
 			->where(function($query){
-				//$query->where('routes.office_id', \Auth::user()->office_id);
-				$query->orWhere('routes.release_to', \Auth::user()->office_id);
-				$query->orWhere('documents.office_id', \Auth::user()->office_id);
+				$query->orWhere('routes.release_to', auth()->user()->office_id);
+				$query->orWhere('documents.office_id', auth()->user()->office_id);
 			})
+			->where('routes.remarks','LIKE', '%return%')
 			->select('document_code', 'document_title', 'document_type_prefix', 'documents.created_at', 'documents.id', 'documents.document_type_id', 'documents.document_id')
 			->orderBy('documents.created_at', 'desc')
-			->distinct()
-			->get();
+			->distinct();
 
-    	return $index;
+    	if ($searchValue) {
+			$index->where(function($query) use($searchValue){
+				$query->orWhere('document_code','LIKE','%'.$searchValue.'%');
+			});
+		}
+
+		$index = $index->paginate($length);
+
+    	return ['data'=>$index, 'draw'=> $request->draw];
+	}
+
+	public function allDocuments(Request $request)
+	{
+		$columns = ['document_code','document_code', 'document_title',];
+
+		$length = $request->length;
+		$column = $request->column;
+		$dir = $request->dir;
+		$searchValue = $request->search;
+
+		$index = Document::with('routes')
+			->leftjoin('document_types','documents.document_type_id', '=', 'document_types.id')
+			->leftjoin('routes','routes.barcode', '=', 'documents.document_code')
+			->where(function($query) use($searchValue){
+				$query->orWhere('routes.release_to', auth()->user()->office_id);
+				$query->orWhere('documents.office_id', auth()->user()->office_id);
+			})
+			->select('document_code', 'document_title', 'document_type_prefix', 'documents.created_at', 'documents.id', 'documents.document_type_id', 'documents.document_id')
+			->orderBy($columns[$column], $dir)
+			->distinct();
+
+		if ($searchValue) {
+			$index->where(function($query) use($searchValue){
+				$query->orWhere('document_code','LIKE','%'.$searchValue.'%');
+			});
+		}
+
+		$index = $index->paginate($length);
+
+    	return ['data'=>$index, 'draw'=> $request->draw];
 	}
 
 	public function edit(Request $request)
@@ -95,8 +190,8 @@ class DocumentController extends Controller
 		// $doc[0] = document details
 		// $doc[1] = sub documents
 		// $doc[2] = office route
-		$doc[0]['user_id'] = \Auth::user()->id;
-		$doc[0]['office_id'] = \Auth::user()->office_id;
+		$doc[0]['user_id'] = auth()->user()->id;
+		$doc[0]['office_id'] = auth()->user()->office_id;
 
 		//create document first
 		$save = Document::create($doc[0]);
@@ -111,11 +206,10 @@ class DocumentController extends Controller
 		{
 			$office = $data['office_id'];
 			$create = new \App\Route;
-			$create->release_at = \Carbon\Carbon::now()->toDateTimeString();
-			$create->released_by = \Auth::user()->id;
+			$create->release_at = now()->toDateTimeString();
+			$create->released_by = auth()->user()->id;
 			$create->barcode = $save->document_code;
-			//$create->user_id = \Auth::user()->id;
-			$create->office_id = \Auth::user()->office_id;
+			$create->office_id = auth()->user()->office_id;
 			$create->release_to = $office;
 			$create->save();
 		}
@@ -132,51 +226,39 @@ class DocumentController extends Controller
 		// $doc[3] = removeRoute
 		// $doc[4] = process
 
-		$doc = $request->all();
+		$document = $request->document;
+		$subDocument = $request->subDocuments;
+		$routes = $request->routes;
+
+		//dd($request->all());
+
         $edit = Document::findOrFail($id);
-		$edit->update($doc[0]);
+		$edit->update($document);
 		
-		$subdocs =  Document::where('document_id', $doc[0]['document_code'])->get();
+		$subdocs =  Document::where('document_id', $document['document_code'])->get();
 		$isInside = false;
 
 		// add document
-		foreach($doc[1] as $id => $data){
+		foreach($subDocument as $id => $data){
 			$code = $data['document_code'];
-			$index = Document::where('document_code', $code)->update(['document_id' => $doc[0]['document_code'] ]);
-		}
-
-		//remove document
-		if(!empty($request[2])){
-			foreach($request[2] as $id => $data){
-				$code = $data['document_code'];
-				$index = Document::where('document_code', $code)->update(['document_id' =>  NULL ]);
-			}
-		}
-
-		//remove route
-		if(!empty($request[3])){
-			foreach($request[3] as $id => $data){
-				$code = $data['id'];
-				$index = Route::where('id', $code)->delete();
-			}
+			$index = Document::where('document_code', $code)->update(['document_id' => $document['document_code'] ]);
 		}
 
 		// Route
-		foreach($request[4] as $id => $data)
+		foreach($routes as $id => $data)
 		{
 			$office = $data['office_id'];
-
 			/*
 			** check if route exist: false add new route
 			** condition: barcode, receive_at, release_to
 			*/
-			$excluded = Route::where('barcode', $doc[0]['document_code'])->whereNull('receive_at')->where('release_to', $office)->first();
+			$excluded = Route::where('barcode', $document['document_code'])->whereNull('receive_at')->where('release_to', $office)->latest()->first();
 			if(is_null($excluded)){
 				$create = new \App\Route;
-				$create->release_at = \Carbon\Carbon::now()->toDateTimeString();
-				$create->barcode = $doc[0]['document_code'];
-				$create->user_id = \Auth::user()->id;
-				$create->office_id = \Auth::user()->office_id;
+				$create->release_at = now()->toDateTimeString();
+				$create->barcode = $document['document_code'];
+				$create->released_by = auth()->user()->id;
+				$create->office_id = auth()->user()->office_id;
 				$create->release_to = $office;
 				$create->save();
 			}
@@ -201,22 +283,36 @@ class DocumentController extends Controller
     	return $index;
 	}
 
-	public function releasedDocuments()
+	public function releasedDocuments(Request $request)
 	{
-		return Route::with(['document', 'office', 'receivedBy', 'releasedBy'])
-			//->notNull()
+
+		$length = $request->length;
+		$column = $request->column;
+		$dir = $request->dir;
+		$searchValue = $request->search;
+		
+		$data = Route::with(['document', 'office', 'receivedBy', 'releasedBy'])
+			->orWhere('barcode',"LIKE","%".$searchValue."%")
 			->releasedBy(auth()->user()->id)
-			->sorted('desc')
-			->get();
+			->paginate($length);
+		
+		return ['data'=>$data, 'draw'=> $request->draw];
 	}
 
-	public function receivedDocuments()
+	public function receivedDocuments(Request $request)
 	{
-		return Route::with(['document', 'office', 'receivedBy', 'releasedBy'])
+		$length = $request->length;
+		$column = $request->column;
+		$dir = $request->dir;
+		$searchValue = $request->search;
+
+		$data = Route::with(['document', 'office', 'receivedBy', 'releasedBy'])
 			->notNull()
+			->orWhere('barcode',"LIKE","%".$searchValue."%")
 			->receivedBy(auth()->user()->id)
-			->sorted('desc')
-			->get();
+			->paginate($length);
+		
+		return ['data'=>$data, 'draw'=> $request->draw];
 	}
 
 	public function unactedDocuments()
@@ -238,5 +334,12 @@ class DocumentController extends Controller
 		)
 		->orderBy('routes.created_at', 'desc')
 		->get();
+	}
+
+	public function deleteDocument(Request $request)
+	{
+		$delete = Document::where('document_code', $request->id)->delete();
+
+		return $delete;
 	}
 }

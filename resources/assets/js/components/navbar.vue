@@ -8,7 +8,7 @@
 
       <div class="navbar-collapse collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
+          <li class="nav-item">
             <router-link to="/all-documents" class="nav-link">Documents</router-link>
           </li>
           <!-- <li class="nav-item">
@@ -55,44 +55,46 @@
     </nav>
     </div>
 </template> 
-<script>
 
-	export default {
-    data(){
-      return {
-        user: {
-          name: '',
-          office: ''
+<script>
+    export default {
+      data(){
+        return {
+            user: {
+              name: '',
+              office: ''
+            },
+        }
+      },
+
+      mounted(){
+        this.getUser();
+      },
+
+      methods: {
+        logout(){
+          axios.post('logout').then((response)=> 
+                {
+                  window.location.href = "/"
+                })
+              .catch((error)=> this.errors = error.response.data.errors)
         },
+
+        getUser(){
+          axios.post('get-user')
+            .then((response)=> {
+                this.user.name = response.data
+                this.$root.user.office_name = response.data.office.office_name
+                this.$root.user.user_name = response.data.name
+                this.$root.user.user_id = response.data.id
+                if(response.data.is_admin == 1){
+                  $(".register").removeClass('d-none')
+                }else{
+                  $(".register").addClass('d-none')
+                }
+              })
+            .catch((error)=> this.errors = error.response.data.errors);
+        }
       }
-    },
-    mounted(){
-      this.getUser();
-    },
-		methods:{
-			logout(){
-				axios.post('logout').then((response)=> 
-			        {
-								window.location.href = "/"
-			        })
-			      .catch((error)=> this.errors = error.response.data.errors)
-			    // this.$router.push({ path: 'view-documents' })
-			},
-      getUser(){
-         axios.post('get-user')
-          .then((response)=> {
-              this.user.name = response.data
-              this.$root.user.office_name = response.data.office.office_name
-              this.$root.user.user_name = response.data.name
-              if(response.data.is_admin == 1){
-                $(".register").removeClass('d-none')
-              }else{
-                $(".register").addClass('d-none')
-              }
-            })
-          .catch((error)=> this.errors = error.response.data.errors);
-          console.log(this.user.name)
-      }
-		}
-	}
+    }
 </script>

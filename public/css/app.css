@@ -13472,3 +13472,8 @@ a.text-dark:focus {
   clip: auto;
 }
 
+.pt-3,
+.py-3 {
+  padding: 0 !important;
+}
+

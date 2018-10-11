@@ -22,9 +22,7 @@
         <main role="main" class="container">
             <div class="my-3 p-3 bg-white rounded box-shadow">
                 <div class="media text-muted pt-3">
-                    
                     @yield('content')
-                    <vue-snotify></vue-snotify>
                 </div>
                 <small class="d-block text-right mt-3">
                 {{-- <a href="#">All updates</a> --}}

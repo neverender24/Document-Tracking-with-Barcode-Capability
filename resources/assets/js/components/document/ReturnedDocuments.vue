@@ -1,12 +1,26 @@
 <template>
 	<div class="">
 		<div class="loading" v-if="loading">Loading&#8230;</div>
+
+		<div class="form-group">
+			<el-switch
+				style="display: block"
+				v-model="returnToggle"
+				active-color="#13ce66"
+				inactive-color="#ff4949"
+				active-text="All"
+				inactive-text="Personal"
+				@change="toggleReturn"
+				>
+			</el-switch>
+		</div>
+
 		<div class="input-group">
 			<div class="input-group-prepend">
 				<span class="input-group-text" id="basic-addon1"><div class="fa fa-search"></div></span>
 			</div>
-			<input type="text" class="form-control" v-model="tableData.search" placeholder="Search" @input="getAllDocuments()">
-			<select v-model="tableData.length" @change="getAllDocuments()">
+			<input type="text" class="form-control" v-model="tableData.search" placeholder="Search" @input="getAllReturnedDocuments()">
+			<select v-model="tableData.length" @change="getAllReturnedDocuments()">
 				<option value="15" selected="selected">15</option>
 				<option value="25">25</option>
 				<option value="50">50</option>
@@ -25,8 +39,8 @@
 			</tbody>
 		</datatable>
 		<pagination :pagination="pagination"
-			@prev="getAllDocuments(pagination.prevPageUrl)" 
-			@next="getAllDocuments(pagination.nextPageUrl)"
+		@prev="getAllReturnedDocuments(pagination.prevPageUrl)" 
+		@next="getAllReturnedDocuments(pagination.nextPageUrl)"
 		></pagination>
 
 		<el-dialog
@@ -41,6 +55,7 @@
 		</el-dialog>
 
 	</div>
+
 </template>
 
 <style>
@@ -62,23 +77,21 @@
 		props: {
 			refreshDatatable:''
 		},
-
 		components: {
 			RouteIndex,
 			datatable: Datatable,
 			pagination: Pagination
 		},
+		data() {
+			let sortOrders = {};
 
-	  	data() {
-		  	let sortOrders = {};
-
-		  	let columns = [
-			  { width: '10%', label: 'Time', name: 'Time'},
-			  { width: '15%', label: 'Barcode', name: 'Barcode'},
-			  { width: '40%', label: 'Document Title', name: 'document_title'},
-			  { width: '10%', label: 'Type', name: 'Type'},
-			  { width: '15%', label: 'Created On', name: 'Created On'},
-		  	]
+			let columns = [
+				{ width: '10%', label: 'Time', name: 'Time'},
+				{ width: '15%', label: 'Barcode', name: 'Barcode'},
+				{ width: '40%', label: 'Document Title', name: 'document_title'},
+				{ width: '10%', label: 'Type', name: 'Type'},
+				{ width: '15%', label: 'Created On', name: 'Created On'},
+			]
 
 			columns.forEach((column)=>{
 				sortOrders[column.name] = -1;
@@ -105,24 +118,24 @@
 					from: '',
 					to: ''
 				},
-				loading: false,
 				openRoutes: false,
+				returnToggle: false,
+				loading: false,
 				documents: [],
 				routeData: {},
 				routeTitle: '',
 			}
-	  	},
-
-	  	mounted(){
-			this.getAllDocuments();
-	  	},
+		},
 
 		watch:{
-		  	refreshDatatable: function() {
-				this.getAllDocuments()
+			refreshDatatable: function(){
+				this.getReturnedDocuments()
 			}
-	  	},
+		},
 
+		mounted(){
+			this.getReturnedDocuments();
+		},
 		methods:{
 			configPagination(data) {
 				this.pagination.lastPage = data.last_page
@@ -134,20 +147,25 @@
 				this.pagination.from = data.from
 				this.pagination.to = data.to
 			},
-
 			sortBy(key) {
 				this.sortKey = key;
 				this.sortOrders[key] = this.sortOrders[key] * -1;
 				this.tableData.column = this.getIndex(this.columns, 'name', key);
 				this.tableData.dir = this.sortOrders[key]===1 ?'asc' : 'desc';
-				this.getAllDocuments()
 			},
-
 			getIndex(array, key, value) {
 				return array.findIndex(i=>i[key]==value)
 			},
 
-			getAllDocuments(url = 'all-documents') {
+			toggleReturn() {
+				if (this.returnToggle == false) {
+					return this.getReturnedDocuments()
+				} else {
+					return this.getAllReturnedDocuments()
+				}
+			},
+
+			getReturnedDocuments(url = 'returned-documents') {
 				this.loading = !this.loading
 				axios.get(url, {params: this.tableData})
 				.then(response => {
@@ -162,7 +180,22 @@
 				})
 			},
 
-			getRoute(barcode) {
+			getAllReturnedDocuments(url = 'returned-all-documents') {
+				this.loading = !this.loading
+				axios.get(url, {params: this.tableData})
+				.then(response => {
+					this.loading = !this.loading;
+
+					let data = response.data
+
+					if (this.tableData.draw == data.draw) {
+						this.documents = data.data.data
+						this.configPagination(data.data)
+					}
+				})
+			},
+			
+			getRoute(barcode){
 				this.loading = !this.loading
 				axios.post('view-routes',{'barcode':barcode})
 					.then((response)=> {
@@ -172,16 +205,17 @@
 						this.openRoutes = true
 					})
 					.catch((error)=> this.errors = error.response.data.errors);
+			
 			},
 
-			fields(id) {
+			fields(id){
 				var rel = new Date(id.updated_at);
 				var rec = new Date(id.created_at);
 				var seconds = (rel.getTime() - rec.getTime()) / 1000; //1440516958
 
 				return seconds
 			},
-			sum(item1, item2) {
+			sum(item1, item2){
 				return item1+item2
 			},
 			secondsToHms(d) {
