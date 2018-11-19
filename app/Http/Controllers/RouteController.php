@@ -89,6 +89,7 @@ class RouteController extends Controller
 
 	public function release(Request $request)
 	{
+		$errors = [];
 		//loop through each routes defined in vue
 		foreach($request->process as $id => $data)
 		{
@@ -107,18 +108,27 @@ class RouteController extends Controller
 				$document = Document::where('document_code', $code)->get();
 
 				if ($document->count() == 0) {
+					array_push($errors,"Document ".$code." Not Found. Make Sure you received it.");
+					continue;
+				}
+				
+				$lastRecord = $this->model->where('barcode', $code)->orderBy('id', 'desc')->first();
+
+				if ($lastRecord->release_to != auth()->user()->office_id) {
+					array_push($errors, "Document ".$code." Not Found. Make Sure you received it.");
 					continue;
 				}
 
-				$document = $this->model->where(function($query) use(&$code, &$office){
-					$query->where('barcode', $code)
-						->where('release_to','=',auth()->user()->office_id);
-				})
-				->get();
+				// $document = $this->model->where(function($query) use(&$code, &$office){
+				// 	$query->where('barcode', $code)
+				// 		->where('release_to','=',auth()->user()->office_id);
+				// 		//->where('released_by','=',auth()->user()->id);
+				// })
+				// ->get();
 
-				if ($document->count() == 0) {
-					continue;
-				}
+				// if ($document->count() == 0) {
+				// 	continue;
+				// }
 
 				/*
 				** Get duplicate route: if there is no route found with following parameters then add route
@@ -145,7 +155,7 @@ class RouteController extends Controller
 			}
 		}
 		
-		return 'success';
+		return $errors;
 	}
 
 	public function store(Request $request)

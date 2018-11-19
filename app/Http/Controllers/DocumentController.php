@@ -70,7 +70,8 @@ class DocumentController extends Controller
 
 		if ($searchValue) {
 			$index->where(function($query) use($searchValue){
-				$query->orWhere('document_code','LIKE','%'.$searchValue.'%');
+				$query->orWhere('document_code','LIKE','%'.$searchValue.'%')
+				->orWhere('document_title','LIKE','%'.$searchValue.'%');
 			});
 		}
 
@@ -106,7 +107,8 @@ class DocumentController extends Controller
 
     	if ($searchValue) {
 			$index->where(function($query) use($searchValue){
-				$query->orWhere('document_code','LIKE','%'.$searchValue.'%');
+				$query->orWhere('document_code','LIKE','%'.$searchValue.'%')
+				->orWhere('document_title','LIKE','%'.$searchValue.'%');
 			});
 		}
 
@@ -138,7 +140,8 @@ class DocumentController extends Controller
 
     	if ($searchValue) {
 			$index->where(function($query) use($searchValue){
-				$query->orWhere('document_code','LIKE','%'.$searchValue.'%');
+				$query->orWhere('document_code','LIKE','%'.$searchValue.'%')
+				->orWhere('document_title','LIKE','%'.$searchValue.'%');
 			});
 		}
 
@@ -169,7 +172,8 @@ class DocumentController extends Controller
 
 		if ($searchValue) {
 			$index->where(function($query) use($searchValue){
-				$query->orWhere('document_code','LIKE','%'.$searchValue.'%');
+				$query->orWhere('document_code','LIKE','%'.$searchValue.'%')
+				->orWhere('document_title','LIKE','%'.$searchValue.'%');
 			});
 		}
 
@@ -211,6 +215,7 @@ class DocumentController extends Controller
 			$create->barcode = $save->document_code;
 			$create->office_id = auth()->user()->office_id;
 			$create->release_to = $office;
+			$create->remarks = "Start";
 			$create->save();
 		}
 

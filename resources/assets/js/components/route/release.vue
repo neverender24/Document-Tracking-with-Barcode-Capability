@@ -238,14 +238,30 @@
 
 			    axios.post('/release',this.$data.list).then((response)=> 
 			        {
+						let err = []
+
+						if (response.data.length != 0) {
+							$('.alert').removeClass('d-none')
+							response.data.forEach(element => {
+								err.push(element);
+							});
+
+							this.errors = err
+							this.$message({
+								type: 'error',
+								message: "Fix some errors.",
+							});
+						} else {
+							this.$message({
+								type: 'success',
+								message: "Document successfully marked as released.",
+							});
+							
+							location.reload();
+						}
 						this.loading = !this.loading
-						this.$message({
-							type: 'success',
-							message: 'Document marked as released',
-						});
-						//this.list = {}
 			        })
-			      .catch((error)=> this.errors = error.response.data.errors)
+			      .catch((error)=> console.log(error))
 			},
 
 			addSubDocuments: function(row, index) {
