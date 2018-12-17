@@ -81,7 +81,7 @@
 	import RouteIndex from './../route/index.vue';
 	import EditDocument from './../document/edit.vue';
 	import Datatable from '../helpers/datatable.vue';
-	import Pagination from '../helpers/Pagination.vue';
+	import Pagination from '../helpers/pagination.vue';
 
 	export default
 	{
