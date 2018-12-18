@@ -126,15 +126,13 @@ class DocumentController extends Controller
 		$dir = $request->dir;
 		$searchValue = $request->search;
 
-		$index = Document::with('routes')
-			->leftjoin('document_types','documents.document_type_id', '=', 'document_types.id')
-			->leftjoin('routes','routes.barcode', '=', 'documents.document_code')
+		$index = Document::with(['routes','documentType'])
+			->whereHas('routes', function ($q) {
+				$q->where('remarks','like', '%return%');
+			})
 			->where(function($query){
-				$query->orWhere('routes.release_to', auth()->user()->office_id);
 				$query->orWhere('documents.office_id', auth()->user()->office_id);
 			})
-			->where('routes.remarks','LIKE', '%return%')
-			->select('document_code', 'document_title', 'document_type_prefix', 'documents.created_at', 'documents.id', 'documents.document_type_id', 'documents.document_id')
 			->orderBy('documents.created_at', 'desc')
 			->distinct();
 
