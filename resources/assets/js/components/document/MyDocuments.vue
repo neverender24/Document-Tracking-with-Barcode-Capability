@@ -24,6 +24,7 @@
 						<td>{{ item.created_at }}</td>
 						<td @click="$event.stopPropagation()">
 							<div class="btn-group" role="group">
+								<button @click="print(item.id, item.document_code,item.document_title)" class="btn btn-sm btn-info"><span class="fa fa-print"></span></button>
 								<button @click="edit(item.id, item.document_code)" v-if="item.routes.length <= 1" class="btn btn-sm btn-info"><span class="fa fa-edit"></span></button>
 								<button v-if="item.routes.length > 1" class="btn btn-sm btn-info" disabled><span class="fa fa-edit"></span></button>
 								<button @click="deleteDocument(item.document_code)" v-if="item.routes.length <= 1" class="btn btn-sm btn-danger"><span class="fa fa-trash"></span></button>
@@ -195,6 +196,12 @@
 					this.openEditDocument = true
 				})
 			},
+
+			print: function(id, barcode, title) {
+				this.loading = !this.loading
+				window.open("/pdf?id="+barcode+"&title="+title+"&office="+this.$root.user.office_name+"&name="+this.$root.user.user_name)
+				this.loading = !this.loading
+	    	},
 
 			deleteDocument(id, barcode) {
 				this.document_id = id;

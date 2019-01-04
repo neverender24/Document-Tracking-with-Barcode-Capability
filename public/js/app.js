@@ -74908,6 +74908,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -75022,6 +75023,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				_this.openEditDocument = true;
 			});
 		},
+
+
+		print: function print(id, barcode, title) {
+			this.loading = !this.loading;
+			window.open("/pdf?id=" + barcode + "&title=" + title + "&office=" + this.$root.user.office_name + "&name=" + this.$root.user.user_name);
+			this.loading = !this.loading;
+		},
+
 		deleteDocument: function deleteDocument(id, barcode) {
 			var _this2 = this;
 
@@ -75918,15 +75927,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 		print: function print() {
-			var _this5 = this;
-
 			this.loading = !this.loading;
-			axios.post('print-form', { 'barcode': this.list.document_code }).then(function (response) {
-				_this5.loading = !_this5.loading;
-				window.open("/pdf?id=" + _this5.list.document_code + "&title=" + _this5.list.document_title + "&office=" + _this5.$root.user.office_name + "&name=" + _this5.$root.user.user_name);
-			}).catch(function (error) {
-				return _this5.errors = error.response.data.errors;
-			});
+			window.open("/pdf?id=" + this.list.document_code + "&title=" + this.list.document_title + "&office=" + this.$root.user.office_name + "&name=" + this.$root.user.user_name);
+			this.loading = !this.loading;
 		}
 	}
 });
@@ -79365,6 +79368,23 @@ var render = function() {
                         "div",
                         { staticClass: "btn-group", attrs: { role: "group" } },
                         [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm btn-info",
+                              on: {
+                                click: function($event) {
+                                  _vm.print(
+                                    item.id,
+                                    item.document_code,
+                                    item.document_title
+                                  )
+                                }
+                              }
+                            },
+                            [_c("span", { staticClass: "fa fa-print" })]
+                          ),
+                          _vm._v(" "),
                           item.routes.length <= 1
                             ? _c(
                                 "button",
