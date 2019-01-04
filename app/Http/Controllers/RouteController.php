@@ -160,8 +160,8 @@ class RouteController extends Controller
 
 	public function store(Request $request)
 	{
-		$request['released_by'] = \Auth::user()->id;
-		$request['office_id'] = \Auth::user()->office_id;
+		$request['released_by'] = auth()->user()->id;
+		$request['office_id'] = auth()->user()->office_id;
 		
 		$create = $this->model->create($request->all());
 
@@ -183,5 +183,58 @@ class RouteController extends Controller
 
 		return $delete;
 		
+	}
+
+	public function releasedDocuments(Request $request)
+	{
+
+		$length = $request->length;
+		$column = $request->column;
+		$dir = $request->dir;
+		$searchValue = $request->search;
+		
+		$data = $this->model->with(['document', 'office', 'receivedBy', 'releasedBy'])
+			->orWhere('barcode',"LIKE","%".$searchValue."%")
+			->releasedBy(auth()->user()->id)
+			->paginate($length);
+		
+		return ['data'=>$data, 'draw'=> $request->draw];
+	}
+
+	public function receivedDocuments(Request $request)
+	{
+		$length = $request->length;
+		$column = $request->column;
+		$dir = $request->dir;
+		$searchValue = $request->search;
+
+		$data = $this->model->with(['document', 'office', 'receivedBy', 'releasedBy'])
+			->notNull()
+			->orWhere('barcode',"LIKE","%".$searchValue."%")
+			->receivedBy(auth()->user()->id)
+			->paginate($length);
+		
+		return ['data'=>$data, 'draw'=> $request->draw];
+	}
+
+	public function unactedDocuments()
+	{
+		return $this->model->leftjoin('documents','documents.document_code','=','routes.barcode')
+		->leftjoin('offices','offices.id','=','release_to')
+		->leftjoin('users as received_by','received_by.id','=','routes.receive_by')
+		->leftjoin('users as released_by','released_by.id','=','routes.released_by')
+		->whereNull('routes.release_at')
+		->where('routes.released_by', auth()->user()->id)
+		->select(
+			'office_prefix',
+			'receive_at',
+			'release_at',
+			'barcode',
+			'document_title',
+			'released_by.name as released_by',
+			'received_by.name as received_by'
+		)
+		->orderBy('routes.created_at', 'desc')
+		->get();
 	}
 }

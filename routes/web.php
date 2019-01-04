@@ -1,17 +1,5 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-
 Auth::routes();
 
 Route::get('/', 'DocumentController@index');
@@ -40,13 +28,12 @@ Route::post('store-receive', "RouteController@storeReceive");
 Route::post('release', "RouteController@release");
 
 //printer
-Route::post('print-form', 'DocumentController@printForm');
 Route::get("pdf","DocumentController@open_pdf");
 
 // reports
-Route::get('released-documents', "DocumentController@releasedDocuments");
-Route::get('received-documents', "DocumentController@receivedDocuments");
-Route::get('unacted-documents', "DocumentController@unactedDocuments");
+Route::get('released-documents', "RouteController@releasedDocuments");
+Route::get('received-documents', "RouteController@receivedDocuments");
+Route::get('unacted-documents', "RouteController@unactedDocuments");
 
 //calculate time
 Route::get('calculate-time', "DocumentController@calculateTime");
@@ -62,11 +49,11 @@ Route::post('get-offices', function(){
 });
 
 Route::post('get-user', function(){
-    return Auth::user()->load('office');
+    return auth()->user()->load('office');
 });
 
 Route::post('get-office', function(){
-    return Auth::user()->office;
+    return auth()->user()->office;
 });
 
 
@@ -76,7 +63,7 @@ Route::post('update-password', function(){
    $new     = request()->get('new_password');
    $confirm = request()->get('confirm_password');
 
-    if (!Hash::check($old, \Auth::user()->password))
+    if (!Hash::check($old, auth()->user()->password))
     {
         return response()->json(array(
                     'code'      =>  400,
@@ -92,7 +79,7 @@ Route::post('update-password', function(){
                 ), 401);
     }
 
-    $user = App\User::findOrFail( \Auth::user()->id);
+    $user = App\User::findOrFail( auth()->user()->id);
     $user->password = bcrypt($new);
     $user->save();
 
