@@ -108,14 +108,14 @@ class RouteController extends Controller
 				$document = Document::where('document_code', $code)->get();
 
 				if ($document->count() == 0) {
-					array_push($errors,"Document ".$code." Not Found. Make Sure you received it.");
+					array_push($errors,"Document ".$code." Not Found. Make Sure you received it. Error 1");
 					continue;
 				}
 				
 				$lastRecord = $this->model->where('barcode', $code)->orderBy('id', 'desc')->first();
 
 				if ($lastRecord->release_to != auth()->user()->office_id) {
-					array_push($errors, "Document ".$code." Not Found. Make Sure you received it.");
+					array_push($errors, "Document ".$code." Not Found. Make Sure you received it. Error 2");
 					continue;
 				}
 
