@@ -24,12 +24,12 @@
 			<tbody>
 				<tr v-for="item in documents" :key="item.barcode">
 					<td>{{ item.released_by.name }}</td>
-					<td>{{ item.office.office_prefix }}</td> 
-					<td>{{ item.receive_at }}</td>
-					<td>{{ item.received_by.name }}</td>
 					<td>{{ item.release_at }}</td>
+					<!-- <td>{{ item.office.office_prefix }}</td>  -->
+					<td>{{ item.receive_at }}</td>
+					<!-- <td>{{ item.received_by.name }}</td> -->
 					<td>{{ item.barcode }}</td>
-					<td>{{ item.document.document_title }}</td>
+					<td>{{ item.document.document_title.substr(0,25) }}</td>
 				</tr>
 			</tbody>
 		</datatable>
@@ -56,13 +56,13 @@
 			let sortOrders = {};
 
 			let columns = [
-				{ width: '10%', label: 'Released by', name: 'Released by'},
-				{ width: '15%', label: 'Release to', name: 'Release to'},
-				{ width: '43%', label: 'Received on', name: 'Received on'},
-				{ width: '7%', label: 'Received by', name: 'Received by'},
+				{ width: '20%', label: 'Released by', name: 'Released by'},
+				// { width: '25%', label: 'Release to', name: 'Release to'},
 				{ width: '20%', label: 'Released on', name: 'Released on'},
-				{ width: '5%', label: 'Barcode', name: 'Barcode'},
-				{ width: '5%', label: 'Document Title', name: 'Document Title'}
+				{ width: '20%', label: 'Received on', name: 'Received on'},
+				// { width: '7%', label: 'Received by', name: 'Received by'},
+				{ width: '20%', label: 'Barcode', name: 'Barcode'},
+				{ width: '20%', label: 'Document Title', name: 'Document Title'}
 			]
 
 			columns.forEach((column)=>{

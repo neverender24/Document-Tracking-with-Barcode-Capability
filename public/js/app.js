@@ -79350,7 +79350,9 @@ var render = function() {
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(item.document_title))]),
                   _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(item.document_type_prefix))]),
+                  _c("td", [
+                    _vm._v(_vm._s(item.document_type.document_type_prefix))
+                  ]),
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(item.created_at))]),
                   _vm._v(" "),
@@ -81689,7 +81691,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	data: function data() {
 		var sortOrders = {};
 
-		var columns = [{ width: '10%', label: 'Released by', name: 'Released by' }, { width: '15%', label: 'Release to', name: 'Release to' }, { width: '43%', label: 'Received on', name: 'Received on' }, { width: '7%', label: 'Received by', name: 'Received by' }, { width: '20%', label: 'Released on', name: 'Released on' }, { width: '5%', label: 'Barcode', name: 'Barcode' }, { width: '5%', label: 'Document Title', name: 'Document Title' }];
+		var columns = [{ width: '20%', label: 'Released by', name: 'Released by' },
+		// { width: '25%', label: 'Release to', name: 'Release to'},
+		{ width: '20%', label: 'Released on', name: 'Released on' }, { width: '20%', label: 'Received on', name: 'Received on' },
+		// { width: '7%', label: 'Received by', name: 'Received by'},
+		{ width: '20%', label: 'Barcode', name: 'Barcode' }, { width: '20%', label: 'Document Title', name: 'Document Title' }];
 
 		columns.forEach(function (column) {
 			sortOrders[column.name] = -1;
@@ -81926,17 +81932,15 @@ var render = function() {
               return _c("tr", { key: item.barcode }, [
                 _c("td", [_vm._v(_vm._s(item.released_by.name))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(item.office.office_prefix))]),
+                _c("td", [_vm._v(_vm._s(item.release_at))]),
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(item.receive_at))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(item.received_by.name))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(item.release_at))]),
-                _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(item.barcode))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(item.document.document_title))])
+                _c("td", [
+                  _vm._v(_vm._s(item.document.document_title.substr(0, 25)))
+                ])
               ])
             })
           )

@@ -20,7 +20,7 @@
 						<td>{{ secondsToHms(item.routes.map(fields).reduce(sum, 0)) }}</td>
 						<td>{{ item.document_code }}</td>
 						<td>{{ item.document_title }}</td>
-						<td>{{ item.document_type_prefix }}</td>
+						<td>{{ item.document_type.document_type_prefix }}</td>
 						<td>{{ item.created_at }}</td>
 						<td @click="$event.stopPropagation()">
 							<div class="btn-group" role="group">
