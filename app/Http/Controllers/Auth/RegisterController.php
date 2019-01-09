@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Office;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -35,6 +36,13 @@ class RegisterController extends Controller
      *
      * @return void
      */
+    public function showRegistrationForm()
+    {
+        $offices = Office::all();
+
+        return view('auth.register', compact('offices'));
+    }
+
     public function __construct()
     {
        // $this->middleware('guest');
