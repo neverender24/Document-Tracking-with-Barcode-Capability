@@ -75525,7 +75525,7 @@ var render = function() {
               _c("td", [
                 _vm._v(
                   _vm._s(
-                    _vm._f("moment")(item.receive_at, "MMM-DD-YYYY hh:mmA")
+                    _vm._f("moment")(item.release_at, "MMM-DD-YYYY hh:mmA")
                   )
                 )
               ]),
@@ -75539,7 +75539,7 @@ var render = function() {
               _c("td", [
                 _vm._v(
                   _vm._s(
-                    _vm._f("moment")(item.release_at, "MMM-DD-YYYY hh:mmA")
+                    _vm._f("moment")(item.receive_at, "MMM-DD-YYYY hh:mmA")
                   )
                 )
               ]),
@@ -75548,7 +75548,7 @@ var render = function() {
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(item.remarks))]),
               _vm._v(" "),
-              item.received_by != null &&
+              item.received_by == null &&
               item.released_by.id == _vm.$root.user.user_id &&
               item.receive_at == null
                 ? _c(
@@ -75621,11 +75621,11 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Release to")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Received at")]),
+        _c("th", [_vm._v("Released at")]),
         _vm._v(" "),
         _c("th", [_vm._v("Received by")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Released at")]),
+        _c("th", [_vm._v("Received at")]),
         _vm._v(" "),
         _c("th", [_vm._v("barcode")]),
         _vm._v(" "),

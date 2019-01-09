@@ -8,9 +8,9 @@
 					<th>Summary</th>
 					<th>Released by</th>
 					<th>Release to</th>
-					<th>Received at</th>
-					<th>Received by</th>
 					<th>Released at</th>
+					<th>Received by</th>
+					<th>Received at</th>
 					<th>barcode</th>
 					<th>Remarks</th>
 					<th>Action</th>
@@ -21,12 +21,12 @@
 					<td>{{ calculateDate(item.release_at, item.receive_at) }}</td>
 					<td>{{ item.released_by == null ? '':item.released_by.name  }}</td>
 					<td>{{ item.office == null ? '':item.office.office_prefix }}</td>
-					<td>{{ item.receive_at | moment("MMM-DD-YYYY hh:mmA")}}</td>
-					<td>{{ item.received_by == null ? '':item.received_by.name }}</td>
 					<td>{{ item.release_at | moment("MMM-DD-YYYY hh:mmA") }}</td>
+					<td>{{ item.received_by == null ? '':item.received_by.name }}</td>
+					<td>{{ item.receive_at | moment("MMM-DD-YYYY hh:mmA")}}</td>
 					<td>{{ item.barcode }}</td>
 					<td>{{ item.remarks }}</td>
-					<td v-if="item.received_by != null && item.released_by.id==$root.user.user_id &&  item.receive_at==null">
+					<td v-if="item.received_by == null && item.released_by.id==$root.user.user_id &&  item.receive_at==null">
 						<el-tooltip class="item" effect="dark" content="Delete" placement="right" :enterable="false">
 							<el-button size="mini" type="danger" icon="el-icon-delete" circle @click="deleteRoute(item.id, item.barcode)"></el-button>
 						</el-tooltip>

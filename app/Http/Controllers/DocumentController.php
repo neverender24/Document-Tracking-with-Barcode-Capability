@@ -60,11 +60,10 @@ class DocumentController extends Controller
 		$index = Document::with('routes')
 		->leftjoin('document_types','documents.document_type_id', '=', 'document_types.id')
 		->leftjoin('routes','routes.barcode', '=', 'documents.document_code')
-		//	->where('user_id', \Auth::user()->id)
 		->where(function($query){
-			$query->where('routes.office_id', \Auth::user()->office_id);
-			$query->orWhere('routes.release_to', \Auth::user()->office_id);
-			$query->orWhere('documents.office_id', \Auth::user()->office_id);
+			$query->where('routes.office_id', auth()->user()->office_id);
+			$query->orWhere('routes.release_to', auth()->user()->office_id);
+			$query->orWhere('documents.office_id', auth()->user()->office_id);
 		})
 		->where('routes.remarks','LIKE', '%return%')
 		->select('document_code', 'document_title', 'document_type_prefix', 'documents.created_at', 'documents.id', 'documents.document_type_id', 'documents.document_id')
@@ -83,11 +82,10 @@ class DocumentController extends Controller
 		 $index = Document::with('routes')
 		->leftjoin('document_types','documents.document_type_id', '=', 'document_types.id')
 		->leftjoin('routes','routes.barcode', '=', 'documents.document_code')
-		//	->where('user_id', \Auth::user()->id)
 		->where(function($query){
-			$query->where('routes.office_id', \Auth::user()->office_id);
-			$query->orWhere('routes.release_to', \Auth::user()->office_id);
-			$query->orWhere('documents.office_id', \Auth::user()->office_id);
+			$query->where('routes.office_id', auth()->user()->office_id);
+			$query->orWhere('routes.release_to', auth()->user()->office_id);
+			$query->orWhere('documents.office_id', auth()->user()->office_id);
 		})
 		->select('document_code', 'document_title', 'document_type_prefix', 'documents.created_at', 'documents.id', 'documents.document_type_id', 'documents.document_id')
 		->orderBy('documents.created_at', 'desc')
