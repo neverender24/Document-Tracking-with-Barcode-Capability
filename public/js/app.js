@@ -74909,6 +74909,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -79400,18 +79401,14 @@ var render = function() {
                                 },
                                 [_c("span", { staticClass: "fa fa-edit" })]
                               )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          item.routes.length > 1
-                            ? _c(
+                            : _c(
                                 "button",
                                 {
                                   staticClass: "btn btn-sm btn-info",
                                   attrs: { disabled: "" }
                                 },
                                 [_c("span", { staticClass: "fa fa-edit" })]
-                              )
-                            : _vm._e(),
+                              ),
                           _vm._v(" "),
                           item.routes.length <= 1
                             ? _c(
@@ -79426,10 +79423,7 @@ var render = function() {
                                 },
                                 [_c("span", { staticClass: "fa fa-trash" })]
                               )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          item.routes.length > 1
-                            ? _c(
+                            : _c(
                                 "button",
                                 {
                                   staticClass: "btn btn-sm btn-danger",
@@ -79437,7 +79431,6 @@ var render = function() {
                                 },
                                 [_c("span", { staticClass: "fa fa-trash" })]
                               )
-                            : _vm._e()
                         ]
                       )
                     ]
@@ -80597,7 +80590,9 @@ var render = function() {
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(item.document_title))]),
                   _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(item.document_type_prefix))]),
+                  _c("td", {
+                    domProps: { innerHTML: _vm._s(item.document_type_prefix) }
+                  }),
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(item.created_at))])
                 ]
@@ -81693,9 +81688,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 		var columns = [{ width: '20%', label: 'Released by', name: 'Released by' },
 		// { width: '25%', label: 'Release to', name: 'Release to'},
-		{ width: '20%', label: 'Released on', name: 'Released on' }, { width: '20%', label: 'Received on', name: 'Received on' },
+		{ width: '15%', label: 'Released on', name: 'Released on' }, { width: '15%', label: 'Received on', name: 'Received on' },
 		// { width: '7%', label: 'Received by', name: 'Received by'},
-		{ width: '20%', label: 'Barcode', name: 'Barcode' }, { width: '20%', label: 'Document Title', name: 'Document Title' }];
+		{ width: '15%', label: 'Barcode', name: 'Barcode' }, { width: '35%', label: 'Document Title', name: 'Document Title' }];
 
 		columns.forEach(function (column) {
 			sortOrders[column.name] = -1;
@@ -81939,7 +81934,7 @@ var render = function() {
                 _c("td", [_vm._v(_vm._s(item.barcode))]),
                 _vm._v(" "),
                 _c("td", [
-                  _vm._v(_vm._s(item.document.document_title.substr(0, 25)))
+                  _vm._v(_vm._s(item.document.document_title.substr(0, 50)))
                 ])
               ])
             })

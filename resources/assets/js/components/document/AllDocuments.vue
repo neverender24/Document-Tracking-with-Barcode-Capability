@@ -19,7 +19,7 @@
 					<td>{{ secondsToHms(item.routes.map(fields).reduce(sum, 0)) }}</td>
 					<td>{{ item.document_code }}</td>
 					<td>{{ item.document_title }}</td>
-					<td>{{ item.document_type_prefix }}</td>
+					<td v-html="item.document_type_prefix"></td>
 					<td>{{ item.created_at }}</td>
 				</tr>
 			</tbody>

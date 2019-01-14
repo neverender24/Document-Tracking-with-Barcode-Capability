@@ -108,14 +108,24 @@ class RouteController extends Controller
 				$document = Document::where('document_code', $code)->get();
 
 				if ($document->count() == 0) {
-					array_push($errors,"Document ".$code." Not Found. Make Sure you received it. Error 1");
+					array_push($errors," Document ".$code." Not Found. Error 1");
 					continue;
 				}
 				
 				$lastRecord = $this->model->where('barcode', $code)->orderBy('id', 'desc')->first();
 
+				if ($lastRecord->receive_by == null) {
+					array_push($errors, " Document ".$code."Document not yet received. Error 4");
+					continue;
+				}
+
+				// if ($lastRecord->office_id == auth()->user()->office_id) {
+				// 	array_push($errors, " Document ".$code."Document already released. Error 3");
+				// 	continue;
+				// }
+
 				if ($lastRecord->release_to != auth()->user()->office_id) {
-					array_push($errors, "Document ".$code." Not Found. Make Sure you received it. Error 2");
+					array_push($errors, " Document ".$code." This document is not routed to your office. You are not allowed to release it. Error 2");
 					continue;
 				}
 

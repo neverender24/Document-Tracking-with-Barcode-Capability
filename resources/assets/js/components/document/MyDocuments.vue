@@ -26,9 +26,10 @@
 							<div class="btn-group" role="group">
 								<button @click="print(item.id, item.document_code,item.document_title)" class="btn btn-sm btn-info"><span class="fa fa-print"></span></button>
 								<button @click="edit(item.id, item.document_code)" v-if="item.routes.length <= 1" class="btn btn-sm btn-info"><span class="fa fa-edit"></span></button>
-								<button v-if="item.routes.length > 1" class="btn btn-sm btn-info" disabled><span class="fa fa-edit"></span></button>
+								<button v-else class="btn btn-sm btn-info" disabled><span class="fa fa-edit"></span></button>
+								
 								<button @click="deleteDocument(item.document_code)" v-if="item.routes.length <= 1" class="btn btn-sm btn-danger"><span class="fa fa-trash"></span></button>
-								<button v-if="item.routes.length > 1" class="btn btn-sm btn-danger" disabled><span class="fa fa-trash"></span></button>
+								<button v-else class="btn btn-sm btn-danger" disabled><span class="fa fa-trash"></span></button>
 							</div>
 						</td>
 					</tr>
