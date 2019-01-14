@@ -26,7 +26,7 @@
 					<td>{{ item.receive_at | moment("MMM-DD-YYYY hh:mmA")}}</td>
 					<td>{{ item.barcode }}</td>
 					<td>{{ item.remarks }}</td>
-					<td v-if="item.received_by == null && item.released_by.id==$root.user.user_id &&  item.receive_at==null">
+					<td v-if="item.received_by == null && item.released_by.id==$root.user.user_id &&  item.receive_at==null && routes.length > 1">
 						<el-tooltip class="item" effect="dark" content="Delete" placement="right" :enterable="false">
 							<el-button size="mini" type="danger" icon="el-icon-delete" circle @click="deleteRoute(item.id, item.barcode)"></el-button>
 						</el-tooltip>

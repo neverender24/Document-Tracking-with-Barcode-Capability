@@ -75551,7 +75551,8 @@ var render = function() {
               _vm._v(" "),
               item.received_by == null &&
               item.released_by.id == _vm.$root.user.user_id &&
-              item.receive_at == null
+              item.receive_at == null &&
+              _vm.routes.length > 1
                 ? _c(
                     "td",
                     [
