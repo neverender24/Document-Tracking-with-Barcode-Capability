@@ -21,8 +21,10 @@
 								<input type="text"
 								class="code form-control form-control-sm border-secondary" 
 								v-on:keyup.enter="addSubDocuments(row,index)"
+								@keyup="checkError(row,index)" 
 								v-model="row.code"
 								v-focus>
+								<small class="text-danger" v-if="row.errors2">{{ row.errors2 }}</small>
 							</td>
 							<td><input type="text" class="form-control form-control-sm" v-model="row.title" disabled></td>
 							<td>
@@ -179,7 +181,8 @@
 				document_type: {},
 				radio: 'Good',
 				withRemarks:'',
-				returnRemarks:''
+				returnRemarks:'',
+				errors2: ''
 			}
 		},
 
@@ -275,10 +278,30 @@
 					});
 				}
 
+				this.checkError(row, index)
+			},
+
+			checkError: function(row, index) {
+
 				if (index !== undefined) {
 					axios.post('get-subdocument', this.list.subDocuments[index])
 					.then((response)=>{ 
 						this.list.subDocuments[index].title = response.data.document_title;
+
+					let error = ''
+					_.findLastKey(response.data.routes, function(n) {
+						if (n.receive_by == null) {
+								error = "Not received yet"
+							}
+					});
+
+					if (!response.data) {
+						error = "Not found! Check Route."
+					}
+
+					this.list.subDocuments[index].errors2 = error
+
+						
 					})
 					.catch((error)=> this.errors = error.response.data.errors)
 				}

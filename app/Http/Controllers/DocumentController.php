@@ -196,7 +196,13 @@ class DocumentController extends Controller
 
     public function getSubDocument(Request $request)
 	{
-		return $this->model->where('document_code', $request->code)->first();
+		return $this->model
+			->with(['routes'])
+			->whereHas('routes', function ($q) {
+				$q->latest();
+			})
+			->where('document_code', $request->code)
+			->first();
 	}
 
 	public function getSubDocuments(Request $request)

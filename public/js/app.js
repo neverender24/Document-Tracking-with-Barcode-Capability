@@ -82242,6 +82242,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -82261,7 +82263,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			document_type: {},
 			radio: 'Good',
 			withRemarks: '',
-			returnRemarks: ''
+			returnRemarks: '',
+			errors2: ''
 		};
 	},
 
@@ -82358,7 +82361,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 		addSubDocuments: function addSubDocuments(row, index) {
-			var _this2 = this;
 
 			if ($('.code').filter(function () {
 				return this.value == row.code;
@@ -82371,9 +82373,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				});
 			}
 
+			this.checkError(row, index);
+		},
+
+		checkError: function checkError(row, index) {
+			var _this2 = this;
+
 			if (index !== undefined) {
 				axios.post('get-subdocument', this.list.subDocuments[index]).then(function (response) {
 					_this2.list.subDocuments[index].title = response.data.document_title;
+
+					var error = '';
+					_.findLastKey(response.data.routes, function (n) {
+						if (n.receive_by == null) {
+							error = "Not received yet";
+						}
+					});
+
+					if (!response.data) {
+						error = "Not found! Check Route.";
+					}
+
+					_this2.list.subDocuments[index].errors2 = error;
 				}).catch(function (error) {
 					return _this2.errors = error.response.data.errors;
 				});
@@ -82482,21 +82503,26 @@ var render = function() {
                           attrs: { type: "text" },
                           domProps: { value: row.code },
                           on: {
-                            keyup: function($event) {
-                              if (
-                                !("button" in $event) &&
-                                _vm._k(
-                                  $event.keyCode,
-                                  "enter",
-                                  13,
-                                  $event.key,
-                                  "Enter"
-                                )
-                              ) {
-                                return null
+                            keyup: [
+                              function($event) {
+                                if (
+                                  !("button" in $event) &&
+                                  _vm._k(
+                                    $event.keyCode,
+                                    "enter",
+                                    13,
+                                    $event.key,
+                                    "Enter"
+                                  )
+                                ) {
+                                  return null
+                                }
+                                _vm.addSubDocuments(row, index)
+                              },
+                              function($event) {
+                                _vm.checkError(row, index)
                               }
-                              _vm.addSubDocuments(row, index)
-                            },
+                            ],
                             input: function($event) {
                               if ($event.target.composing) {
                                 return
@@ -82504,7 +82530,13 @@ var render = function() {
                               _vm.$set(row, "code", $event.target.value)
                             }
                           }
-                        })
+                        }),
+                        _vm._v(" "),
+                        row.errors2
+                          ? _c("small", { staticClass: "text-danger" }, [
+                              _vm._v(_vm._s(row.errors2))
+                            ])
+                          : _vm._e()
                       ]),
                       _vm._v(" "),
                       _c("td", [
