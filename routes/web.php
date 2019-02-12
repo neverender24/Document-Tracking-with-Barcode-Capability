@@ -45,7 +45,7 @@ Route::post('get-subdocument', "DocumentController@getSubDocument");
 Route::post('get-subdocuments', "DocumentController@getSubDocuments");
 
 Route::post('get-offices', function(){
-    return App\Office::orderBy('office_name','ASC')->get();
+    return App\Office::orderBy('office_prefix','ASC')->get();
 });
 
 Route::post('get-user', function(){
