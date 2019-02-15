@@ -14,7 +14,7 @@ class DocumentTypeController extends Controller
 
     public function getDocumentTypes()
 	{
-		return DocumentType::orderBy('created_at', 'desc')->get();
+		return DocumentType::orderBy('document_type', 'asc')->get();
 	}
 
 	public function store(Request $request)
