@@ -75790,150 +75790,192 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	props: {
-		list: {},
-		barcode: ''
-	},
-	data: function data() {
-		return {
-			subDocuments: [],
-			process: [],
-			errors: {},
-			offices: {},
-			document_type: {},
-			loading: false
-		};
-	},
+    props: {
+        list: {},
+        barcode: ""
+    },
+    data: function data() {
+        return {
+            subDocuments: [],
+            process: [],
+            errors: {},
+            offices: {},
+            document_type: {},
+            loading: false
+        };
+    },
 
-	components: {
-		'barcode': __WEBPACK_IMPORTED_MODULE_0_vue_barcode___default.a
-	},
-	mounted: function mounted() {
-		this.selectDocumentType();
-		this.selectOffice();
-	},
+    components: {
+        barcode: __WEBPACK_IMPORTED_MODULE_0_vue_barcode___default.a
+    },
+    mounted: function mounted() {
+        this.selectDocumentType();
+        this.selectOffice();
+    },
 
-	directives: {
-		focus: {
-			// directive definition
-			inserted: function inserted(el) {
-				el.focus();
-			}
-		}
-	},
-	methods: {
-		removeEmptyDocument: function removeEmptyDocument(row, index) {
-			if (row.document_code == '') {
-				this.subDocuments.splice(index, 1);
-			}
-		},
+    directives: {
+        focus: {
+            // directive definition
+            inserted: function inserted(el) {
+                el.focus();
+            }
+        }
+    },
+    methods: {
+        removeEmptyDocument: function removeEmptyDocument(row, index) {
+            if (row.document_code == "") {
+                this.subDocuments.splice(index, 1);
+            }
+        },
 
-		validate: function validate() {
+        validate: function validate() {
+            if (this.list.document_title && this.list.document_type_id) return this.save();
+            this.errors = [];
+            this.$message({
+                type: "error",
+                message: "Fix errors"
+            });
+            $(".alert").removeClass("d-none");
+            if (!this.list.document_title) this.errors.push("Keywords required.");
+            if (!this.list.document_type_id) this.errors.push("Document Type required.");
+            return false;
+        },
+        save: function save() {
+            var _this = this;
 
-			if (this.list.document_title && this.list.document_type_id) return this.save();
-			this.errors = [];
-			this.$message({
-				type: 'error',
-				message: 'Fix errors'
-			});
-			$('.alert').removeClass('d-none');
-			if (!this.list.document_title) this.errors.push("Keywords required.");
-			if (!this.list.document_type_id) this.errors.push("Document Type required.");
-			return false;
-		},
-		save: function save() {
-			var _this = this;
-
-			this.loading = !this.loading;
-			axios.patch('/documents/' + this.list.id, {
-				'document': this.list,
-				'subDocuments': this.subDocuments,
-				'routes': this.process
-			}).then(function (response) {
-				_this.$message({
-					type: 'success',
-					message: 'Updated successfully'
-				});
-				_this.$emit('closeEdit');
-				_this.loading = !_this.loading;
-			}).catch(function (error) {
-				return _this.errors = error.response.data.errors;
-			});
-		},
-
-
-		addSubDocuments: function addSubDocuments(row, index) {
-			var _this2 = this;
-
-			$('.document').removeClass('d-none');
-			if ($('.code').filter(function () {
-				return this.value == row.code;
-			}).length > 1) {
-				//	alert("Already Scanned")
-				row.document_code = "";
-			} else {
-				this.subDocuments.push({
-					document_code: "",
-					document_title: ""
-				});
-			}
-
-			//getting sub-documents via document_code
-			if (index !== undefined) {
-				axios.post('get-subdocument', this.subDocuments[index]).then(function (response) {
-					_this2.subDocuments[index].document_title = response.data.document_title;
-				}).catch(function (error) {
-					return _this2.errors = error.response.data.errors;
-				});
-			}
-		},
-
-		addSteps: function addSteps(row, index) {
-			$('.route').removeClass('d-none');
-			this.process.push({
-				office_id: ""
-			});
-		},
-
-		removeStep: function removeStep(row, index) {
-			this.process.splice(index, 1);
-		},
-
-		removeSubDocument: function removeSubDocument(row, index) {
-			this.subDocuments.splice(index, 1);
-		},
-
-		selectDocumentType: function selectDocumentType() {
-			var _this3 = this;
-
-			axios.post('view-document-types').then(function (response) {
-				_this3.document_type = response.data;
-			}).catch(function (error) {
-				return _this3.errors = error.response.data.errors;
-			});
-		},
-		selectOffice: function selectOffice() {
-			var _this4 = this;
-
-			axios.post('get-offices').then(function (response) {
-				_this4.offices = response.data;
-			}).catch(function (error) {
-				return _this4.errors = error.response.data.errors;
-			});
-		},
+            this.loading = !this.loading;
+            axios.patch("/documents/" + this.list.id, {
+                document: this.list,
+                subDocuments: this.subDocuments,
+                routes: this.process
+            }).then(function (response) {
+                _this.$message({
+                    type: "success",
+                    message: "Updated successfully"
+                });
+                _this.$emit("closeEdit");
+                _this.loading = !_this.loading;
+            }).catch(function (error) {
+                return _this.errors = error.response.data.errors;
+            });
+        },
 
 
-		print: function print() {
-			this.loading = !this.loading;
-			window.open("/pdf?id=" + this.list.document_code + "&title=" + this.list.document_title + "&office=" + this.$root.user.office_name + "&name=" + this.$root.user.user_name);
-			this.loading = !this.loading;
-		}
-	}
+        addSubDocuments: function addSubDocuments(row, index) {
+            var _this2 = this;
+
+            $(".document").removeClass("d-none");
+            if ($(".code").filter(function () {
+                return this.value == row.code;
+            }).length > 1) {
+                //	alert("Already Scanned")
+                row.document_code = "";
+            } else {
+                this.subDocuments.push({
+                    document_code: "",
+                    document_title: ""
+                });
+            }
+
+            //getting sub-documents via document_code
+            if (index !== undefined) {
+                axios.post("get-subdocument", this.subDocuments[index]).then(function (response) {
+                    _this2.subDocuments[index].document_title = response.data.document_title;
+                }).catch(function (error) {
+                    return _this2.errors = error.response.data.errors;
+                });
+            }
+        },
+
+        addSteps: function addSteps(row, index) {
+            $(".route").removeClass("d-none");
+            this.process.push({
+                office_id: ""
+            });
+        },
+
+        removeStep: function removeStep(row, index) {
+            this.process.splice(index, 1);
+        },
+
+        removeSubDocument: function removeSubDocument(row, index) {
+            this.subDocuments.splice(index, 1);
+        },
+
+        selectDocumentType: function selectDocumentType() {
+            var _this3 = this;
+
+            axios.post("view-document-types").then(function (response) {
+                _this3.document_type = response.data;
+            }).catch(function (error) {
+                return _this3.errors = error.response.data.errors;
+            });
+        },
+        selectOffice: function selectOffice() {
+            var _this4 = this;
+
+            axios.post("get-offices").then(function (response) {
+                _this4.offices = response.data;
+            }).catch(function (error) {
+                return _this4.errors = error.response.data.errors;
+            });
+        },
+
+
+        print: function print() {
+            this.loading = !this.loading;
+            window.open("/pdf?id=" + this.list.document_code + "&title=" + this.list.document_title + "&office=" + this.$root.user.office_name + "&name=" + this.$root.user.user_name);
+            this.loading = !this.loading;
+        },
+
+        removeChars: function removeChars(text) {
+            var regexp = new RegExp("#([^\\s]*)", "g");
+            this.list.document_title = text.replace(regexp, "No.");
+        }
+    }
 });
 
 /***/ }),
@@ -78782,13 +78824,7 @@ var render = function() {
                                   attrs: { item: value },
                                   domProps: { value: value.id }
                                 },
-                                [
-                                  _vm._v(
-                                    "\n\t\t\t\t\t\t\t\t\t\t" +
-                                      _vm._s(value.office_name) +
-                                      "\n\t\t\t\t\t\t\t\t\t"
-                                  )
-                                ]
+                                [_vm._v(_vm._s(value.office_name))]
                               )
                             })
                           ],
@@ -78866,13 +78902,7 @@ var render = function() {
                 return _c(
                   "option",
                   { attrs: { item: value }, domProps: { value: value.id } },
-                  [
-                    _vm._v(
-                      "\n\t\t\t\t\t\t" +
-                        _vm._s(value.document_type) +
-                        "\n\t\t\t\t\t"
-                    )
-                  ]
+                  [_vm._v(_vm._s(value.document_type))]
                 )
               })
             ],
@@ -78918,6 +78948,9 @@ var render = function() {
             attrs: { type: "text", placeholder: "Title keywords", rows: "5" },
             domProps: { value: _vm.list.document_title },
             on: {
+              change: function($event) {
+                _vm.removeChars(_vm.list.document_title)
+              },
               input: function($event) {
                 if ($event.target.composing) {
                   return
@@ -80833,143 +80866,188 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	props: {
-		list: {},
-		subDocuments: '',
-		process: ''
-	},
+    props: {
+        list: {},
+        subDocuments: "",
+        process: ""
+    },
 
-	data: function data() {
-		return {
-			errors: {},
-			offices: {},
-			document_type: {},
-			loading: false
-		};
-	},
-	mounted: function mounted() {
-		this.selectDocumentType();
-		this.selectOffice();
-	},
-
-
-	directives: {
-		focus: {
-			inserted: function inserted(el) {
-				el.focus();
-			}
-		}
-	},
-
-	methods: {
-		validate: function validate() {
-			var checkRoute = false;
-
-			var filteredProcess = this.process.filter(function (pr) {
-				if (pr.office_id) {
-					return true;
-				}
-			});
-			if (filteredProcess.length) {
-				checkRoute = true;
-			}
-
-			if (this.list.document_title && this.list.document_type_id && checkRoute) return this.save();
-			this.errors = [];
-			this.$message({
-				type: 'error',
-				message: 'Fix errors'
-			});
-			$('.alert').removeClass('d-none');
-			if (!this.list.document_title) this.errors.push("Keywords required.");
-			if (!this.list.document_type_id) this.errors.push("Document Type required.");
-			if (!checkRoute) this.errors.push("There should be at least 1 route.");
-			return false;
-		},
-		save: function save() {
-			var _this = this;
-
-			this.loading = !this.loading;
-			axios.post('/documents', [this.list, this.subDocuments, this.process]).then(function (response) {
-				_this.$message({
-					type: 'success',
-					message: 'Added successfully'
-				});
-
-				_this.loading = !_this.loading;
-				//this.print();
-				_this.$emit('closeCreate');
-			}).catch(function (error) {});
-		},
+    data: function data() {
+        return {
+            errors: {},
+            offices: {},
+            document_type: {},
+            loading: false
+        };
+    },
+    mounted: function mounted() {
+        this.selectDocumentType();
+        this.selectOffice();
+    },
 
 
-		addSubDocuments: function addSubDocuments(row, index) {
-			var _this2 = this;
+    directives: {
+        focus: {
+            inserted: function inserted(el) {
+                el.focus();
+            }
+        }
+    },
 
-			if ($('.code').filter(function () {
-				return this.value == row.code;
-			}).length > 1) {
-				row.code = "";
-			} else {
-				this.subDocuments.push({
-					code: "",
-					title: ""
-				});
-			}
+    methods: {
+        validate: function validate() {
+            var checkRoute = false;
 
-			//getting sub-documents via document_code
-			if (index !== undefined) {
-				axios.post('get-subdocument', this.subDocuments[index]).then(function (response) {
-					_this2.subDocuments[index].title = response.data.document_title;
-				}).catch(function (error) {
-					return _this2.errors = error.response.data.errors;
-				});
-			}
-		},
+            var filteredProcess = this.process.filter(function (pr) {
+                if (pr.office_id) {
+                    return true;
+                }
+            });
+            if (filteredProcess.length) {
+                checkRoute = true;
+            }
 
-		addSteps: function addSteps(row, index) {
-			this.process.push({
-				office_id: ""
-			});
-		},
+            if (this.list.document_title && this.list.document_type_id && checkRoute) return this.save();
+            this.errors = [];
+            this.$message({
+                type: "error",
+                message: "Fix errors"
+            });
+            $(".alert").removeClass("d-none");
+            if (!this.list.document_title) this.errors.push("Keywords required.");
+            if (!this.list.document_type_id) this.errors.push("Document Type required.");
+            if (!checkRoute) this.errors.push("There should be at least 1 route.");
+            return false;
+        },
+        save: function save() {
+            var _this = this;
 
-		removeStep: function removeStep(index) {
-			this.process.splice(index, 1);
-		},
+            this.loading = !this.loading;
+            axios.post("/documents", [this.list, this.subDocuments, this.process]).then(function (response) {
+                _this.$message({
+                    type: "success",
+                    message: "Added successfully"
+                });
 
-		removeSubDocument: function removeSubDocument(index) {
-			this.subDocuments.splice(index, 1);
-		},
-
-		selectDocumentType: function selectDocumentType() {
-			var _this3 = this;
-
-			axios.post('view-document-types').then(function (response) {
-				_this3.document_type = response.data;
-			}).catch(function (error) {
-				return _this3.errors = error.response.data.errors;
-			});
-		},
-		selectOffice: function selectOffice() {
-			var _this4 = this;
-
-			axios.post('get-offices').then(function (response) {
-				_this4.offices = response.data;
-			}).catch(function (error) {
-				return _this4.errors = error.response.data.errors;
-			});
-		},
+                _this.loading = !_this.loading;
+                //this.print();
+                _this.$emit("closeCreate");
+            }).catch(function (error) {});
+        },
 
 
-		print: function print() {
-			this.loading = !this.loading;
-			window.open("/pdf?id=" + this.list.document_code + "&title=" + this.list.document_title + "&office=" + this.$root.user.office_name + "&name=" + this.$root.user.user_name);
-			this.loading = !this.loading;
-		}
-	}
+        addSubDocuments: function addSubDocuments(row, index) {
+            var _this2 = this;
+
+            if ($(".code").filter(function () {
+                return this.value == row.code;
+            }).length > 1) {
+                row.code = "";
+            } else {
+                this.subDocuments.push({
+                    code: "",
+                    title: ""
+                });
+            }
+
+            //getting sub-documents via document_code
+            if (index !== undefined) {
+                axios.post("get-subdocument", this.subDocuments[index]).then(function (response) {
+                    _this2.subDocuments[index].title = response.data.document_title;
+                }).catch(function (error) {
+                    return _this2.errors = error.response.data.errors;
+                });
+            }
+        },
+
+        addSteps: function addSteps(row, index) {
+            this.process.push({
+                office_id: ""
+            });
+        },
+
+        removeStep: function removeStep(index) {
+            this.process.splice(index, 1);
+        },
+
+        removeSubDocument: function removeSubDocument(index) {
+            this.subDocuments.splice(index, 1);
+        },
+
+        selectDocumentType: function selectDocumentType() {
+            var _this3 = this;
+
+            axios.post("view-document-types").then(function (response) {
+                _this3.document_type = response.data;
+            }).catch(function (error) {
+                return _this3.errors = error.response.data.errors;
+            });
+        },
+        selectOffice: function selectOffice() {
+            var _this4 = this;
+
+            axios.post("get-offices").then(function (response) {
+                _this4.offices = response.data;
+            }).catch(function (error) {
+                return _this4.errors = error.response.data.errors;
+            });
+        },
+
+
+        print: function print() {
+            this.loading = !this.loading;
+            window.open("/pdf?id=" + this.list.document_code + "&title=" + this.list.document_title + "&office=" + this.$root.user.office_name + "&name=" + this.$root.user.user_name);
+            this.loading = !this.loading;
+        },
+
+        removeChars: function removeChars(text) {
+            var regexp = new RegExp('#([^\\s]*)', 'g');
+            this.list.document_title = text.replace(regexp, 'No.');
+        }
+    }
 });
 
 /***/ }),
@@ -81162,11 +81240,9 @@ var render = function() {
                                 },
                                 [
                                   _vm._v(
-                                    "\n\t\t\t\t\t\t\t\t\t\t" +
-                                      _vm._s(value.office_prefix) +
+                                    _vm._s(value.office_prefix) +
                                       " - " +
-                                      _vm._s(value.office_name) +
-                                      "\n\t\t\t\t\t\t\t\t\t"
+                                      _vm._s(value.office_name)
                                   )
                                 ]
                               )
@@ -81244,11 +81320,7 @@ var render = function() {
               _vm._v(" "),
               _vm._l(_vm.document_type, function(value, key) {
                 return _c("option", { domProps: { value: value.id } }, [
-                  _vm._v(
-                    "\n\t\t\t\t\t\t" +
-                      _vm._s(value.document_type) +
-                      "\n\t\t\t\t\t"
-                  )
+                  _vm._v(_vm._s(value.document_type))
                 ])
               })
             ],
@@ -81294,6 +81366,9 @@ var render = function() {
             attrs: { type: "text", placeholder: "Title keywords", rows: "5" },
             domProps: { value: _vm.list.document_title },
             on: {
+              change: function($event) {
+                _vm.removeChars(_vm.list.document_title)
+              },
               input: function($event) {
                 if ($event.target.composing) {
                   return
