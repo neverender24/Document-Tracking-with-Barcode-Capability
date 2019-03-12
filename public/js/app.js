@@ -75090,24 +75090,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				return _this4.errors = error.response.data.errors;
 			});
 		},
-		fields: function fields(id) {
-			var rel = new Date(id.updated_at);
-			var rec = new Date(id.created_at);
+		calc: function calc(routes) {
+			var sum = 0;
+			var first = true;
+			var firstRecord = 0;
+			var self = this;
+			_.forEach(routes, function (key, index) {
+				if (first) {
+					first = false;
+					firstRecord = self.calculateDate(key.receive_at, key.release_at);
+				}
+
+				if (index != 0) {
+					sum += self.calculateDate(key.release_at, routes[index - 1].receive_at);
+				}
+			});
+
+			return this.secondsToHms(firstRecord + sum);
+		},
+		calculateDate: function calculateDate(released, received) {
+			var moment = __webpack_require__(0);
+			var rel = new Date(released);
+			var rec = new Date(received);
 			var seconds = (rel.getTime() - rec.getTime()) / 1000; //1440516958
+
 
 			return seconds;
 		},
-		sum: function sum(item1, item2) {
-			return item1 + item2;
-		},
 		secondsToHms: function secondsToHms(d) {
 			d = Number(d);
-
 			var h = Math.floor(d / 3600);
 			var m = Math.floor(d % 3600 / 60);
 			var s = Math.floor(d % 3600 % 60);
 
-			return ('0' + h).slice(-2) + ":" + ('0' + m).slice(-2) + ":" + ('0' + s).slice(-2);
+			var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hour, ") : "";
+			var mDisplay = m > 0 ? m + (m == 1 ? " min, " : " min, ") : "";
+			var sDisplay = s > 0 ? s + (s == 1 ? " sec" : " sec") : "";
+
+			return hDisplay + mDisplay + sDisplay;
 		}
 	}
 });
@@ -75118,6 +75138,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
 //
 //
 //
@@ -75190,6 +75212,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			});
 		},
 		calculateDate: function calculateDate(released, received) {
+			var moment = __webpack_require__(0);
+			var rel = new Date(released);
+			var rec = new Date(received);
+			var seconds = (rel.getTime() - rec.getTime()) / 1000; //1440516958
+			var newdate = this.secondsToHms(seconds);
+
+			return newdate;
+		},
+		calculateStartDate: function calculateStartDate(released, received) {
 			var moment = __webpack_require__(0);
 			var rel = new Date(released);
 			var rec = new Date(received);
@@ -75505,11 +75536,24 @@ var render = function() {
           "tbody",
           _vm._l(_vm.routes, function(item, key) {
             return _c("tr", [
-              _c("td", [
-                _vm._v(
-                  _vm._s(_vm.calculateDate(item.release_at, item.receive_at))
-                )
-              ]),
+              key != 0
+                ? _c("td", [
+                    _vm._v(
+                      _vm._s(
+                        _vm.calculateDate(
+                          item.release_at,
+                          _vm.routes[key - 1].receive_at
+                        )
+                      )
+                    )
+                  ])
+                : _c("td", [
+                    _vm._v(
+                      _vm._s(
+                        _vm.calculateStartDate(item.release_at, item.receive_at)
+                      )
+                    )
+                  ]),
               _vm._v(" "),
               _c("td", [
                 _vm._v(
@@ -79359,7 +79403,7 @@ var render = function() {
         [
           _c(
             "tbody",
-            _vm._l(_vm.documents, function(item) {
+            _vm._l(_vm.documents, function(item, index) {
               return _c(
                 "tr",
                 {
@@ -79371,15 +79415,7 @@ var render = function() {
                   }
                 },
                 [
-                  _c("td", [
-                    _vm._v(
-                      _vm._s(
-                        _vm.secondsToHms(
-                          item.routes.map(_vm.fields).reduce(_vm.sum, 0)
-                        )
-                      )
-                    )
-                  ]),
+                  _c("td", [_vm._v(_vm._s(_vm.calc(item.routes, index)))]),
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(item.document_code))]),
                   _vm._v(" "),
@@ -79923,24 +79959,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				return _this3.errors = error.response.data.errors;
 			});
 		},
-		fields: function fields(id) {
-			var rel = new Date(id.updated_at);
-			var rec = new Date(id.created_at);
+		calc: function calc(routes) {
+			var sum = 0;
+			var first = true;
+			var firstRecord = 0;
+			var self = this;
+			_.forEach(routes, function (key, index) {
+				if (first) {
+					first = false;
+					firstRecord = self.calculateDate(key.receive_at, key.release_at);
+				}
+
+				if (index != 0) {
+					sum += self.calculateDate(key.release_at, routes[index - 1].receive_at);
+				}
+			});
+
+			return this.secondsToHms(firstRecord + sum);
+		},
+		calculateDate: function calculateDate(released, received) {
+			var moment = __webpack_require__(0);
+			var rel = new Date(released);
+			var rec = new Date(received);
 			var seconds = (rel.getTime() - rec.getTime()) / 1000; //1440516958
+
 
 			return seconds;
 		},
-		sum: function sum(item1, item2) {
-			return item1 + item2;
-		},
 		secondsToHms: function secondsToHms(d) {
 			d = Number(d);
-
 			var h = Math.floor(d / 3600);
 			var m = Math.floor(d % 3600 / 60);
 			var s = Math.floor(d % 3600 % 60);
 
-			return ('0' + h).slice(-2) + ":" + ('0' + m).slice(-2) + ":" + ('0' + s).slice(-2);
+			var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hour, ") : "";
+			var mDisplay = m > 0 ? m + (m == 1 ? " min, " : " min, ") : "";
+			var sDisplay = s > 0 ? s + (s == 1 ? " sec" : " sec") : "";
+
+			return hDisplay + mDisplay + sDisplay;
 		}
 	}
 });
@@ -80075,7 +80131,7 @@ var render = function() {
         [
           _c(
             "tbody",
-            _vm._l(_vm.documents, function(item) {
+            _vm._l(_vm.documents, function(item, index) {
               return _c(
                 "tr",
                 {
@@ -80087,15 +80143,7 @@ var render = function() {
                   }
                 },
                 [
-                  _c("td", [
-                    _vm._v(
-                      _vm._s(
-                        _vm.secondsToHms(
-                          item.routes.map(_vm.fields).reduce(_vm.sum, 0)
-                        )
-                      )
-                    )
-                  ]),
+                  _c("td", [_vm._v(_vm._s(_vm.calc(item.routes, index)))]),
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(item.document_code))]),
                   _vm._v(" "),
@@ -80354,6 +80402,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -80471,24 +80520,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				return _this2.errors = error.response.data.errors;
 			});
 		},
-		fields: function fields(id) {
-			var rel = new Date(id.updated_at);
-			var rec = new Date(id.created_at);
+		calc: function calc(routes) {
+			var sum = 0;
+			var first = true;
+			var firstRecord = 0;
+			var self = this;
+			_.forEach(routes, function (key, index) {
+				if (first) {
+					first = false;
+					firstRecord = self.calculateDate(key.receive_at, key.release_at);
+				}
+
+				if (index != 0) {
+					sum += self.calculateDate(key.release_at, routes[index - 1].receive_at);
+				}
+			});
+
+			return this.secondsToHms(firstRecord + sum);
+		},
+		calculateDate: function calculateDate(released, received) {
+			var moment = __webpack_require__(0);
+			var rel = new Date(released);
+			var rec = new Date(received);
 			var seconds = (rel.getTime() - rec.getTime()) / 1000; //1440516958
+
 
 			return seconds;
 		},
-		sum: function sum(item1, item2) {
-			return item1 + item2;
-		},
 		secondsToHms: function secondsToHms(d) {
 			d = Number(d);
-
 			var h = Math.floor(d / 3600);
 			var m = Math.floor(d % 3600 / 60);
 			var s = Math.floor(d % 3600 % 60);
 
-			return ('0' + h).slice(-2) + ":" + ('0' + m).slice(-2) + ":" + ('0' + s).slice(-2);
+			var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hour, ") : "";
+			var mDisplay = m > 0 ? m + (m == 1 ? " min, " : " min, ") : "";
+			var sDisplay = s > 0 ? s + (s == 1 ? " sec" : " sec") : "";
+
+			return hDisplay + mDisplay + sDisplay;
 		}
 	}
 });
@@ -80598,7 +80667,7 @@ var render = function() {
         [
           _c(
             "tbody",
-            _vm._l(_vm.documents, function(item) {
+            _vm._l(_vm.documents, function(item, index) {
               return _c(
                 "tr",
                 {
@@ -80610,15 +80679,7 @@ var render = function() {
                   }
                 },
                 [
-                  _c("td", [
-                    _vm._v(
-                      _vm._s(
-                        _vm.secondsToHms(
-                          item.routes.map(_vm.fields).reduce(_vm.sum, 0)
-                        )
-                      )
-                    )
-                  ]),
+                  _c("td", [_vm._v(_vm._s(_vm.calc(item.routes, index)))]),
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(item.document_code))]),
                   _vm._v(" "),

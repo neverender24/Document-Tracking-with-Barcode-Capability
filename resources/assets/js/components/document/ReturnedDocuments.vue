@@ -29,8 +29,8 @@
 
 		<datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
 			<tbody>
-				<tr v-for="item in documents" :key="item.document_code" @click="getRoute(item.document_code)">
-					<td>{{ secondsToHms(item.routes.map(fields).reduce(sum, 0)) }}</td>
+				<tr v-for="(item, index) in documents" :key="item.document_code" @click="getRoute(item.document_code)">
+					<td>{{ calc(item.routes, index) }}</td>
 					<td>{{ item.document_code }}</td>
 					<td>{{ item.document_title }}</td>
 					<td>{{ item.document_type_prefix }}</td>
@@ -208,25 +208,47 @@
 			
 			},
 
-			fields(id){
-				var rel = new Date(id.updated_at);
-				var rec = new Date(id.created_at);
+			calc(routes) {
+				var sum = 0
+				var first = true
+				var firstRecord = 0
+				var self = this
+				_.forEach(routes, function(key, index){
+					if (first) {
+						first = false
+						firstRecord = self.calculateDate(key.receive_at, key.release_at)
+					}
+
+					if (index!=0){
+						sum += self.calculateDate(key.release_at, routes[index-1].receive_at)
+					}
+				})
+
+				return this.secondsToHms(firstRecord+sum)
+			},
+
+			calculateDate(released, received){
+				var moment = require('moment');
+				var rel = new Date(released);
+				var rec = new Date(received);
 				var seconds = (rel.getTime() - rec.getTime()) / 1000; //1440516958
+				
 
 				return seconds
 			},
-			sum(item1, item2){
-				return item1+item2
-			},
+
 			secondsToHms(d) {
 				d = Number(d);
-
 				var h = Math.floor(d / 3600);
 				var m = Math.floor(d % 3600 / 60);
 				var s = Math.floor(d % 3600 % 60);
 
-				return ('0' + h).slice(-2) + ":" + ('0' + m).slice(-2) + ":" + ('0' + s).slice(-2);
-			},
+				var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hour, ") : "";
+				var mDisplay = m > 0 ? m + (m == 1 ? " min, " : " min, ") : "";
+				var sDisplay = s > 0 ? s + (s == 1 ? " sec" : " sec") : "";
+
+				return hDisplay + mDisplay + sDisplay; 
+			}
 		}
 	}
 </script>

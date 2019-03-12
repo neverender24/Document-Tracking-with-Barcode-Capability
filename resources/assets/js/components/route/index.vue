@@ -18,7 +18,9 @@
 			</thead>
 			<tbody>
 				<tr v-for="item,key in routes">
-					<td>{{ calculateDate(item.release_at, item.receive_at) }}</td>
+					<!-- <td v-if="key!=0">{{routes[key-1].receive_at}}</td> -->
+					<td v-if="key!=0">{{ calculateDate(item.release_at, routes[key-1].receive_at) }}</td>
+					<td v-else>{{ calculateStartDate(item.release_at, item.receive_at) }}</td>
 					<td>{{ item.released_by == null ? '':item.released_by.name  }}</td>
 					<td>{{ item.office == null ? '':item.office.office_prefix }}</td>
 					<td>{{ item.release_at | moment("MMM-DD-YYYY hh:mmA") }}</td>
@@ -71,6 +73,16 @@
 			},
 			
 			calculateDate(released, received){
+				var moment = require('moment');
+				var rel = new Date(released);
+				var rec = new Date(received);
+				var seconds = (rel.getTime() - rec.getTime()) / 1000; //1440516958
+				var newdate = this.secondsToHms(seconds)
+
+				return newdate
+			},
+
+			calculateStartDate(released, received){
 				var moment = require('moment');
 				var rel = new Date(released);
 				var rec = new Date(received);
