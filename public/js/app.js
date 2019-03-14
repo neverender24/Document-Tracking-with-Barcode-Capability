@@ -74635,7 +74635,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -74643,52 +74654,52 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	components: {
-		MyDocuments: __WEBPACK_IMPORTED_MODULE_0__document_MyDocuments_vue___default.a,
-		AllDocuments: __WEBPACK_IMPORTED_MODULE_2__document_AllDocuments_vue___default.a,
-		ReturnedDocuments: __WEBPACK_IMPORTED_MODULE_1__document_ReturnedDocuments_vue___default.a,
-		AddDocument: __WEBPACK_IMPORTED_MODULE_3__document_create_vue___default.a
-	},
-	data: function data() {
-		return {
-			activeName: 'first',
-			myDocuments: false,
-			returnedDocuments: false,
-			openAddDocument: false,
-			refreshDatatable: false,
-			create: {
-				document_title: '',
-				document_code: Math.floor(Math.random() * 26) + Date.now(),
-				document_date: '',
-				document_type_id: ''
-			},
-			subDocuments: [],
-			process: []
-		};
-	},
+    components: {
+        MyDocuments: __WEBPACK_IMPORTED_MODULE_0__document_MyDocuments_vue___default.a,
+        AllDocuments: __WEBPACK_IMPORTED_MODULE_2__document_AllDocuments_vue___default.a,
+        ReturnedDocuments: __WEBPACK_IMPORTED_MODULE_1__document_ReturnedDocuments_vue___default.a,
+        AddDocument: __WEBPACK_IMPORTED_MODULE_3__document_create_vue___default.a
+    },
+    data: function data() {
+        return {
+            activeName: "first",
+            myDocuments: false,
+            returnedDocuments: false,
+            openAddDocument: false,
+            refreshDatatable: false,
+            create: {
+                document_title: "",
+                document_code: Math.floor(Math.random() * 26) + Date.now(),
+                document_date: "",
+                document_type_id: ""
+            },
+            subDocuments: [],
+            process: []
+        };
+    },
 
 
-	methods: {
-		closeCreateModal: function closeCreateModal() {
-			this.openAddDocument = false;
-			this.refreshDatatable = !this.refreshDatatable;
+    methods: {
+        closeCreateModal: function closeCreateModal() {
+            this.openAddDocument = false;
+            this.refreshDatatable = !this.refreshDatatable;
 
-			this.create.document_title = '';
-			this.create.document_code = Math.floor(Math.random() * 26) + Date.now(), this.create.document_date = '';
-			this.create.document_type_id = '';
-			this.subDocuments = [];
-			this.process = [];
-		},
-		loadMyDocuments: function loadMyDocuments(tab) {
-			if (tab.label == "Personal") {
-				this.myDocuments = true;
-			}
+            this.create.document_title = "";
+            this.create.document_code = Math.floor(Math.random() * 26) + Date.now(), this.create.document_date = "";
+            this.create.document_type_id = "";
+            this.subDocuments = [];
+            this.process = [];
+        },
+        loadMyDocuments: function loadMyDocuments(tab) {
+            if (tab.label == "Personal") {
+                this.myDocuments = true;
+            }
 
-			if (tab.label == "Returned") {
-				this.returnedDocuments = true;
-			}
-		}
-	}
+            if (tab.label == "Returned") {
+                this.returnedDocuments = true;
+            }
+        }
+    }
 });
 
 /***/ }),
@@ -74777,7 +74788,7 @@ exports = module.exports = __webpack_require__(4)(false);
 
 
 // module
-exports.push([module.i, "\n.routeModal {\n\theight: auto;\n}\n.el-dialog__body{\n\tpadding-top: 0px;\n}\n", ""]);
+exports.push([module.i, "\n.routeModal {\r\n    height: auto;\n}\n.el-dialog__body {\r\n    padding-top: 0px;\n}\r\n", ""]);
 
 // exports
 
@@ -74910,6 +74921,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -74917,219 +74968,218 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	props: {
-		refreshDatatable: ''
-	},
+    props: {
+        refreshDatatable: ""
+    },
 
-	components: {
-		RouteIndex: __WEBPACK_IMPORTED_MODULE_0__route_index_vue___default.a,
-		EditDocument: __WEBPACK_IMPORTED_MODULE_1__document_edit_vue___default.a,
-		datatable: __WEBPACK_IMPORTED_MODULE_2__helpers_datatable_vue___default.a,
-		pagination: __WEBPACK_IMPORTED_MODULE_3__helpers_pagination_vue___default.a
-	},
+    components: {
+        RouteIndex: __WEBPACK_IMPORTED_MODULE_0__route_index_vue___default.a,
+        EditDocument: __WEBPACK_IMPORTED_MODULE_1__document_edit_vue___default.a,
+        datatable: __WEBPACK_IMPORTED_MODULE_2__helpers_datatable_vue___default.a,
+        pagination: __WEBPACK_IMPORTED_MODULE_3__helpers_pagination_vue___default.a
+    },
 
-	data: function data() {
-		var sortOrders = {};
+    data: function data() {
+        var sortOrders = {};
 
-		var columns = [{ width: '10%', label: 'Time', name: 'Time' }, { width: '15%', label: 'Barcode', name: 'Barcode' }, { width: '40%', label: 'Document Title', name: 'document_title' }, { width: '10%', label: 'Type', name: 'Type' }, { width: '20%', label: 'Created On', name: 'Created On' }, { width: '5%', label: 'Action', name: 'Action' }];
+        var columns = [{ width: "10%", label: "Time", name: "Time" }, { width: "15%", label: "Barcode", name: "Barcode" }, { width: "40%", label: "Document Title", name: "document_title" }, { width: "10%", label: "Type", name: "Type" }, { width: "20%", label: "Created On", name: "Created On" }, { width: "5%", label: "Action", name: "Action" }];
 
-		columns.forEach(function (column) {
-			sortOrders[column.name] = -1;
-		});
+        columns.forEach(function (column) {
+            sortOrders[column.name] = -1;
+        });
 
-		return {
-			columns: columns,
-			sortKey: 'document_code',
-			sortOrders: sortOrders,
-			tableData: {
-				draw: 0,
-				length: 15,
-				search: '',
-				column: 0,
-				dir: 'desc'
-			},
-			pagination: {
-				lastPage: '',
-				currentPage: '',
-				total: '',
-				lastPageUrl: '',
-				nextPageUrl: '',
-				prevPageUrl: '',
-				from: '',
-				to: ''
-			},
-			openRoutes: false,
-			openEditDocument: false,
-			loading: false,
-			documents: [],
-			myDocuments: [],
-			routeData: {},
-			routeTitle: '',
-			document_id: '',
-			barcode: '',
-			editData: {}
-		};
-	},
-	created: function created() {
-		this.getMyDocuments();
-	},
-
-
-	watch: {
-		refreshDatatable: function refreshDatatable() {
-			this.getMyDocuments();
-		}
-	},
-
-	methods: {
-		configPagination: function configPagination(data) {
-			this.pagination.lastPage = data.last_page;
-			this.pagination.currentPage = data.current_page;
-			this.pagination.total = data.total;
-			this.pagination.lastPageUrl = data.last_page_url;
-			this.pagination.prevPageUrl = data.prev_page_url;
-			this.pagination.nextPageUrl = data.next_page_url;
-			this.pagination.from = data.from;
-			this.pagination.to = data.to;
-		},
-		sortBy: function sortBy(key) {
-			this.sortKey = key;
-			this.sortOrders[key] = this.sortOrders[key] * -1;
-			this.tableData.column = this.getIndex(this.columns, 'name', key);
-			this.tableData.dir = this.sortOrders[key] === 1 ? 'asc' : 'desc';
-			this.getAllDocuments();
-		},
-		getIndex: function getIndex(array, key, value) {
-			return array.findIndex(function (i) {
-				return i[key] == value;
-			});
-		},
+        return {
+            columns: columns,
+            sortKey: "document_code",
+            sortOrders: sortOrders,
+            tableData: {
+                draw: 0,
+                length: 15,
+                search: "",
+                column: 0,
+                dir: "desc"
+            },
+            pagination: {
+                lastPage: "",
+                currentPage: "",
+                total: "",
+                lastPageUrl: "",
+                nextPageUrl: "",
+                prevPageUrl: "",
+                from: "",
+                to: ""
+            },
+            openRoutes: false,
+            openEditDocument: false,
+            loading: false,
+            documents: [],
+            myDocuments: [],
+            routeData: {},
+            routeTitle: "",
+            document_id: "",
+            barcode: "",
+            editData: {}
+        };
+    },
+    created: function created() {
+        this.getMyDocuments();
+    },
 
 
-		closeEditModal: function closeEditModal() {
-			this.openEditDocument = false;
-			this.getMyDocuments();
-		},
+    watch: {
+        refreshDatatable: function refreshDatatable() {
+            this.getMyDocuments();
+        }
+    },
 
-		edit: function edit(id, barcode) {
-			var _this = this;
-
-			this.document_id = id;
-			this.barcode = barcode;
-
-			this.loading = !this.loading;
-			axios.post('/edit-documents', { id: id }).then(function (response) {
-				_this.loading = !_this.loading;
-				_this.editData = response.data;
-				_this.openEditDocument = true;
-			});
-		},
-
-
-		print: function print(id, barcode, title) {
-			this.loading = !this.loading;
-			window.open("/pdf?id=" + barcode + "&title=" + title + "&office=" + this.$root.user.office_name + "&name=" + this.$root.user.user_name);
-			this.loading = !this.loading;
-		},
-
-		deleteDocument: function deleteDocument(id, barcode) {
-			var _this2 = this;
-
-			this.document_id = id;
-			this.barcode = barcode;
-			this.loading = !this.loading;
-
-			this.$confirm('This will permanently delete the record. Continue?', 'Warning', {
-				confirmButtonText: 'OK',
-				cancelButtonText: 'Cancel',
-				type: 'warning'
-			}).then(function () {
-				axios.post('/delete-document', { id: id }).then(function (response) {
-					_this2.getMyDocuments();
-					_this2.$message({
-						type: 'success',
-						message: 'Delete completed'
-					});
-					_this2.loading = !_this2.loading;
-				});
-			}).catch(function () {
-				_this2.$message({
-					type: 'info',
-					message: 'Delete canceled'
-				});
-				_this2.loading = !_this2.loading;
-			});
-		},
-		getMyDocuments: function getMyDocuments() {
-			var _this3 = this;
-
-			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'view-documents';
-
-			this.loading = !this.loading;
-			axios.get(url, { params: this.tableData }).then(function (response) {
-				_this3.loading = !_this3.loading;
-
-				var data = response.data;
-
-				if (_this3.tableData.draw == data.draw) {
-					_this3.documents = data.data.data;
-					_this3.configPagination(data.data);
-				}
-			});
-		},
-		getRoute: function getRoute(barcode) {
-			var _this4 = this;
-
-			this.loading = !this.loading;
-			axios.post('view-routes', { 'barcode': barcode }).then(function (response) {
-				_this4.loading = !_this4.loading;
-				_this4.routeData = response.data;
-				_this4.routeTitle = response.data[0].document.document_title;
-				_this4.openRoutes = true;
-			}).catch(function (error) {
-				return _this4.errors = error.response.data.errors;
-			});
-		},
-		calc: function calc(routes) {
-			var sum = 0;
-			var first = true;
-			var firstRecord = 0;
-			var self = this;
-			_.forEach(routes, function (key, index) {
-				if (first) {
-					first = false;
-					firstRecord = self.calculateDate(key.receive_at, key.release_at);
-				}
-
-				if (index != 0) {
-					sum += self.calculateDate(key.release_at, routes[index - 1].receive_at);
-				}
-			});
-
-			return this.secondsToHms(firstRecord + sum);
-		},
-		calculateDate: function calculateDate(released, received) {
-			var moment = __webpack_require__(0);
-			var rel = new Date(released);
-			var rec = new Date(received);
-			var seconds = (rel.getTime() - rec.getTime()) / 1000; //1440516958
+    methods: {
+        configPagination: function configPagination(data) {
+            this.pagination.lastPage = data.last_page;
+            this.pagination.currentPage = data.current_page;
+            this.pagination.total = data.total;
+            this.pagination.lastPageUrl = data.last_page_url;
+            this.pagination.prevPageUrl = data.prev_page_url;
+            this.pagination.nextPageUrl = data.next_page_url;
+            this.pagination.from = data.from;
+            this.pagination.to = data.to;
+        },
+        sortBy: function sortBy(key) {
+            this.sortKey = key;
+            this.sortOrders[key] = this.sortOrders[key] * -1;
+            this.tableData.column = this.getIndex(this.columns, "name", key);
+            this.tableData.dir = this.sortOrders[key] === 1 ? "asc" : "desc";
+            this.getAllDocuments();
+        },
+        getIndex: function getIndex(array, key, value) {
+            return array.findIndex(function (i) {
+                return i[key] == value;
+            });
+        },
 
 
-			return seconds;
-		},
-		secondsToHms: function secondsToHms(d) {
-			d = Number(d);
-			var h = Math.floor(d / 3600);
-			var m = Math.floor(d % 3600 / 60);
-			var s = Math.floor(d % 3600 % 60);
+        closeEditModal: function closeEditModal() {
+            this.openEditDocument = false;
+            this.getMyDocuments();
+        },
 
-			var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hour, ") : "";
-			var mDisplay = m > 0 ? m + (m == 1 ? " min, " : " min, ") : "";
-			var sDisplay = s > 0 ? s + (s == 1 ? " sec" : " sec") : "";
+        edit: function edit(id, barcode) {
+            var _this = this;
 
-			return hDisplay + mDisplay + sDisplay;
-		}
-	}
+            this.document_id = id;
+            this.barcode = barcode;
+
+            this.loading = !this.loading;
+            axios.post("/edit-documents", { id: id }).then(function (response) {
+                _this.loading = !_this.loading;
+                _this.editData = response.data;
+                _this.openEditDocument = true;
+            });
+        },
+
+
+        print: function print(id, barcode, title) {
+            this.loading = !this.loading;
+            window.open("/pdf?id=" + barcode + "&title=" + title + "&office=" + this.$root.user.office_name + "&name=" + this.$root.user.user_name);
+            this.loading = !this.loading;
+        },
+
+        deleteDocument: function deleteDocument(id, barcode) {
+            var _this2 = this;
+
+            this.document_id = id;
+            this.barcode = barcode;
+            this.loading = !this.loading;
+
+            this.$confirm("This will permanently delete the record. Continue?", "Warning", {
+                confirmButtonText: "OK",
+                cancelButtonText: "Cancel",
+                type: "warning"
+            }).then(function () {
+                axios.post("/delete-document", { id: id }).then(function (response) {
+                    _this2.getMyDocuments();
+                    _this2.$message({
+                        type: "success",
+                        message: "Delete completed"
+                    });
+                    _this2.loading = !_this2.loading;
+                });
+            }).catch(function () {
+                _this2.$message({
+                    type: "info",
+                    message: "Delete canceled"
+                });
+                _this2.loading = !_this2.loading;
+            });
+        },
+        getMyDocuments: function getMyDocuments() {
+            var _this3 = this;
+
+            var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "view-documents";
+
+            this.loading = !this.loading;
+            axios.get(url, { params: this.tableData }).then(function (response) {
+                _this3.loading = !_this3.loading;
+
+                var data = response.data;
+
+                if (_this3.tableData.draw == data.draw) {
+                    _this3.documents = data.data.data;
+                    _this3.configPagination(data.data);
+                }
+            });
+        },
+        getRoute: function getRoute(barcode) {
+            var _this4 = this;
+
+            this.loading = !this.loading;
+            axios.post("view-routes", { barcode: barcode }).then(function (response) {
+                _this4.loading = !_this4.loading;
+                _this4.routeData = response.data;
+                _this4.routeTitle = response.data[0].document.document_title;
+                _this4.openRoutes = true;
+            }).catch(function (error) {
+                return _this4.errors = error.response.data.errors;
+            });
+        },
+        calc: function calc(routes) {
+            var sum = 0;
+            var first = true;
+            var firstRecord = 0;
+            var self = this;
+            _.forEach(routes, function (key, index) {
+                if (first) {
+                    first = false;
+                    firstRecord = self.calculateDate(key.receive_at, key.release_at);
+                }
+
+                if (index != 0) {
+                    sum += self.calculateDate(key.release_at, routes[index - 1].receive_at);
+                }
+            });
+
+            return this.secondsToHms(firstRecord + sum);
+        },
+        calculateDate: function calculateDate(released, received) {
+            var moment = __webpack_require__(0);
+            var rel = new Date(released);
+            var rec = new Date(received);
+            var seconds = (rel.getTime() - rec.getTime()) / 1000; //1440516958
+
+            return seconds;
+        },
+        secondsToHms: function secondsToHms(d) {
+            d = Number(d);
+            var h = Math.floor(d / 3600);
+            var m = Math.floor(d % 3600 / 60);
+            var s = Math.floor(d % 3600 % 60);
+
+            var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hour, ") : "";
+            var mDisplay = m > 0 ? m + (m == 1 ? " min, " : " min, ") : "";
+            var sDisplay = s > 0 ? s + (s == 1 ? " sec" : " sec") : "";
+
+            return hDisplay + mDisplay + sDisplay;
+        }
+    }
 });
 
 /***/ }),
@@ -79421,9 +79471,35 @@ var render = function() {
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(item.document_title))]),
                   _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(item.document_type.document_type_prefix))
-                  ]),
+                  item.document_type_id == 14
+                    ? _c("td", [
+                        _c("span", { staticClass: "badge badge-primary" }, [
+                          _vm._v(
+                            _vm._s(item.document_type.document_type_prefix)
+                          )
+                        ])
+                      ])
+                    : item.document_type_id == 15
+                      ? _c("td", [
+                          _c("span", { staticClass: "badge badge-warning" }, [
+                            _vm._v(
+                              _vm._s(item.document_type.document_type_prefix)
+                            )
+                          ])
+                        ])
+                      : item.document_type_id == 32
+                        ? _c("td", [
+                            _c("span", { staticClass: "badge badge-success" }, [
+                              _vm._v(
+                                _vm._s(item.document_type.document_type_prefix)
+                              )
+                            ])
+                          ])
+                        : _c("td", [
+                            _vm._v(
+                              _vm._s(item.document_type.document_type_prefix)
+                            )
+                          ]),
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(item.created_at))]),
                   _vm._v(" "),
@@ -79750,6 +79826,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers_datatable_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__helpers_datatable_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_pagination_vue__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_pagination_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__helpers_pagination_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -80149,7 +80241,31 @@ var render = function() {
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(item.document_title))]),
                   _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(item.document_type_prefix))]),
+                  item.document_type_id == 14
+                    ? _c("td", [
+                        _c("span", { staticClass: "badge badge-primary" }, [
+                          _vm._v(_vm._s(item.document_type_prefix))
+                        ])
+                      ])
+                    : item.document_type_id == 15
+                      ? _c("td", [
+                          _c("span", { staticClass: "badge badge-warning" }, [
+                            _vm._v(_vm._s(item.document_type_prefix))
+                          ])
+                        ])
+                      : item.document_type_id == 32
+                        ? _c("td", [
+                            _c("span", { staticClass: "badge badge-success" }, [
+                              _vm._v(_vm._s(item.document_type_prefix))
+                            ])
+                          ])
+                        : _c("td", [
+                            _vm._v(
+                              "\n\t\t\t\t\t" +
+                                _vm._s(item.document_type_prefix) +
+                                "\n\t\t\t\t"
+                            )
+                          ]),
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(item.created_at))])
                 ]
@@ -80348,6 +80464,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers_datatable_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__helpers_datatable_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_pagination_vue__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_pagination_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__helpers_pagination_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -80685,9 +80817,31 @@ var render = function() {
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(item.document_title))]),
                   _vm._v(" "),
-                  _c("td", {
-                    domProps: { innerHTML: _vm._s(item.document_type_prefix) }
-                  }),
+                  item.document_type_id == 14
+                    ? _c("td", [
+                        _c("span", { staticClass: "badge badge-primary" }, [
+                          _vm._v(_vm._s(item.document_type_prefix))
+                        ])
+                      ])
+                    : item.document_type_id == 15
+                      ? _c("td", [
+                          _c("span", { staticClass: "badge badge-warning" }, [
+                            _vm._v(_vm._s(item.document_type_prefix))
+                          ])
+                        ])
+                      : item.document_type_id == 32
+                        ? _c("td", [
+                            _c("span", { staticClass: "badge badge-success" }, [
+                              _vm._v(_vm._s(item.document_type_prefix))
+                            ])
+                          ])
+                        : _c("td", [
+                            _vm._v(
+                              "\n\t\t\t\t\t" +
+                                _vm._s(item.document_type_prefix) +
+                                "\n\t\t\t\t"
+                            )
+                          ]),
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(item.created_at))])
                 ]
@@ -80968,22 +81122,100 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        list: {},
-        subDocuments: "",
-        process: ""
-    },
-
+    props: ["list", "subDocuments", "process"],
     data: function data() {
         return {
             errors: {},
             offices: {},
             document_type: {},
-            loading: false
+            loading: false,
+            payrollForm: false,
+            payrollFormInputs: {
+                payrollType: "",
+                month: "",
+                period: "",
+                name: ""
+            },
+            payrollType: ["Regular", "Job Order", "Casual", "Honorarium", "PERA-ACA", "Overtime"],
+            months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+            period: ["Whole Month", "First Quincena", "Second Quincena"]
         };
     },
+
+
+    computed: {
+        sortPayrollType: function sortPayrollType() {
+            return this.payrollType.sort();
+        }
+    },
+
     mounted: function mounted() {
         this.selectDocumentType();
         this.selectOffice();
@@ -81105,8 +81337,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         removeChars: function removeChars(text) {
-            var regexp = new RegExp('#([^\\s]*)', 'g');
-            this.list.document_title = text.replace(regexp, 'No.');
+            var regexp = new RegExp("#([^\\s]*)", "g");
+            this.list.document_title = text.replace(regexp, "No.");
+        },
+        displayEntries: function displayEntries(document_type_id) {
+            if (document_type_id == 14) {
+                // payroll
+                this.payrollForm = true;
+                this.generatePayrollTitle();
+            } else {
+                this.payrollForm = false;
+                this.list.document_title = "";
+            }
+        },
+        generatePayrollTitle: function generatePayrollTitle() {
+            var title = this.payrollFormInputs.payrollType + "; " + this.payrollFormInputs.month + "; " + this.payrollFormInputs.period + "; " + this.payrollFormInputs.name + "; ";
+
+            return this.removeChars(title);
         }
     }
 });
@@ -81343,74 +81590,302 @@ var render = function() {
       _c("div", { staticClass: "col-md-6 order-md-1" }, [
         _c("h4", [_vm._v("Add Document")]),
         _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c(
-            "select",
-            {
+        _c("div", { staticClass: "row py-2" }, [
+          _c("div", { staticClass: "col-md-8" }, [
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.list.document_type_id,
+                    expression: "list.document_type_id"
+                  }
+                ],
+                staticClass: "form-control form-control-sm border-secondary",
+                on: {
+                  change: [
+                    function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.list,
+                        "document_type_id",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    },
+                    function($event) {
+                      _vm.displayEntries(_vm.list.document_type_id)
+                    }
+                  ]
+                }
+              },
+              [
+                _c("option", { attrs: { value: "0" } }, [
+                  _vm._v("Select Document Type")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.document_type, function(value, key) {
+                  return _c("option", { domProps: { value: value.id } }, [
+                    _vm._v(_vm._s(value.document_type))
+                  ])
+                })
+              ],
+              2
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-4" }, [
+            _c("input", {
               directives: [
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.list.document_type_id,
-                  expression: "list.document_type_id"
+                  value: _vm.list.document_code,
+                  expression: "list.document_code"
                 }
               ],
-              staticClass: "form-control border-secondary",
+              staticClass: "form-control form-control-sm",
+              attrs: { type: "text", readonly: "" },
+              domProps: { value: _vm.list.document_code },
               on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.$set(
-                    _vm.list,
-                    "document_type_id",
-                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                  )
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.list, "document_code", $event.target.value)
                 }
               }
-            },
-            [
-              _c("option", { attrs: { value: "0" } }, [
-                _vm._v("Select Document Type")
-              ]),
-              _vm._v(" "),
-              _vm._l(_vm.document_type, function(value, key) {
-                return _c("option", { domProps: { value: value.id } }, [
-                  _vm._v(_vm._s(value.document_type))
-                ])
-              })
-            ],
-            2
-          )
+            })
+          ])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.list.document_code,
-                expression: "list.document_code"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "text", readonly: "" },
-            domProps: { value: _vm.list.document_code },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.list, "document_code", $event.target.value)
-              }
-            }
-          })
+          _vm.payrollForm
+            ? _c("div", { staticClass: "card" }, [
+                _c("div", { staticClass: "card-header py-0" }, [
+                  _vm._v("Title Guide")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "card-body py-2 mb-1" }, [
+                  _c("div", { staticClass: "form-group row" }, [
+                    _c("label", { staticClass: "col-sm-2 col-form-label" }, [
+                      _vm._v("Type:")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-sm-10" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.payrollFormInputs.payrollType,
+                              expression: "payrollFormInputs.payrollType"
+                            }
+                          ],
+                          staticClass:
+                            "form-control border-secondary form-control-sm",
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.payrollFormInputs,
+                                  "payrollType",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                _vm.generatePayrollTitle()
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "0" } }, [
+                            _vm._v("-Select-")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.sortPayrollType, function(value, key) {
+                            return _c("option", [_vm._v(_vm._s(value))])
+                          })
+                        ],
+                        2
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("label", { staticClass: "col-sm-2 col-form-label" }, [
+                      _vm._v("Month:")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-sm-10" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.payrollFormInputs.month,
+                              expression: "payrollFormInputs.month"
+                            }
+                          ],
+                          staticClass:
+                            "form-control border-secondary form-control-sm",
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.payrollFormInputs,
+                                  "month",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                _vm.generatePayrollTitle()
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "0" } }, [
+                            _vm._v("-Select-")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.months, function(value, key) {
+                            return _c("option", [_vm._v(_vm._s(value))])
+                          })
+                        ],
+                        2
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("label", { staticClass: "col-sm-2 col-form-label" }, [
+                      _vm._v("Period:")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-sm-10" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.payrollFormInputs.period,
+                              expression: "payrollFormInputs.period"
+                            }
+                          ],
+                          staticClass:
+                            "form-control border-secondary form-control-sm",
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.payrollFormInputs,
+                                  "period",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                _vm.generatePayrollTitle()
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "0" } }, [
+                            _vm._v("-Select-")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.period, function(value, key) {
+                            return _c("option", [_vm._v(_vm._s(value))])
+                          })
+                        ],
+                        2
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("label", { staticClass: "col-sm-2 col-form-label" }, [
+                      _vm._v("Name")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-sm-10" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.payrollFormInputs.name,
+                            expression: "payrollFormInputs.name"
+                          }
+                        ],
+                        staticClass: "form-control form-control-sm",
+                        attrs: { type: "text" },
+                        domProps: { value: _vm.payrollFormInputs.name },
+                        on: {
+                          keyup: function($event) {
+                            _vm.generatePayrollTitle()
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.payrollFormInputs,
+                              "name",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(2)
+                  ])
+                ])
+              ])
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
@@ -81424,7 +81899,7 @@ var render = function() {
               }
             ],
             staticClass: "form-control border-secondary",
-            attrs: { type: "text", placeholder: "Title keywords", rows: "5" },
+            attrs: { type: "text", placeholder: "Title keywords", rows: "2" },
             domProps: { value: _vm.list.document_title },
             on: {
               change: function($event) {
@@ -81435,30 +81910,6 @@ var render = function() {
                   return
                 }
                 _vm.$set(_vm.list, "document_title", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.list.document_date,
-                expression: "list.document_date"
-              }
-            ],
-            staticClass: "form-control border-secondary",
-            attrs: { type: "date" },
-            domProps: { value: _vm.list.document_date },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.list, "document_date", $event.target.value)
               }
             }
           })
@@ -81520,6 +81971,16 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("h6", [
       _c("strong", [_c("em", [_vm._v("Route to (Select Office)")])])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-12" }, [
+      _c("small", { staticClass: "text-danger py-1" }, [
+        _vm._v("Append below if there are additional searchable keywords.")
+      ])
     ])
   }
 ]

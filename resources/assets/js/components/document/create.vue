@@ -88,37 +88,102 @@
 
             <div class="col-md-6 order-md-1">
                 <h4>Add Document</h4>
-                <div class="form-group">
-                    <select v-model="list.document_type_id" class="form-control border-secondary">
+                <div class="row py-2">
+                    <div class="col-md-8">
+                    <select
+                        v-model="list.document_type_id"
+                        class="form-control form-control-sm border-secondary"
+                        @change="displayEntries(list.document_type_id)"
+                    >
                         <option value="0">Select Document Type</option>
                         <option
                             v-for="(value,key) in document_type"
                             :value="value.id"
                         >{{ value.document_type }}</option>
                     </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control form-control-sm" v-model="list.document_code" readonly>
+                    </div>
                 </div>
 
+                <!-- Detail Form -->
                 <div class="form-group">
-                    <input type="text" class="form-control" v-model="list.document_code" readonly>
+                <div class="card" v-if="payrollForm">
+                    <div class="card-header py-0">Title Guide</div>
+                    <div class="card-body py-2 mb-1">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Type:</label>
+                            <div class="col-sm-10">
+                                <select
+                                    v-model="payrollFormInputs.payrollType"
+                                    class="form-control border-secondary form-control-sm"
+                                    @change="generatePayrollTitle()"
+                                >
+                                    <option value="0">-Select-</option>
+                                    <option v-for="(value,key) in sortPayrollType">{{ value }}</option>
+                                </select>
+                            </div>
+                            <label class="col-sm-2 col-form-label">Month:</label>
+                            <div class="col-sm-10">
+                                <select
+                                    v-model="payrollFormInputs.month"
+                                    class="form-control border-secondary form-control-sm"
+                                    @change="generatePayrollTitle()"
+                                >
+                                    <option value="0">-Select-</option>
+                                    <option v-for="(value,key) in months">{{ value }}</option>
+                                </select>
+                            </div>
+                            <label class="col-sm-2 col-form-label">Period:</label>
+                            <div class="col-sm-10">
+                                <select
+                                    v-model="payrollFormInputs.period"
+                                    class="form-control border-secondary form-control-sm"
+                                    @change="generatePayrollTitle()"
+                                >
+                                    <option value="0">-Select-</option>
+                                    <option v-for="(value,key) in period">{{ value }}</option>
+                                </select>
+                            </div>
+                            <label class="col-sm-2 col-form-label">Name</label>
+                            <div class="col-sm-10">
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    v-model="payrollFormInputs.name"
+                                    @keyup="generatePayrollTitle()"
+                                >
+                            </div>
+                            <div class="col-sm-12">
+                                <small
+                                    class="text-danger py-1"
+                                >Append below if there are additional searchable keywords.</small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                </div>
+                <!-- End detail form -->
+
                 <div class="form-group">
                     <textarea
                         type="text"
                         class="form-control border-secondary"
                         placeholder="Title keywords"
                         v-model="list.document_title"
-                        rows="5"
-						@change="removeChars(list.document_title)"
+                        rows="2"
+                        @change="removeChars(list.document_title)"
                     ></textarea>
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <input
                         type="date"
                         class="form-control border-secondary"
                         v-model="list.document_date"
                     >
-                </div>
+                </div> -->
 
                 <div class="col-md-12 col-sm-12 col-xs-12 form-group">
                     <span class="btn btn-primary" @click="validate">Save</span>
@@ -132,19 +197,50 @@
 </template>
 <script>
 export default {
-    props: {
-        list: {},
-        subDocuments: "",
-        process: ""
-    },
-
+    props: ["list", "subDocuments", "process"],
     data() {
         return {
             errors: {},
             offices: {},
             document_type: {},
-            loading: false
+            loading: false,
+            payrollForm: false,
+            payrollFormInputs: {
+                payrollType: "",
+                month: "",
+                period: "",
+                name: ""
+            },
+            payrollType: [
+                "Regular",
+                "Job Order",
+                "Casual",
+                "Honorarium",
+                "PERA-ACA",
+                "Overtime"
+            ],
+            months: [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+            ],
+            period: ["Whole Month", "First Quincena", "Second Quincena"]
         };
+    },
+
+    computed: {
+        sortPayrollType: function() {
+            return this.payrollType.sort()
+        }
     },
 
     mounted() {
@@ -288,10 +384,34 @@ export default {
             this.loading = !this.loading;
         },
 
-		removeChars(text) {
-			var regexp = new RegExp('#([^\\s]*)','g');
-			this.list.document_title = text.replace(regexp, 'No.');
-		}
+        removeChars(text) {
+            var regexp = new RegExp("#([^\\s]*)", "g");
+            this.list.document_title = text.replace(regexp, "No.");
+        },
+
+        displayEntries(document_type_id) {
+            if (document_type_id == 14) { // payroll
+                this.payrollForm = true;
+                this.generatePayrollTitle();
+            } else {
+                this.payrollForm = false;
+                this.list.document_title = "";
+            }
+        },
+
+        generatePayrollTitle() {
+            var title =
+                this.payrollFormInputs.payrollType +
+                "; " +
+                this.payrollFormInputs.month +
+                "; " +
+                this.payrollFormInputs.period +
+                "; " +
+                this.payrollFormInputs.name +
+                "; ";
+
+            return this.removeChars(title);
+        }
     }
 };
 </script>

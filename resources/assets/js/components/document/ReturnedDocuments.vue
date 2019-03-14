@@ -33,7 +33,23 @@
 					<td>{{ calc(item.routes, index) }}</td>
 					<td>{{ item.document_code }}</td>
 					<td>{{ item.document_title }}</td>
-					<td>{{ item.document_type_prefix }}</td>
+					<!-- color tags -->
+					<!-- payroll -->
+					<td v-if="item.document_type_id == 14"> 
+						<span class="badge badge-primary">{{ item.document_type_prefix }}</span>
+					</td>
+					<!-- memo -->
+					<td v-else-if="item.document_type_id == 15"> 
+						<span class="badge badge-warning">{{ item.document_type_prefix }}</span>
+					</td>
+					<!-- obr -->
+					<td v-else-if="item.document_type_id == 32"> 
+						<span class="badge badge-success">{{ item.document_type_prefix }}</span>
+					</td>
+					<td v-else>
+						{{ item.document_type_prefix }}
+					</td>
+					<!-- end color -->
 					<td>{{ item.created_at }}</td>
 				</tr>
 			</tbody>
