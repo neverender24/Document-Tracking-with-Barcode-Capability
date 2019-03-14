@@ -54,7 +54,7 @@
                         <tbody>
                             <tr v-for="(row, index) in process">
                                 <td>
-                                    <select
+                                    <!-- <select
                                         class="form-control form-control-sm border-secondary"
                                         v-model="row.office_id"
                                     >
@@ -64,7 +64,11 @@
                                             v-bind:item="value"
                                             :value="value.id"
                                         >{{ value.office_name }}</option>
-                                    </select>
+                                    </select> -->
+                                    <model-select :options="searchOfficeSelect"
+                                        v-model="row.office_id"
+                                        placeholder="select item">
+                                    </model-select>
                                 </td>
                                 <td>
                                     <a v-on:click="removeStep(row, index);" style="cursor: pointer">
@@ -127,6 +131,7 @@
 </template>
 <script>
 import VueBarcode from "vue-barcode";
+import { ModelSelect } from 'vue-search-select'
 
 export default {
     props: {
@@ -138,13 +143,29 @@ export default {
             subDocuments: [],
             process: [],
             errors: {},
-            offices: {},
+            offices: [],
             document_type: {},
             loading: false
         };
     },
     components: {
-        barcode: VueBarcode
+        barcode: VueBarcode,
+        ModelSelect
+    },
+    computed: {
+        searchOfficeSelect: function() {
+            var self = this
+            var select = []
+
+            _.forEach(self.offices, function(e){
+                        select.push({
+                            value: e.id,
+                            text: e.office_prefix
+                        });
+             })
+
+             return select
+        }
     },
     mounted() {
         this.selectDocumentType();

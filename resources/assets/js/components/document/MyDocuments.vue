@@ -45,7 +45,9 @@
                     <td v-else-if="item.document_type_id == 32">
                         <span class="badge badge-success">{{ item.document_type.document_type_prefix }}</span>
                     </td>
-                    <td v-else>{{ item.document_type.document_type_prefix }}</td>
+                    <td v-else>
+						<span class="badge badge-secondary">{{ item.document_type.document_type_prefix }}</span>
+						</td>
                     <!-- end color -->
                     <td>{{ item.created_at }}</td>
                     <td @click="$event.stopPropagation()">

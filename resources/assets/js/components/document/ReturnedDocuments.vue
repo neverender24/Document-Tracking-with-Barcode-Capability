@@ -47,7 +47,7 @@
 						<span class="badge badge-success">{{ item.document_type_prefix }}</span>
 					</td>
 					<td v-else>
-						{{ item.document_type_prefix }}
+						<span class="badge badge-secondary">{{ item.document_type_prefix }}</span>
 					</td>
 					<!-- end color -->
 					<td>{{ item.created_at }}</td>

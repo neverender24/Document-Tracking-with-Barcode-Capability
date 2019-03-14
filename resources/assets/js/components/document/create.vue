@@ -62,7 +62,7 @@
                         <tbody>
                             <tr v-for="(row, index) in process">
                                 <td>
-                                    <select
+                                    <!-- <select
                                         class="form-control form-control-sm border-secondary"
                                         v-model="row.office_id"
                                     >
@@ -71,8 +71,14 @@
                                             v-for="(value,key) in offices"
                                             v-bind:item="value"
                                             :value="value.id"
-                                        >{{ value.office_prefix }} - {{ value.office_name }}</option>
-                                    </select>
+                                        >{{ value.office_prefix }}</option>
+                                    </select> -->
+
+                                    <model-select :options="searchOfficeSelect"
+                                        v-model="row.office_id"
+                                        placeholder="select item">
+                                    </model-select>
+
                                 </td>
                                 <td>
                                     <a v-on:click="removeStep(index);" style="cursor: pointer">
@@ -196,12 +202,17 @@
     </div>
 </template>
 <script>
+import { ModelSelect } from 'vue-search-select'
+
 export default {
     props: ["list", "subDocuments", "process"],
+    components: {
+        ModelSelect
+    },
     data() {
         return {
             errors: {},
-            offices: {},
+            offices: [],
             document_type: {},
             loading: false,
             payrollForm: false,
@@ -237,13 +248,27 @@ export default {
                 "November",
                 "December"
             ],
-            period: ["Whole Month", "First Quincena", "Second Quincena"]
+            period: ["Whole Month", "First Quincena", "Second Quincena"],
+            
         };
     },
 
     computed: {
         sortPayrollType: function() {
             return this.payrollType.sort()
+        },
+        searchOfficeSelect: function() {
+            var self = this
+            var select = []
+
+            _.forEach(self.offices, function(e){
+                        select.push({
+                            value: e.id,
+                            text: e.office_prefix
+                        });
+             })
+
+             return select
         }
     },
 
@@ -365,10 +390,11 @@ export default {
         },
 
         selectOffice() {
+            var self = this
             axios
                 .post("get-offices")
                 .then(response => {
-                    this.offices = response.data;
+                    this.offices = response.data
                 })
                 .catch(error => (this.errors = error.response.data.errors));
         },
