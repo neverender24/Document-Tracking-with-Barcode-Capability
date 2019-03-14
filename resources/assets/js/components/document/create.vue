@@ -217,7 +217,11 @@ export default {
                 "Casual",
                 "Honorarium",
                 "PERA-ACA",
-                "Overtime"
+                "Overtime",
+                "Clothing",
+                "Monetization",
+                "Bonuses",
+                "Others"
             ],
             months: [
                 "January",

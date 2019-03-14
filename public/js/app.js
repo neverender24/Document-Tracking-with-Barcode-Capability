@@ -81203,7 +81203,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 period: "",
                 name: ""
             },
-            payrollType: ["Regular", "Job Order", "Casual", "Honorarium", "PERA-ACA", "Overtime"],
+            payrollType: ["Regular", "Job Order", "Casual", "Honorarium", "PERA-ACA", "Overtime", "Clothing", "Monetization", "Bonuses", "Others"],
             months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             period: ["Whole Month", "First Quincena", "Second Quincena"]
         };
