@@ -60,7 +60,7 @@
                             </button>
                             <button
                                 @click="edit(item.id, item.document_code)"
-                                v-if="item.routes.length <= 1"
+                                v-if="item.routes.length <= 1 && item.routes[0].receive_at==null"
                                 class="btn btn-sm btn-info"
                             >
                                 <span class="fa fa-edit"></span>
@@ -71,7 +71,7 @@
                             
                             <button
                                 @click="deleteDocument(item.document_code)"
-                                v-if="item.routes.length <= 1"
+                                v-if="item.routes.length <= 1 && item.routes[0].receive_at==null"
                                 class="btn btn-sm btn-danger"
                             >
                                 <span class="fa fa-trash"></span>

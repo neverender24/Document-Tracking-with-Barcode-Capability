@@ -29,7 +29,9 @@
 					<td>{{ item.receive_at }}</td>
 					<!-- <td>{{ item.received_by.name }}</td> -->
 					<td>{{ item.barcode }}</td>
-					<td>{{ item.document.document_title.substr(0,50) }}</td>
+					<td>
+							{{ item.document_title == null ? '':item.document_title.substr(0,50) }}
+					</td>
 				</tr>
 			</tbody>
 		</datatable>
