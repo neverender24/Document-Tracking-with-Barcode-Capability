@@ -192,8 +192,8 @@
                 </div> -->
 
                 <div class="col-md-12 col-sm-12 col-xs-12 form-group">
-                    <span class="btn btn-primary" @click="validate">Save</span>
-                    <span to="/print" class="btn btn-danger" @click="print">Print</span>
+                    <span class="btn btn-primary" @click="validate">Save and Print</span>
+                    <!-- <span to="/print" class="btn btn-danger" @click="print">Print</span> -->
                     <span class="btn btn-success" @click="addSubDocuments" id="subDoc">Sub-Documents</span>
                     <span class="btn btn-success" @click="addSteps" id="sub">Add Route</span>
                 </div>
@@ -334,7 +334,7 @@ export default {
                     });
 
                     this.loading = !this.loading;
-                    //this.print();
+                    this.print();
                     this.$emit("closeCreate");
                 })
                 .catch(error => {});

@@ -14,7 +14,7 @@ class RouteController extends Controller
 	)
 	{
 		$this->model = $route;
-		$this->middleware("auth");
+		$this->middleware("auth",["except"=>["getRoutes"]]);
 	}
 
     public function getRoutes(Request $request)

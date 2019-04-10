@@ -1,230 +1,319 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+  <!-- CSRF Token -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Document Tracker') }}</title>
+  <title>{{ config('app.name', 'Document Tracker') }}</title>
 
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+  <!-- Styles -->
+  <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
 
-    <style>
-    div.main{
-    background: #0264d6; /* Old browsers */
-background: -moz-radial-gradient(center, ellipse cover,  #0264d6 1%, #1c2b5a 100%); /* FF3.6+ */
-background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,#0264d6), color-stop(100%,#1c2b5a)); /* Chrome,Safari4+ */
-background: -webkit-radial-gradient(center, ellipse cover,  #0264d6 1%,#1c2b5a 100%); /* Chrome10+,Safari5.1+ */
-background: -o-radial-gradient(center, ellipse cover,  #0264d6 1%,#1c2b5a 100%); /* Opera 12+ */
-background: -ms-radial-gradient(center, ellipse cover,  #0264d6 1%,#1c2b5a 100%); /* IE10+ */
-background: radial-gradient(ellipse at center,  #0264d6 1%,#1c2b5a 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0264d6', endColorstr='#1c2b5a',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-height:calc(100vh);
-width:100%;
-}
+  <style>
+    div.main {
+      background: #0264d6;
+      /* Old browsers */
+      background: -moz-radial-gradient(center, ellipse cover, #0264d6 1%, #1c2b5a 100%);
+      /* FF3.6+ */
+      background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%, #0264d6), color-stop(100%, #1c2b5a));
+      /* Chrome,Safari4+ */
+      background: -webkit-radial-gradient(center, ellipse cover, #0264d6 1%, #1c2b5a 100%);
+      /* Chrome10+,Safari5.1+ */
+      background: -o-radial-gradient(center, ellipse cover, #0264d6 1%, #1c2b5a 100%);
+      /* Opera 12+ */
+      background: -ms-radial-gradient(center, ellipse cover, #0264d6 1%, #1c2b5a 100%);
+      /* IE10+ */
+      background: radial-gradient(ellipse at center, #0264d6 1%, #1c2b5a 100%);
+      /* W3C */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0264d6', endColorstr='#1c2b5a', GradientType=1);
+      /* IE6-9 fallback on horizontal gradient */
+      height: calc(100vh);
+      width: 100%;
+    }
 
-[class*="fontawesome-"]:before {
-  font-family: 'FontAwesome', sans-serif;
-}
+    [class*="fontawesome-"]:before {
+      font-family: 'FontAwesome', sans-serif;
+    }
 
-/* ---------- GENERAL ---------- */
-
-* {
-  box-sizing: border-box;
-    margin:0px auto;
-
-  &:before,
-  &:after {
-    box-sizing: border-box;
-  }
-
-}
-
-body {
-   
-    color: #606468;
-  font: 87.5%/1.5em 'Open Sans', sans-serif;
-  margin: 0;
-}
-
-a {
-	color: #eee;
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
-}
-
-input {
-	border: none;
-	font-family: 'Open Sans', Arial, sans-serif;
-	font-size: 14px;
-	line-height: 1.5em;
-	padding: 0;
-	-webkit-appearance: none;
-}
-
-p {
-	line-height: 1.5em;
-}
-
-.clearfix {
-  *zoom: 1;
-
-  &:before,
-  &:after {
-    content: ' ';
-    display: table;
-  }
-
-  &:after {
-    clear: both;
-  }
-
-}
-
-.container {
-  left: 50%;
-  position: fixed;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-/* ---------- LOGIN ---------- */
-
-#login form{
-	width: 250px;
-}
-#login, .logo{
-    display:inline-block;
-    width:40%;
-}
-#login{
-border-right:1px solid #fff;
-  padding: 0px 22px;
-  width: 59%;
-}
-.logo{
-color:#fff;
-font-size:50px;
-line-height: 125px;
-
-}
-
-.logo img{
-    width: 10rem;
-}
-
-#login form span.fa {
-	background-color: #fff;
-	border-radius: 3px 0px 0px 3px;
-	color: #000;
-	display: block;
-	float: left;
-	height: 50px;
-    font-size:24px;
-	line-height: 50px;
-	text-align: center;
-	width: 50px;
-}
-
-#login form input {
-	height: 50px;
-}
-fieldset{
-    padding:0;
-    border:0;
+.modal-full {
+    min-width: 100%;
     margin: 0;
-
-}
-#login form input[type="text"], input[type="password"], input[type="email"] {
-	background-color: #fff;
-	border-radius: 0px 3px 3px 0px;
-	color: #000;
-	margin-bottom: 1em;
-	padding: 0 16px;
-	width: 200px;
 }
 
-#login form input[type="submit"] {
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  background-color: #000000;
-  color: #eee;
-  font-weight: bold;
-  /* margin-bottom: 2em; */
-  text-transform: uppercase;
-  padding: 5px 10px;
-  height: 30px;
-}
+    /* ---------- GENERAL ---------- */
 
-#login form input[type="submit"]:hover {
-	background-color: #d44179;
-}
+    * {
+      box-sizing: border-box;
+      margin: 0px auto;
 
-#login > p {
-	text-align: center;
-}
+      &:before,
+      &:after {
+        box-sizing: border-box;
+      }
 
-#login > p span {
-	padding-left: 5px;
-}
-.middle {
-  display: flex;
-  width: 600px;
-}
-.header-title{
-    padding: 0 0 40px 0 !important;
-    margin-top: -40px;
-    color: #fff;
-    text-transform: uppercase;
-}
+    }
 
-    </style>
+    body {
+
+      color: #606468;
+      font: 87.5%/1.5em 'Open Sans', sans-serif;
+      margin: 0;
+    }
+
+    a {
+      color: #eee;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    input {
+      border: none;
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.5em;
+      padding: 0;
+      -webkit-appearance: none;
+    }
+
+    p {
+      line-height: 1.5em;
+    }
+
+    .clearfix {
+      *zoom: 1;
+
+      &:before,
+      &:after {
+        content: ' ';
+        display: table;
+      }
+
+      &:after {
+        clear: both;
+      }
+
+    }
+
+    .container {
+      left: 50%;
+      position: fixed;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* ---------- LOGIN ---------- */
+
+    #login form {
+      width: 250px;
+    }
+
+    #login,
+    .logo {
+      display: inline-block;
+      width: 40%;
+    }
+
+    #login {
+      border-right: 1px solid #fff;
+      padding: 0px 22px;
+      width: 59%;
+    }
+
+    .logo {
+      color: #fff;
+      font-size: 50px;
+      line-height: 125px;
+
+    }
+
+    .logo img {
+      width: 10rem;
+    }
+
+    #login form span.fa {
+      background-color: #fff;
+      border-radius: 3px 0px 0px 3px;
+      color: #000;
+      display: block;
+      float: left;
+      height: 50px;
+      font-size: 24px;
+      line-height: 50px;
+      text-align: center;
+      width: 50px;
+    }
+
+    #login form input {
+      height: 50px;
+    }
+
+    fieldset {
+      padding: 0;
+      border: 0;
+      margin: 0;
+
+    }
+
+    #login form input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+      background-color: #fff;
+      border-radius: 0px 3px 3px 0px;
+      color: #000;
+      margin-bottom: 1em;
+      padding: 0 16px;
+      width: 200px;
+    }
+
+    #login form input[type="submit"] {
+      border-radius: 3px;
+      -moz-border-radius: 3px;
+      -webkit-border-radius: 3px;
+      background-color: #000000;
+      color: #eee;
+      font-weight: bold;
+      /* margin-bottom: 2em; */
+      text-transform: uppercase;
+      padding: 5px 10px;
+      height: 30px;
+    }
+
+    #login form input[type="submit"]:hover {
+      background-color: #d44179;
+    }
+
+    #login>p {
+      text-align: center;
+    }
+
+    #login>p span {
+      padding-left: 5px;
+    }
+
+    .middle {
+      display: flex;
+      width: 600px;
+    }
+
+    .header-title {
+      padding: 0 0 40px 0 !important;
+      margin-top: -40px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+
+    .modal {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      overflow: hidden;
+    }
+
+    .modal-dialog {
+      position: fixed;
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+    }
+
+    .modal-content {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      border: 2px solid #3c7dcf;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .modal-header {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 50px;
+      padding: 10px;
+      background: #6598d9;
+      border: 0;
+      color: #fff;
+    }
+
+    .modal-title {
+      font-weight: 300;
+      font-size: 2em;
+      color: #fff;
+      line-height: 30px;
+    }
+
+    .modal-body {
+      position: absolute;
+      top: 50px;
+      bottom: 60px;
+      width: 100%;
+      font-weight: 300;
+      overflow: auto;
+    }
+
+    .modal-footer {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 60px;
+      padding: 10px;
+      background: #f1f3f5;
+    }
+  </style>
 </head>
 <!------ Include the above in your HEAD tag ---------->
+
 <body>
-<div class="main">
+
+  <div class="main">
 
     <div class="container">
-    
-<center>
-                  <h1 class="header-title">Document Tracking</h1>  
-<div class="middle">
-      <div id="login">
-        <form method="POST" action="{{ route('login') }}" >
-            @csrf
-          <fieldset class="clearfix">
 
-            <p ><span class="fa fa-user"></span>
-            <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus></p>
-                
+      <center>
+        <h1 class="header-title">Document Tracking</h1>
+        <div class="middle">
+          <div id="login">
+            <form method="POST" action="{{ route('login') }}">
+              @csrf
+              <fieldset class="clearfix">
+
+                <p><span class="fa fa-user"></span>
+                  <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus></p>
+
                 @if ($errors->has('email'))
-                    <span class="invalid-feedback">
+                <span class="invalid-feedback">
                         <strong>{{ $errors->first('email') }}</strong>
-                    </span>
-                @endif
-            
-            <p><span class="fa fa-lock"></span><input id="password" type="password" name="password" required>
+                    </span> @endif
 
-                    @if ($errors->has('password'))
-                        <span class="invalid-feedback">
+                <p><span class="fa fa-lock"></span><input id="password" type="password" name="password" required> @if ($errors->has('password'))
+                  <span class="invalid-feedback">
                             <strong>{{ $errors->first('password') }}</strong>
-                        </span>
-                    @endif
-            </p>
-            
-             <div>
-            
-                                <span style=" text-align:right;  display: inline-block;"><input type="submit" value="Sign In"></span>
+                        </span> @endif
+                </p>
+
+                <div>
+
+                  <span style=" text-align:right;  display: inline-block;"><input type="submit"  class="btn btn-default btn-sm" value="Sign In"></span>
+                  <span style=" text-align:right;  display: inline-block;"><button type="button" class="btn btn-default btn-sm"  data-toggle="modal" data-target="#exampleModal">FAST TRACK</button>
                             </div>
 
           </fieldset>
@@ -242,7 +331,9 @@ fieldset{
       </div>
 </center>
     </div>
-
+</div>
+<div id="app">
+  <fast-track></fast-track>
 </div>
 <script src="{{ asset('js/app.js') }}" defer></script>
 </body>

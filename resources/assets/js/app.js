@@ -15,6 +15,7 @@ Vue.use(require('vue-moment'));
 
 
 let Navbar = require('./components/navbar.vue');
+let FastTrack = require('./components/fast_track.vue');
 let AllDocuments = require('./components/document/index.vue');
 
 let Receive = require('./components/route/receive.vue');
@@ -63,6 +64,6 @@ const app = new Vue({
         office_name: ''
       }
 	  },
-    components: {Navbar},
+    components: {Navbar, FastTrack},
     
 });
