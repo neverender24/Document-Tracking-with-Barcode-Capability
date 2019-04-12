@@ -79018,7 +79018,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             refreshDatatable: false,
             create: {
                 document_title: "",
-                document_code: this.randomString(6, "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + Date.now()), //Math.floor(Math.random() * 26) + Date.now(),
+                document_code: this.randomString(6, "0123456789abcdefghijklmnopqrstuvwxyz" + Date.now()), //Math.floor(Math.random() * 26) + Date.now(),
                 document_date: "",
                 document_type_id: ""
             },
@@ -79034,7 +79034,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.refreshDatatable = !this.refreshDatatable;
 
             this.create.document_title = "";
-            this.create.document_code = this.randomString(6, "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + Date.now()); //Math.floor(Math.random() * 26) + Date.now(),
+            this.create.document_code = this.randomString(6, "0123456789abcdefghijklmnopqrstuvwxyz" + Date.now()); //Math.floor(Math.random() * 26) + Date.now(),
             this.create.document_date = "";
             this.create.document_type_id = "";
             this.subDocuments = [];

@@ -78,7 +78,7 @@ export default {
                 document_title: "",
                 document_code: this.randomString(
                 6,
-                "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+                "0123456789abcdefghijklmnopqrstuvwxyz" +
                     Date.now()
             ),//Math.floor(Math.random() * 26) + Date.now(),
                 document_date: "",
@@ -97,7 +97,7 @@ export default {
             this.create.document_title = "";
             this.create.document_code = this.randomString(
                 6,
-                "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+                "0123456789abcdefghijklmnopqrstuvwxyz" +
                     Date.now()
             ); //Math.floor(Math.random() * 26) + Date.now(),
             this.create.document_date = "";
