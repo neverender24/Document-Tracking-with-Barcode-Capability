@@ -76,7 +76,11 @@ export default {
             refreshDatatable: false,
             create: {
                 document_title: "",
-                document_code: Math.floor(Math.random() * 26) + Date.now(),
+                document_code: this.randomString(
+                6,
+                "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+                    Date.now()
+            ),//Math.floor(Math.random() * 26) + Date.now(),
                 document_date: "",
                 document_type_id: ""
             },
@@ -91,9 +95,12 @@ export default {
             this.refreshDatatable = !this.refreshDatatable;
 
             this.create.document_title = "";
-            (this.create.document_code =
-                Math.floor(Math.random() * 26) + Date.now()),
-                (this.create.document_date = "");
+            this.create.document_code = this.randomString(
+                6,
+                "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+                    Date.now()
+            ); //Math.floor(Math.random() * 26) + Date.now(),
+            this.create.document_date = "";
             this.create.document_type_id = "";
             this.subDocuments = [];
             this.process = [];
@@ -106,6 +113,12 @@ export default {
             if (tab.label == "Returned") {
                 this.returnedDocuments = true;
             }
+        },
+        randomString(length, chars) {
+            var result = "";
+            for (var i = length; i > 0; --i)
+                result += chars[Math.round(Math.random() * (chars.length - 1))];
+            return result;
         }
     }
 };

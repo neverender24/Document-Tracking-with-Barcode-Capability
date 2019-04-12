@@ -72,13 +72,13 @@
                                             v-bind:item="value"
                                             :value="value.id"
                                         >{{ value.office_prefix }}</option>
-                                    </select> -->
+                                    </select>-->
 
-                                    <model-select :options="searchOfficeSelect"
+                                    <model-select
+                                        :options="searchOfficeSelect"
                                         v-model="row.office_id"
-                                        placeholder="select item">
-                                    </model-select>
-
+                                        placeholder="select item"
+                                    ></model-select>
                                 </td>
                                 <td>
                                     <a v-on:click="removeStep(index);" style="cursor: pointer">
@@ -96,79 +96,84 @@
                 <h4>Add Document</h4>
                 <div class="row py-2">
                     <div class="col-md-8">
-                    <select
-                        v-model="list.document_type_id"
-                        class="form-control form-control-sm border-secondary"
-                        @change="displayEntries(list.document_type_id)"
-                    >
-                        <option value="0">Select Document Type</option>
-                        <option
-                            v-for="(value,key) in document_type"
-                            :value="value.id"
-                        >{{ value.document_type }}</option>
-                    </select>
+                        <select
+                            v-model="list.document_type_id"
+                            class="form-control form-control-sm border-secondary"
+                            @change="displayEntries(list.document_type_id)"
+                        >
+                            <option value="0">Select Document Type</option>
+                            <option
+                                v-for="(value,key) in document_type"
+                                :value="value.id"
+                            >{{ value.document_type }}</option>
+                        </select>
                     </div>
                     <div class="col-md-4">
-                        <input type="text" class="form-control form-control-sm" v-model="list.document_code" readonly>
+                        <input
+                            type="text"
+                            class="form-control form-control-sm"
+                            v-model="list.document_code"
+                            readonly
+                        >
                     </div>
                 </div>
 
                 <!-- Detail Form -->
                 <div class="form-group">
-                <div class="card" v-if="payrollForm">
-                    <div class="card-header py-0">Title Guide</div>
-                    <div class="card-body py-2 mb-1">
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Type:</label>
-                            <div class="col-sm-10">
-                                <select
-                                    v-model="payrollFormInputs.payrollType"
-                                    class="form-control border-secondary form-control-sm"
-                                    @change="generatePayrollTitle()"
-                                >
-                                    <option value="0">-Select-</option>
-                                    <option v-for="(value,key) in sortPayrollType">{{ value }}</option>
-                                </select>
-                            </div>
-                            <label class="col-sm-2 col-form-label">Month:</label>
-                            <div class="col-sm-10">
-                                <select
-                                    v-model="payrollFormInputs.month"
-                                    class="form-control border-secondary form-control-sm"
-                                    @change="generatePayrollTitle()"
-                                >
-                                    <option value="0">-Select-</option>
-                                    <option v-for="(value,key) in months">{{ value }}</option>
-                                </select>
-                            </div>
-                            <label class="col-sm-2 col-form-label">Period:</label>
-                            <div class="col-sm-10">
-                                <select
-                                    v-model="payrollFormInputs.period"
-                                    class="form-control border-secondary form-control-sm"
-                                    @change="generatePayrollTitle()"
-                                >
-                                    <option value="0">-Select-</option>
-                                    <option v-for="(value,key) in period">{{ value }}</option>
-                                </select>
-                            </div>
-                            <label class="col-sm-2 col-form-label">Name</label>
-                            <div class="col-sm-10">
-                                <input
-                                    type="text"
-                                    class="form-control form-control-sm"
-                                    v-model="payrollFormInputs.name"
-                                    @keyup="generatePayrollTitle()"
-                                >
-                            </div>
-                            <div class="col-sm-12">
-                                <small
-                                    class="text-danger py-1"
-                                >Append below if there are additional searchable keywords.</small>
+                    <div class="card" v-if="payrollForm">
+                        <div class="card-header py-0">Title Guide</div>
+                        <div class="card-body py-2 mb-1">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Type:</label>
+                                <div class="col-sm-10">
+                                    <select
+                                        v-model="payrollFormInputs.payrollType"
+                                        class="form-control border-secondary form-control-sm"
+                                        @change="generatePayrollTitle()"
+                                    >
+                                        <option value="0">-Select-</option>
+                                        <option v-for="(value,key) in sortPayrollType">{{ value }}</option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-2 col-form-label">Month:</label>
+                                <div class="col-sm-10">
+                                    <select
+                                        v-model="payrollFormInputs.month"
+                                        class="form-control border-secondary form-control-sm"
+                                        @change="generatePayrollTitle()"
+                                    >
+                                        <option value="0">-Select-</option>
+                                        <option v-for="(value,key) in months">{{ value }}</option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-2 col-form-label">Period:</label>
+                                <div class="col-sm-10">
+                                    <select
+                                        v-model="payrollFormInputs.period"
+                                        class="form-control border-secondary form-control-sm"
+                                        @change="generatePayrollTitle()"
+                                    >
+                                        <option value="0">-Select-</option>
+                                        <option v-for="(value,key) in period">{{ value }}</option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-2 col-form-label">Name</label>
+                                <div class="col-sm-10">
+                                    <input
+                                        type="text"
+                                        class="form-control form-control-sm"
+                                        v-model="payrollFormInputs.name"
+                                        @keyup="generatePayrollTitle()"
+                                    >
+                                </div>
+                                <div class="col-sm-12">
+                                    <small
+                                        class="text-danger py-1"
+                                    >Append below if there are additional searchable keywords.</small>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 </div>
                 <!-- End detail form -->
 
@@ -189,7 +194,7 @@
                         class="form-control border-secondary"
                         v-model="list.document_date"
                     >
-                </div> -->
+                </div>-->
 
                 <div class="col-md-12 col-sm-12 col-xs-12 form-group">
                     <span class="btn btn-primary" @click="validate">Save and Print</span>
@@ -202,7 +207,7 @@
     </div>
 </template>
 <script>
-import { ModelSelect } from 'vue-search-select'
+import { ModelSelect } from "vue-search-select";
 
 export default {
     props: ["list", "subDocuments", "process"],
@@ -248,27 +253,26 @@ export default {
                 "November",
                 "December"
             ],
-            period: ["Whole Month", "First Quincena", "Second Quincena"],
-            
+            period: ["Whole Month", "First Quincena", "Second Quincena"]
         };
     },
 
     computed: {
         sortPayrollType: function() {
-            return this.payrollType.sort()
+            return this.payrollType.sort();
         },
         searchOfficeSelect: function() {
-            var self = this
-            var select = []
+            var self = this;
+            var select = [];
 
-            _.forEach(self.offices, function(e){
-                        select.push({
-                            value: e.id,
-                            text: e.office_prefix
-                        });
-             })
+            _.forEach(self.offices, function(e) {
+                select.push({
+                    value: e.id,
+                    text: e.office_prefix
+                });
+            });
 
-             return select
+            return select;
         }
     },
 
@@ -390,11 +394,11 @@ export default {
         },
 
         selectOffice() {
-            var self = this
+            var self = this;
             axios
                 .post("get-offices")
                 .then(response => {
-                    this.offices = response.data
+                    this.offices = response.data;
                 })
                 .catch(error => (this.errors = error.response.data.errors));
         },
@@ -420,7 +424,8 @@ export default {
         },
 
         displayEntries(document_type_id) {
-            if (document_type_id == 14) { // payroll
+            if (document_type_id == 14) {
+                // payroll
                 this.payrollForm = true;
                 this.generatePayrollTitle();
             } else {

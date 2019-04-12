@@ -79018,7 +79018,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             refreshDatatable: false,
             create: {
                 document_title: "",
-                document_code: Math.floor(Math.random() * 26) + Date.now(),
+                document_code: this.randomString(6, "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + Date.now()), //Math.floor(Math.random() * 26) + Date.now(),
                 document_date: "",
                 document_type_id: ""
             },
@@ -79034,7 +79034,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.refreshDatatable = !this.refreshDatatable;
 
             this.create.document_title = "";
-            this.create.document_code = Math.floor(Math.random() * 26) + Date.now(), this.create.document_date = "";
+            this.create.document_code = this.randomString(6, "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + Date.now()); //Math.floor(Math.random() * 26) + Date.now(),
+            this.create.document_date = "";
             this.create.document_type_id = "";
             this.subDocuments = [];
             this.process = [];
@@ -79047,6 +79048,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (tab.label == "Returned") {
                 this.returnedDocuments = true;
             }
+        },
+        randomString: function randomString(length, chars) {
+            var result = "";
+            for (var i = length; i > 0; --i) {
+                result += chars[Math.round(Math.random() * (chars.length - 1))];
+            }return result;
         }
     }
 });
@@ -84988,6 +84995,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -85012,7 +85024,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             payrollType: ["Regular", "Job Order", "Casual", "Honorarium", "PERA-ACA", "Overtime", "Clothing", "Monetization", "Bonuses", "Others"],
             months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             period: ["Whole Month", "First Quincena", "Second Quincena"]
-
         };
     },
 
