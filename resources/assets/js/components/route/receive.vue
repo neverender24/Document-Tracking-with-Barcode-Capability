@@ -30,7 +30,8 @@
 					<!-- <td>{{ item.received_by.name }}</td> -->
 					<td>{{ item.barcode }}</td>
 					<td>
-							<!-- {{ item.document.document_title == null ? '':item.document.document_title.substr(0,50) }} -->
+						
+							{{ item.document.document_title == null ? '':item.document.document_title.substr(0,50) }}
 					</td>
 				</tr>
 			</tbody>
@@ -63,7 +64,7 @@
 				{ width: '15%', label: 'Released on', name: 'Released on'},
 				{ width: '15%', label: 'Received on', name: 'Received on'},
 				// { width: '7%', label: 'Received by', name: 'Received by'},
-				{ width: '15%', label: 'Barcode', name: 'Barcode'},
+				{ width: '10%', label: 'Barcode', name: 'Barcode'},
 				{ width: '35%', label: 'Document Title', name: 'Document Title'}
 			]
 
