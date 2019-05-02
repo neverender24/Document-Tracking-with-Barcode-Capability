@@ -85601,17 +85601,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(item.barcode))]),
                 _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    "\n\t\t\t\t\t\t" +
-                      _vm._s(
-                        item.document.document_title == null
-                          ? ""
-                          : item.document.document_title.substr(0, 50)
-                      ) +
-                      "\n\t\t\t\t"
-                  )
-                ])
+                _c("td")
               ])
             })
           )

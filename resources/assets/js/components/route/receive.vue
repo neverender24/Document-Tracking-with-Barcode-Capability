@@ -30,7 +30,7 @@
 					<!-- <td>{{ item.received_by.name }}</td> -->
 					<td>{{ item.barcode }}</td>
 					<td>
-							{{ item.document.document_title == null ? '':item.document.document_title.substr(0,50) }}
+							<!-- {{ item.document.document_title == null ? '':item.document.document_title.substr(0,50) }} -->
 					</td>
 				</tr>
 			</tbody>
