@@ -2,16 +2,16 @@ require('./bootstrap');
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Vuelidate from 'vuelidate'
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import locale from 'element-ui/lib/locale/lang/en'
+import CKEditor from '@ckeditor/ckeditor5-vue';
 
 
 Vue.use(ElementUI, { locale })
-Vue.use(Vuelidate)
 Vue.use(VueRouter)
 Vue.use(require('vue-moment'));
+Vue.use( CKEditor );
 
 
 let Navbar = require('./components/navbar.vue');
@@ -26,6 +26,7 @@ let ReceivedDocuments = require('./components/reports/ReceivedDocuments.vue');
 let UnactedDocuments = require('./components/reports/UnactedDocuments.vue');
 
 let ChangePassword = require('./components/change_password.vue');
+let AddNotes = require('./components/add_notes.vue');
 
 const routes = [
   {
@@ -39,7 +40,7 @@ const routes = [
   { path: '/received-documents', component: ReceivedDocuments },
   { path: '/unacted-documents', component: UnactedDocuments },
   { path: '/change-password', component: ChangePassword },
-  { path: '/change-password', component: ChangePassword },
+  { path: '/add-notes', component: AddNotes },
 ]
 
 const router = new VueRouter({ 

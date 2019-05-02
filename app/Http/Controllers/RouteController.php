@@ -155,7 +155,7 @@ class RouteController extends Controller
 				{
 					$create = new \App\Route;
 					$create->release_at = now()->toDateTimeString();
-					$create->barcode = $sub['code'];
+					$create->barcode = strtolower($sub['code']);
 					$create->released_by = auth()->user()->id;
 					$create->office_id = auth()->user()->office_id;
 					$create->release_to = $office;

@@ -86,4 +86,8 @@ Route::post('update-password', function(){
     return $user;
 });
 
-
+// updates
+Route::post('seen', "UpdateController@seen");
+Route::get('seen-badge', "UpdateController@seenBadge");
+Route::resource('updates', 'UpdateController');
+Route::post('versions', "UpdateController@getVersion");

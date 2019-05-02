@@ -31,4 +31,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Office','office_id');
     }
+
+    public function updates() {
+        return $this->belongsToMany('App\Update','update_user');
+    }
 }

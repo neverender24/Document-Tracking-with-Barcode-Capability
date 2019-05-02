@@ -12,8 +12,11 @@
             <div class="col-md-6 order-md-6 mb-6">
                 <!-- Generate Sub-Documents -->
                 <div class="container document" v-if="list.subDocuments.length > 0">
-                    <h6 v-if="list.subDocuments.length > 0">Scan Documents
-                        <small style="color: red;">TIPS: Hit enter/barcode to add new document.</small>
+                    <h6 v-if="list.subDocuments.length > 0">
+                        Scan Documents
+                        <small
+                            style="color: red;"
+                        >TIPS: Hit enter/barcode to add new document.</small>
                     </h6>
                     <table class="table">
                         <tbody>
@@ -67,11 +70,12 @@
                                             v-bind:item="value"
                                             :value="value.id"
                                         >{{ value.office_prefix }} - {{ value.office_name }}</option>
-                                    </select> -->
-																		<model-select :options="searchOfficeSelect"
+                                    </select>-->
+                                    <model-select
+                                        :options="searchOfficeSelect"
                                         v-model="row.office_id"
-                                        placeholder="select item">
-                                    </model-select>
+                                        placeholder="select item"
+                                    ></model-select>
                                 </td>
                                 <td>
                                     <a v-on:click="removeStep(index);" style="cursor: pointer">
@@ -216,22 +220,22 @@ export default {
             errors2: ""
         };
     },
- components: {
+    components: {
         ModelSelect
     },
     computed: {
         searchOfficeSelect: function() {
-            var self = this
-            var select = []
+            var self = this;
+            var select = [];
 
-            _.forEach(self.offices, function(e){
-                        select.push({
-                            value: e.id,
-                            text: e.office_prefix
-                        });
-             })
+            _.forEach(self.offices, function(e) {
+                select.push({
+                    value: e.id,
+                    text: e.office_prefix
+                });
+            });
 
-             return select
+            return select;
         }
     },
     directives: {
@@ -354,9 +358,11 @@ export default {
                         this.list.subDocuments[index].title =
                             response.data.document_title;
 
+                        var length = response.data.routes.length
                         let error = "";
-                        _.findLastKey(response.data.routes, function(n) {
-                            if (n.receive_by == null) {
+                        
+                        _.findLastKey(response.data.routes, function(n, index) {
+                            if (index == length-1 && n.receive_by == null) {
                                 error = "Not received yet";
                             }
                         });
