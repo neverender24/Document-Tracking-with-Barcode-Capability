@@ -1,7 +1,7 @@
 <template>
-
+        <div class="table-responsive">
         <route-index v-if="barcode" :routes="routeData" :title="routeTitle"></route-index>
-
+        </div>
 </template>
 
 <script>
