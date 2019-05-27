@@ -18,7 +18,7 @@
         <div class="col-6 text-left">
             <?php
                 if(isset($_GET['id'])){
-                    echo DNS2D::getBarcodeSVG("http://122.54.19.170:8081/fast-track/".$_GET['id'], "QRCODE",3,3);
+                    echo DNS2D::getBarcodeSVG("http://122.54.19.170:8081/track/".$_GET['id'], "QRCODE",3,3);
                 }
             ?>
         </div>
