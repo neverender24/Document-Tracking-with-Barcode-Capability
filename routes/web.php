@@ -21,6 +21,8 @@ Route::post('get-step', "DocumentTypeController@getStep");
 Route::resource('routes', "RouteController");
 Route::post('view-routes', "RouteController@getRoutes");
 Route::post('get-routes', "RouteController@populateRoutes");
+Route::post('track/fast-track', "RouteController@fastTrack");
+Route::get('track/{id}', "RouteController@track");
 
 Route::get('view-receive', "RouteController@getReceive");
 Route::post('store-receive', "RouteController@storeReceive");

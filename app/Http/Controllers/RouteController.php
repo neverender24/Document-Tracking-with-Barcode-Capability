@@ -14,7 +14,7 @@ class RouteController extends Controller
 	)
 	{
 		$this->model = $route;
-		$this->middleware("auth",["except"=>["getRoutes"]]);
+		$this->middleware("auth",["except"=>["getRoutes", "fastTrack","track"]]);
 	}
 
     public function getRoutes(Request $request)
@@ -35,6 +35,31 @@ class RouteController extends Controller
 			->union($parent)
 			->get();
 		
+		return $child;
+	}
+
+	public function track($barcode) {
+		return view('admin.fast_track', compact('barcode'));
+	}
+
+	public function fastTrack(Request $request) {
+
+		$barcode = $request->barcode;
+		
+		$parent = $this->model->with(['subDocument', 'office', 'receivedBy', 'releasedBy'])
+		->whereHas('subDocument', function($query) use(&$barcode){
+			$query->where('documents.document_code', $barcode)
+				  ->orWhere('documents.document_id', $barcode);
+		})
+		->sorted('asc');
+
+		
+		$child = $this->model->with(['document', 'office', 'receivedBy', 'releasedBy'])
+			->barcode($barcode)
+			->sorted('asc')
+			->union($parent)
+			->get();
+
 		return $child;
 	}
 
