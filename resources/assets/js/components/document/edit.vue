@@ -132,6 +132,7 @@
 <script>
 import VueBarcode from "vue-barcode";
 import { ModelSelect } from 'vue-search-select'
+import {Helpers} from "../helpers/helpers.js";
 
 export default {
     props: {
@@ -284,16 +285,7 @@ export default {
 
         print: function() {
             this.loading = !this.loading;
-            window.open(
-                "/pdf?id=" +
-                    this.list.document_code +
-                    "&title=" +
-                    this.list.document_title +
-                    "&office=" +
-                    this.$root.user.office_name +
-                    "&name=" +
-                    this.$root.user.user_name
-            );
+            Helpers.print(this.list.document_code, this.list.document_title, this.$root.user.office_name, this.$root.user.user_name)
             this.loading = !this.loading;
         },
 

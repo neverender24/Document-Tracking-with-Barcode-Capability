@@ -32,23 +32,7 @@
                     <td>{{ calc(item.routes, index) }}</td>
                     <td>{{ item.document_code }}</td>
                     <td>{{ item.document_title }}</td>
-                    <!-- color tags -->
-                    <!-- payroll -->
-                    <td v-if="item.document_type_id == 14">
-                        <span class="badge badge-primary">{{ item.document_type.document_type_prefix }}</span>
-                    </td>
-                    <!-- memo -->
-                    <td v-else-if="item.document_type_id == 15">
-                        <span class="badge badge-warning">{{ item.document_type.document_type_prefix }}</span>
-                    </td>
-                    <!-- obr -->
-                    <td v-else-if="item.document_type_id == 32">
-                        <span class="badge badge-success">{{ item.document_type.document_type_prefix }}</span>
-                    </td>
-                    <td v-else>
-						<span class="badge badge-secondary">{{ item.document_type.document_type_prefix }}</span>
-						</td>
-                    <!-- end color -->
+                    <td v-html="identifyType(item.document_type_id, item.document_type.document_type_prefix)"></td>
                     <td>{{ item.created_at }}</td>
                     <td @click="$event.stopPropagation()">
                         <div class="btn-group" role="group">
@@ -68,7 +52,7 @@
                             <button v-else class="btn btn-sm btn-info" disabled>
                                 <span class="fa fa-edit"></span>
                             </button>
-                            
+
                             <button
                                 @click="deleteDocument(item.document_code)"
                                 v-if="item.routes.length <= 1 && item.routes[0].receive_at==null"
@@ -126,6 +110,7 @@ import RouteIndex from "./../route/index.vue";
 import EditDocument from "./../document/edit.vue";
 import Datatable from "../helpers/datatable.vue";
 import Pagination from "../helpers/pagination.vue";
+import { Helpers } from "../helpers/helpers.js";
 
 export default {
     props: {
@@ -240,15 +225,11 @@ export default {
 
         print: function(id, barcode, title) {
             this.loading = !this.loading;
-            window.open(
-                "/pdf?id=" +
-                    barcode +
-                    "&title=" +
-                    title +
-                    "&office=" +
-                    this.$root.user.office_name +
-                    "&name=" +
-                    this.$root.user.user_name
+            Helpers.print(
+                barcode,
+                title,
+                this.$root.user.office_name,
+                this.$root.user.user_name
             );
             this.loading = !this.loading;
         },
@@ -314,50 +295,11 @@ export default {
         },
 
         calc(routes) {
-            var sum = 0;
-            var first = true;
-            var firstRecord = 0;
-            var self = this;
-            _.forEach(routes, function(key, index) {
-                if (first) {
-                    first = false;
-                    firstRecord = self.calculateDate(
-                        key.receive_at,
-                        key.release_at
-                    );
-                }
-
-                if (index != 0) {
-                    sum += self.calculateDate(
-                        key.release_at,
-                        routes[index - 1].receive_at
-                    );
-                }
-            });
-
-            return this.secondsToHms(firstRecord + sum);
+            return Helpers.calc(routes);
         },
 
-        calculateDate(released, received) {
-            var moment = require("moment");
-            var rel = new Date(released);
-            var rec = new Date(received);
-            var seconds = (rel.getTime() - rec.getTime()) / 1000; //1440516958
-
-            return seconds;
-        },
-
-        secondsToHms(d) {
-            d = Number(d);
-            var h = Math.floor(d / 3600);
-            var m = Math.floor((d % 3600) / 60);
-            var s = Math.floor((d % 3600) % 60);
-
-            var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hour, ") : "";
-            var mDisplay = m > 0 ? m + (m == 1 ? " min, " : " min, ") : "";
-            var sDisplay = s > 0 ? s + (s == 1 ? " sec" : " sec") : "";
-
-            return hDisplay + mDisplay + sDisplay;
+        identifyType(type, prefix) {
+            return Helpers.identifyType(type, prefix)
         }
     }
 };
