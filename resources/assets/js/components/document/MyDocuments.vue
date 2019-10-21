@@ -13,10 +13,11 @@
                 class="form-control"
                 v-model="tableData.search"
                 placeholder="Search"
-                @input="getMyDocuments()"
+                @change="getMyDocuments()"
             >
             <select v-model="tableData.length" @change="getMyDocuments()">
-                <option value="15" selected="selected">15</option>
+                <option value="15" selected="selected">10</option>
+                <option value="15">15</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
             </select>
@@ -68,11 +69,14 @@
                 </tr>
             </tbody>
         </datatable>
-        <pagination
-            :pagination="pagination"
-            @prev="getMyDocuments(pagination.prevPageUrl)"
-            @next="getMyDocuments(pagination.nextPageUrl)"
-        ></pagination>
+        <div class="py-3 d-flex flex-row align-items-center justify-content-between">
+			<pagination
+				:pagination="pagination"
+				@prev="getMyDocuments(pagination.prevPageUrl)"
+				@next="getMyDocuments(pagination.nextPageUrl)" 
+			></pagination>
+			<p>{{ pagination.from }} to {{pagination.to}} of {{ pagination.total }} entries</p>
+		</div>
 
         <el-dialog title="ROUTES" custom-class="routeModal" :visible.sync="openRoutes" width="85%">
             <route-index :routes="routeData" @deleteRoute="getRoute" :title="routeTitle"></route-index>
@@ -146,7 +150,7 @@ export default {
             sortOrders: sortOrders,
             tableData: {
                 draw: 0,
-                length: 15,
+                length: 10,
                 search: "",
                 column: 0,
                 dir: "desc"

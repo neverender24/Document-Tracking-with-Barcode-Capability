@@ -19,9 +19,10 @@
 			<div class="input-group-prepend">
 				<span class="input-group-text" id="basic-addon1"><div class="fa fa-search"></div></span>
 			</div>
-			<input type="text" class="form-control" v-model="tableData.search" placeholder="Search" @input="getAllReturnedDocuments()">
+			<input type="text" class="form-control" v-model="tableData.search" placeholder="Search" @change="getAllReturnedDocuments()">
 			<select v-model="tableData.length" @change="getAllReturnedDocuments()">
-				<option value="15" selected="selected">15</option>
+				<option value="15" selected="selected">10</option>
+				<option value="25">15</option>
 				<option value="25">25</option>
 				<option value="50">50</option>
 			</select>
@@ -33,15 +34,19 @@
 					<td>{{ calc(item.routes, index) }}</td>
 					<td>{{ item.document_code }}</td>
 					<td>{{ item.document_title }}</td>
-					<td v-html="identifyType(item.document_type_id, item.document_type_prefix)"></td>
+					<td v-html="identifyType(item.document_type_id, item.document_type.document_type_prefix)"></td>
 					<td>{{ item.created_at }}</td>
 				</tr>
 			</tbody>
 		</datatable>
-		<pagination :pagination="pagination"
-		@prev="getAllReturnedDocuments(pagination.prevPageUrl)" 
-		@next="getAllReturnedDocuments(pagination.nextPageUrl)"
-		></pagination>
+		<div class="py-3 d-flex flex-row align-items-center justify-content-between">
+			<pagination
+				:pagination="pagination"
+				@prev="getMyDocuments(pagination.prevPageUrl)"
+				@next="getMyDocuments(pagination.nextPageUrl)" 
+			></pagination>
+			<p>{{ pagination.from }} to {{pagination.to}} of {{ pagination.total }} entries</p>
+		</div>
 
 		<el-dialog
 			title="ROUTES"
@@ -104,7 +109,7 @@
 				sortOrders: sortOrders,
 				tableData: {
 					draw: 0,
-					length: 15,
+					length: 10,
 					search: '',
 					column: 0,
 					dir: 'desc',

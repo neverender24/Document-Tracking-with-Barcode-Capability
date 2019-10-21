@@ -313,7 +313,7 @@
                 <div>
 
                   <span style=" text-align:right;  display: inline-block;"><input type="submit"  class="btn btn-default btn-sm" value="Sign In"></span>
-                  <span style=" text-align:right;  display: inline-block;"><button type="button" class="btn btn-default btn-sm"  data-toggle="modal" data-target="#exampleModal">FAST TRACK</button>
+                  <span style=" text-align:right;  display: inline-block;"><button type="button" class="btn btn-warning btn-sm"  data-toggle="modal" data-target="#exampleModal">FAST TRACK</button>
                             </div>
 
           </fieldset>

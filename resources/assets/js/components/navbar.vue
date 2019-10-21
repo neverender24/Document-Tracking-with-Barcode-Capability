@@ -70,6 +70,7 @@
                             <a href="register" class="dropdown-item" v-if="isAdmin">Register</a>
                             <router-link to="/change-password" class="dropdown-item">Change Password</router-link>
                             <router-link to="/add-notes" class="dropdown-item" v-if="isAdmin">Add Notes</router-link>
+                            <router-link to="/generate-barcodes" class="dropdown-item" v-if="isAdmin">Genereate Barcodes</router-link>
                             <div class="dropdown-divider"></div>
                         </div>
                     </li>
@@ -167,7 +168,7 @@ export default {
             axios
                 .post("logout")
                 .then(response => {
-                    window.location.href = "/";
+                    window.location.href = "";
                 })
                 .catch(error => (this.errors = error.response.data.errors));
         },

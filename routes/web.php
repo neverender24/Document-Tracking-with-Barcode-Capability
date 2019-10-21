@@ -58,35 +58,11 @@ Route::post('get-office', function(){
     return auth()->user()->office;
 });
 
+// change password
+Route::post('update-password', 'UserController@changePassword');
 
-Route::post('update-password', function(){
-
-   $old     = request()->get('old_password');
-   $new     = request()->get('new_password');
-   $confirm = request()->get('confirm_password');
-
-    if (!Hash::check($old, auth()->user()->password))
-    {
-        return response()->json(array(
-                    'code'      =>  400,
-                    'message'   =>  "Password given incorrect"
-                ), 400);
-    }
-
-    if($new !== $confirm)
-    {
-       return response()->json(array(
-                    'code'      =>  401,
-                    'message'   =>  "New password not matched"
-                ), 401);
-    }
-
-    $user = App\User::findOrFail( auth()->user()->id);
-    $user->password = bcrypt($new);
-    $user->save();
-
-    return $user;
-});
+// generate barcodes
+Route::post('generate-barcodes', 'DocumentController@generateBarcodes');
 
 // updates
 Route::post('seen', "UpdateController@seen");

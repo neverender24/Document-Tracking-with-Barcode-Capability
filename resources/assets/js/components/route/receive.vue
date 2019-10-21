@@ -12,7 +12,7 @@
 			<div class="input-group-prepend">
 				<span class="input-group-text" id="basic-addon1"><div class="fa fa-search"></div></span>
 			</div>
-			<input type="text" class="form-control" v-model="tableData.search" placeholder="Search" @input="initReceive()">
+			<input type="text" class="form-control" v-model="tableData.search" placeholder="Search" @change="initReceive()">
 			<select v-model="tableData.length" @change="initReceive()">
 				<option value="15" selected="selected">15</option>
 				<option value="25">25</option>

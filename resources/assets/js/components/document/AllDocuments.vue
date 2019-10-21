@@ -12,10 +12,11 @@
                 class="form-control"
                 v-model="tableData.search"
                 placeholder="Search"
-                @input="getAllDocuments()"
-            >
+                @change="getAllDocuments()"
+            />
             <select v-model="tableData.length" @change="getAllDocuments()">
-                <option value="15" selected="selected">15</option>
+                <option value="15" selected="selected">10</option>
+                <option value="25">15</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
             </select>
@@ -32,16 +33,21 @@
                     <td>{{ calc(item.routes, index) }}</td>
                     <td>{{ item.document_code }}</td>
                     <td>{{ item.document_title }}</td>
-                    <td v-html="identifyType(item.document_type_id, item.document_type_prefix)"></td>
+                    <td
+                        v-html="identifyType(item.document_type_id, item.document_type.document_type_prefix)"
+                    ></td>
                     <td>{{ item.created_at }}</td>
                 </tr>
             </tbody>
         </datatable>
-        <pagination
-            :pagination="pagination"
-            @prev="getAllDocuments(pagination.prevPageUrl)"
-            @next="getAllDocuments(pagination.nextPageUrl)"
-        ></pagination>
+        <div class="py-3 d-flex flex-row align-items-center justify-content-between">
+			<pagination
+				:pagination="pagination"
+				@prev="getAllDocuments(pagination.prevPageUrl)"
+				@next="getAllDocuments(pagination.nextPageUrl)" 
+			></pagination>
+			<p>{{ pagination.from }} to {{pagination.to}} of {{ pagination.total }} entries</p>
+		</div>
 
         <el-dialog title="ROUTES" custom-class="routeModal" :visible.sync="openRoutes" width="85%">
             <route-index :routes="routeData" @deleteRoute="getRoute" :title="routeTitle"></route-index>
@@ -68,10 +74,7 @@ import Pagination from "../helpers/pagination.vue";
 import { Helpers } from "../helpers/helpers.js";
 
 export default {
-    props: {
-        refreshDatatable: ""
-    },
-
+    props: ["refreshDatatable"],
     components: {
         RouteIndex,
         datatable: Datatable,
@@ -99,7 +102,7 @@ export default {
             sortOrders: sortOrders,
             tableData: {
                 draw: 0,
-                length: 15,
+                length: 10,
                 search: "",
                 column: 0,
                 dir: "desc"
@@ -185,11 +188,11 @@ export default {
 
         calc(routes) {
             return Helpers.calc(routes);
-		},
-		
-		identifyType(type, prefix) {
-            	return Helpers.identifyType(type, prefix)
-        	}
+        },
+
+        identifyType(type, prefix) {
+            return Helpers.identifyType(type, prefix);
+        }
     }
 };
 </script>
