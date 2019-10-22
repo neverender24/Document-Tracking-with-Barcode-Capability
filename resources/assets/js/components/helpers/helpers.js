@@ -31,9 +31,9 @@ export const Helpers = {
         var s = Math.floor((timestamp % 3600) % 60);
 
         
-        var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hour, ") : "";
-        var mDisplay = m > 0 ? m + (m == 1 ? " min, " : " min, ") : "";
-        var sDisplay = s > 0 ? s + (s == 1 ? " sec" : " sec") : "";
+        var hDisplay = h > 0 ? h + (h == 1 ? ":" : ":") : "";
+        var mDisplay = m > 0 ? m + (m == 1 ? ":" : ":") : "";
+        var sDisplay = s > 0 ? s + (s == 1 ? "" : "") : "";
 
         return hDisplay + mDisplay + sDisplay;
     },

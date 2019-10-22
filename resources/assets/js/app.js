@@ -16,6 +16,8 @@ Vue.use(require('vue-moment'));
 Vue.use( CKEditor );
 Vue.component(VueBarcode.name, VueBarcode);
 
+Vue.config.productionTip = false
+
 let Navbar = require('./components/navbar.vue');
 let FastTrack = require('./components/fast_track.vue');
 let QrTrack = require('./components/qr_track.vue');

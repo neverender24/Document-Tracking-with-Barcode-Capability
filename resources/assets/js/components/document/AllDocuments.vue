@@ -85,8 +85,8 @@ export default {
         let sortOrders = {};
 
         let columns = [
-            { width: "10%", label: "Time", name: "Time" },
-            { width: "15%", label: "Barcode", name: "Barcode" },
+            { width: "15%", label: "Time", name: "Time" },
+            { width: "10%", label: "Barcode", name: "Barcode" },
             { width: "40%", label: "Document Title", name: "document_title" },
             { width: "10%", label: "Type", name: "Type" },
             { width: "15%", label: "Created On", name: "Created On" }
