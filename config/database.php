@@ -43,7 +43,7 @@ return [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => 'ivp', //env('DB_DATABASE', 'ivp'),
+            'database' => 'doctrack', //env('DB_DATABASE', 'ivp'),
             'username' => 'budgetserver', //env('DB_USERNAME', 'budgetserver'),
             'password' => 'budgetserver123', //env('DB_PASSWORD', 'budgetserver123'),
             'unix_socket' => env('DB_SOCKET', ''),
