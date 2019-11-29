@@ -21,8 +21,7 @@ class RouteController extends Controller
 
         $parent = $this->model->with(['subDocument', 'office', 'receivedBy', 'releasedBy'])
             ->whereHas('subDocument', function ($query) use ($barcode) {
-                return $query->where('document_code', $barcode)
-                    ->orWhere('document_id', $barcode);
+                $query->where('document_code', $barcode);
             })
             ->sorted('asc');
 
