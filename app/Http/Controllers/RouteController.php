@@ -29,7 +29,7 @@ class RouteController extends Controller
         $child = $this->model->with(['document', 'office', 'receivedBy', 'releasedBy'])
             ->barcode($barcode)
             ->sorted('asc')
-            ->union($parent)
+           // ->union($parent)
             ->get();
 
         return $child;
