@@ -15,8 +15,8 @@
                 @change="getAllDocuments()"
             />
             <select v-model="tableData.length" @change="getAllDocuments()">
-                <option value="15" selected="selected">10</option>
-                <option value="25">15</option>
+                <option value="10" selected="selected">10</option>
+                <option value="15">15</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
             </select>

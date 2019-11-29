@@ -21,8 +21,8 @@
 			</div>
 			<input type="text" class="form-control" v-model="tableData.search" placeholder="Search" @change="getAllReturnedDocuments()">
 			<select v-model="tableData.length" @change="getAllReturnedDocuments()">
-				<option value="15" selected="selected">10</option>
-				<option value="25">15</option>
+				<option value="10" selected="selected">10</option>
+				<option value="15">15</option>
 				<option value="25">25</option>
 				<option value="50">50</option>
 			</select>
