@@ -6,7 +6,7 @@ use App\Document;
 use App\Route;
 use Illuminate\Http\Request;
 
-class DocumentController extends Controller
+class DocumentControllerOld extends Controller
 {
     public function __construct(Document $document)
     {
