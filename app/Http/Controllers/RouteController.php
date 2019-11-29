@@ -20,11 +20,11 @@ class RouteController extends Controller
         $barcode = $request->barcode;
 
         $parent = $this->model->with(['subDocument', 'office', 'receivedBy', 'releasedBy'])
-            ->whereHas('subDocument', function ($query) use (&$barcode) {
+            ->whereHas('subDocument', function ($query) use ($barcode) {
                 $query->where('documents.document_code', $barcode)
                     ->orWhere('documents.document_id', $barcode);
             })
-            ->sorted('asc')->get();
+            ->sorted('asc');
 
         $child = $this->model->with(['document', 'office', 'receivedBy', 'releasedBy'])
             ->barcode($barcode)
@@ -32,7 +32,7 @@ class RouteController extends Controller
             ->union($parent)
             ->get();
 
-        return $parent;
+        return $child;
     }
 
     public function track($barcode)
