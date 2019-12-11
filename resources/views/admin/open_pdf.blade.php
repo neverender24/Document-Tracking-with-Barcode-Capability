@@ -47,7 +47,7 @@
         <span style="position:fixed; margin:50px 0px 0px 600px;font-size:1.1em;">{{ $_GET['office'] }}</span>
         {{-- from --}}
         <span style="position:fixed; margin:50px 0px 0px 110px;font-size:1.1em;">{{ $_GET['name'] }}</span>
-        <img src="{{asset('form.jpg')}}" style="width: 1024px;"/>
+        <img src="{{asset('form.JPG')}}" style="width: 1024px;"/>
         <div class="col-lg-3 col-md-6 col-sm-6 text-right">
         </div>
     </div>
