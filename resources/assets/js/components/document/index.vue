@@ -76,11 +76,7 @@ export default {
             refreshDatatable: false,
             create: {
                 document_title: "",
-                document_code: this.randomString(
-                6,
-                "0123456789abcdefghijklmnopqrstuvwxyz" +
-                    Date.now()
-            ),//Math.floor(Math.random() * 26) + Date.now(),
+                document_code: this.generateCode(),
                 document_date: "",
                 document_type_id: ""
             },
@@ -93,13 +89,8 @@ export default {
         closeCreateModal: function() {
             this.openAddDocument = false;
             this.refreshDatatable = !this.refreshDatatable;
-
             this.create.document_title = "";
-            this.create.document_code = this.randomString(
-                6,
-                "0123456789abcdefghijklmnopqrstuvwxyz" +
-                    Date.now()
-            ); //Math.floor(Math.random() * 26) + Date.now(),
+            this.create.document_code =  this.generateCode(),
             this.create.document_date = "";
             this.create.document_type_id = "";
             this.subDocuments = [];
@@ -119,6 +110,13 @@ export default {
             for (var i = length; i > 0; --i)
                 result += chars[Math.round(Math.random() * (chars.length - 1))];
             return result;
+        },
+        generateCode() {
+            return this.randomString(
+                8,
+                "0123456789abcdefghijklmnopqrstuvwxyz" +
+                    Date.now()
+            );
         }
     }
 };
