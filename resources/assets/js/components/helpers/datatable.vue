@@ -1,5 +1,5 @@
 <template>
-    <table class="table table-hover table-sm">
+    <table class="table table-hover table-striped table-sm">
         <thead>
             <tr>
                 <th v-for="column in columns"

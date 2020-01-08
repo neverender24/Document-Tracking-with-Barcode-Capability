@@ -33,10 +33,10 @@
                     <td>{{ calc(item.routes, index) }}</td>
                     <td>{{ item.document_code }}</td>
                     <td>{{ item.document_title }}</td>
-                    <td
+                    <td style="text-align:center;"
                         v-html="identifyType(item.document_type_id, item.document_type.document_type_prefix)"
                     ></td>
-                    <td>{{ item.created_at }}</td>
+                    <td>{{ item.created_at | moment("MMM-DD-YY hh:mmA") }}</td>
                 </tr>
             </tbody>
         </datatable>

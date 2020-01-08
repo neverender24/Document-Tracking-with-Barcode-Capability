@@ -33,8 +33,8 @@
                     <td>{{ calc(item.routes, index) }}</td>
                     <td>{{ item.document_code }}</td>
                     <td>{{ item.document_title }}</td>
-                    <td v-html="identifyType(item.document_type_id, item.document_type.document_type_prefix)"></td>
-                    <td>{{ item.created_at }}</td>
+                    <td style="text-align:center;" v-html="identifyType(item.document_type_id, item.document_type.document_type_prefix)"></td>
+                    <td>{{ item.created_at | moment("MMM-DD-YY hh:mmA") }}</td>
                     <td @click="$event.stopPropagation()">
                         <div class="btn-group" role="group">
                             <button
