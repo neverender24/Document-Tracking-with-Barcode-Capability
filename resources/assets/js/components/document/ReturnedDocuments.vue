@@ -26,6 +26,7 @@
                 v-model="tableData.search"
                 placeholder="Search"
                 @change="getAllReturnedDocuments()"
+                @input="resetSearch()"
             />
             <select v-model="tableData.length" @change="getAllReturnedDocuments()">
                 <option value="10" selected="selected">10</option>
@@ -225,6 +226,11 @@ export default {
 
         identifyType(type, prefix) {
             return Helpers.identifyType(type, prefix);
+        },
+        resetSearch() {
+            if (this.tableData.search == '') {
+                this.getAllReturnedDocuments()
+            }
         }
     }
 };

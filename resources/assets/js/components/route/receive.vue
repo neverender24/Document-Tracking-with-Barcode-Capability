@@ -24,7 +24,8 @@
                 class="form-control"
                 v-model="tableData.search"
                 placeholder="Search"
-                @change="initReceive()"
+                @change="initReceive()" 
+                @input="resetSearch()"
             />
             <select v-model="tableData.length" @change="initReceive()">
                 <option value="15" selected="selected">15</option>
@@ -168,6 +169,11 @@ export default {
                     this.configPagination(data.data);
                 }
             });
+        },
+        resetSearch() {
+            if (this.tableData.search == '') {
+                this.initReceive()
+            }
         }
     }
 };
