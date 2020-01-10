@@ -37,9 +37,10 @@
 							<el-button slot="reference" size="mini" type="warning" round>View</el-button>
 						</el-popover>
 					</td>
-					<td v-else class="text-center">
+					<td v-else-if="remarks(item.remarks) == 'good'" class="text-center">
 						{{ item.remarks}}
 					</td>
+					<td v-else class="text-center"></td>
 					<td v-if="item.received_by == null && item.released_by.id==$root.user.user_id &&  item.receive_at==null && routes.length > 1">
 						<el-tooltip class="item" effect="dark" content="Delete" placement="right" :enterable="false">
 							<el-button size="mini" type="danger" icon="el-icon-delete" circle @click="deleteRoute(item.id, item.barcode)"></el-button>
@@ -124,7 +125,11 @@
 			},
 
 			remarks(remark) {
-				console.log(remark)
+				
+				if (remark == null) {
+					return '';
+				}
+
 				if (remark.toLowerCase().includes('return')) {
 					return 'return'
 				} else if (remark.toLowerCase().includes('remarks')) {
