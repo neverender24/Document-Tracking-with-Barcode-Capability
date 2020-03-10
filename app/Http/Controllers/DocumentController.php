@@ -271,7 +271,12 @@ class DocumentController extends Controller
      */
     public function deleteDocument(Request $request)
     {
-        return $this->model->where('document_code', $request->id)->delete();
+        $barcode = $request->id;
+
+        Route::where('barcode', $barcode)->limit(1)->delete();
+        $this->model->where('document_code', $barcode)->limit(1)->delete();
+
+        return $barcode;
     }
 
     /**
