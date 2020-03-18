@@ -101,7 +101,7 @@
                             class="form-control form-control-sm border-secondary"
                             @change="displayEntries(list.document_type_id)"
                         >
-                            <option value="0">Select Document Type</option>
+                            <option value="">Select Document Type</option>
                             <option
                                 v-for="(value,key) in document_type"
                                 :value="value.id"
