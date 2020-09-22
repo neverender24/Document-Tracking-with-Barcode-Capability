@@ -312,4 +312,14 @@ class DocumentController extends Controller
     {
         return view('admin.open_pdf');
     }
+
+    public function file_document(Request $request)
+    {
+        $route = $this->model->where('id', $request->document_id)->first();
+        $route->update([
+            "file_tag" => $request->file_tag
+        ]);
+
+        return $route;
+    }
 }

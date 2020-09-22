@@ -35,7 +35,10 @@ Route::get("pdf","DocumentController@open_pdf");
 // reports
 Route::get('released-documents', "RouteController@releasedDocuments");
 Route::get('received-documents', "RouteController@receivedDocuments");
-Route::get('unacted-documents', "RouteController@unactedDocuments");
+Route::get('unacted_documents', "RouteController@unacted_documents")->name('unacted_documents');
+
+//file
+Route::post('file_document', 'DocumentController@file_document')->name('file_document');
 
 //calculate time
 Route::get('calculate-time', "DocumentController@calculateTime");

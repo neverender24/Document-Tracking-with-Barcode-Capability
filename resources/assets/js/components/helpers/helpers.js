@@ -32,10 +32,10 @@ export const Helpers = {
 
         
         var hDisplay = h > 0 ? h + (h == 1 ? "" : "h,") : "";
-        var mDisplay = m > 0 ? m + (m == 1 ? ":" : "m,") : "";
+        var mDisplay = m > 0 ? m + (m == 1 ? ":" : "m") : "";
         var sDisplay = s > 0 ? s + (s == 1 ? "" : "s") : "";
 
-        return hDisplay + mDisplay + sDisplay;
+        return hDisplay + mDisplay // + sDisplay;
     },
 
     calc(routes) {

@@ -5,7 +5,7 @@
 		<table class="table table-hover table-sm">
 			<thead>
 				<tr>
-					<th>Summary</th>
+					<th>Time</th>
 					<th>Released by</th>
 					<th>Release to</th>
 					<th>Released at</th>
@@ -117,11 +117,11 @@
 				var m = Math.floor(d % 3600 / 60);
 				var s = Math.floor(d % 3600 % 60);
 
-				var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hour, ") : "";
-				var mDisplay = m > 0 ? m + (m == 1 ? " min, " : " min, ") : "";
+				var hDisplay = h > 0 ? h + (h == 1 ? "h, " : "h, ") : "";
+				var mDisplay = m > 0 ? m + (m == 1 ? "m, " : "m ") : "";
 				var sDisplay = s > 0 ? s + (s == 1 ? " sec" : " sec") : "";
 
-				return hDisplay + mDisplay + sDisplay; 
+				return hDisplay + mDisplay //+ sDisplay; 
 			},
 
 			remarks(remark) {

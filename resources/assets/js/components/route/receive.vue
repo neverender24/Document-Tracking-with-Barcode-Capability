@@ -3,17 +3,19 @@
         <h4>Receiving</h4>
         <div class="loading" v-if="loading">Loading&#8230;</div>
 
-        <el-input
+    <div class="row">
+        <div class="col-md-4">
+            <input
+            type="text"
+            class="form-control"
             placeholder="Enter barcode no."
             v-model="barcode"
             @change="enterRoute()"
-            autofocus="true"
+             v-focus
         >
-            <template slot="prepend">||||</template>
-        </el-input>
-        <hr />
-
-        <div class="input-group">
+        </div>
+        <div class="col-md-8">
+            <div class="input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">
                     <div class="fa fa-search"></div>
@@ -33,6 +35,12 @@
                 <option value="50">50</option>
             </select>
         </div>
+        </div>
+    </div>
+        
+        <hr />
+
+        
 
         <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
             <tbody>
@@ -44,6 +52,8 @@
                     <!-- <td>{{ item.received_by.name }}</td> -->
                     <td>{{ item.barcode }}</td>
                     <td>{{ item.document.document_title == null ? '':item.document.document_title.substr(0,50) }}</td>
+                    <td v-if="item.document.file_tag==1"><button class="btn btn-success btn-sm" @click="fileMe(item.document.id, 0)" >Unfile</button></td>
+                    <td v-else><button class="btn btn-success btn-sm" @click="fileMe(item.document.id, 1)">File</button></td>
                 </tr>
             </tbody>
         </datatable>
@@ -74,7 +84,8 @@ export default {
             { width: "15%", label: "Received on", name: "Received on" },
             // { width: '7%', label: 'Received by', name: 'Received by'},
             { width: "10%", label: "Barcode", name: "Barcode" },
-            { width: "35%", label: "Document Title", name: "Document Title" }
+            { width: "30%", label: "Document Title", name: "Document Title" },
+            { width: "5%", label: "Action", name: "Action" }
         ];
 
         columns.forEach(column => {
@@ -108,8 +119,15 @@ export default {
             temp: ""
         };
     },
-    mounted() {
+    mounted() {    
         this.initReceive();
+    },
+    directives: {
+        focus: {
+            inserted: function(el) {
+                el.focus();
+            }
+        }
     },
     methods: {
         configPagination(data) {
@@ -174,6 +192,11 @@ export default {
             if (this.tableData.search == '') {
                 this.initReceive()
             }
+        },
+        fileMe(id, tag) {
+            axios.post("file_document",{ document_id: id, file_tag: tag } ).then(response => {
+                this.initReceive()
+            });
         }
     }
 };

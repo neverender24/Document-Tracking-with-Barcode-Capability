@@ -186,7 +186,7 @@ export default {
                 })
                 .catch(error => (this.errors = error.response.data.errors));
         },
-
+ 
         calc(routes) {
             return Helpers.calc(routes);
         },

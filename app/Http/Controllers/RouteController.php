@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Document;
 use App\Route;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class RouteController extends Controller
 {
     public function __construct(
-        Route $route
+        Route $route,
+        Document $document
     ) {
         $this->model = $route;
+        $this->document = $document;
         $this->middleware("auth", ["except" => ["getRoutes", "fastTrack", "track"]]);
     }
 
@@ -19,19 +22,24 @@ class RouteController extends Controller
     {
         $barcode = $request->barcode;
 
-        $parent = $this->model->with(['subDocument', 'office', 'receivedBy', 'releasedBy'])
+        $parent = $this->model->with(['document','subDocument', 'office', 'receivedBy', 'releasedBy'])
             ->whereHas('subDocument', function ($query) use ($barcode) {
                 $query->where('document_code', $barcode);
             })
+            ->whereHas('document', function ($query) {
+                $query->where('document_type_id',"<>", 39);
+            })
+            ->sorted('asc'); 
+        
+        $child = $this->model->with(['document', 'office', 'receivedBy', 'releasedBy'])
+            ->whereHas('document', function ($query) {
+                $query->where('document_type_id',"<>", 39);
+            })
+            ->barcode($barcode)
             ->sorted('asc');
 
-        $child = $this->model->with(['document', 'office', 'receivedBy', 'releasedBy'])
-            ->barcode($barcode)
-            ->sorted('asc')
-            ->union($parent)
-            ->get();
+        return $child->union($parent)->get();
 
-        return $child;
     }
 
     public function track($barcode)
@@ -233,24 +241,35 @@ class RouteController extends Controller
         return ['data' => $data, 'draw' => $request->draw];
     }
 
-    public function unactedDocuments()
+    public function unacted_documents(Request $request)
     {
-        return $this->model->leftjoin('documents', 'documents.document_code', '=', 'routes.barcode')
-            ->leftjoin('offices', 'offices.id', '=', 'release_to')
-            ->leftjoin('users as received_by', 'received_by.id', '=', 'routes.receive_by')
-            ->leftjoin('users as released_by', 'released_by.id', '=', 'routes.released_by')
-            ->whereNull('routes.release_at')
-            ->where('routes.released_by', auth()->user()->id)
-            ->select(
-                'office_prefix',
-                'receive_at',
-                'release_at',
-                'barcode',
-                'document_title',
-                'released_by.name as released_by',
-                'received_by.name as received_by'
-            )
-            ->orderBy('routes.created_at', 'desc')
-            ->get();
+        $length = $request->length;
+        $searchValue = $request->search;
+        $dateFrom = $request->date_from;
+
+        $data = $this->document
+            ->with(['documentType'])
+            ->whereHas('routes', function($q) use($dateFrom){
+                if ($dateFrom) {
+                    $q->whereDate('receive_at', $dateFrom);
+                } else {
+                    $q->whereRaw('DATE(receive_at) = CURDATE()');  
+                }
+            })
+            ->where(function($q) use($searchValue){
+                return $q->where('file_tag','<>', 1)
+                ->orWhereNull('file_tag');
+            })
+            ->where(function($q) use($searchValue){
+                return $q->orWhere('document_code', "LIKE", "%" . $searchValue . "%")
+                    ->orWhere('document_title', "LIKE", "%" . $searchValue . "%");
+            })
+            
+            ->where('user_id', auth()->user()->id)
+            ->paginate($length);
+
+        return ['data' => $data, 'draw' => $request->draw];
     }
+
+
 }
