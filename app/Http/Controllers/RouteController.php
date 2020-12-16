@@ -26,15 +26,15 @@ class RouteController extends Controller
             ->whereHas('subDocument', function ($query) use ($barcode) {
                 $query->where('document_code', $barcode);
             })
-            ->whereHas('document', function ($query) {
-                $query->where('document_type_id',"<>", 39);
-            })
+            // ->whereHas('document', function ($query) {
+            //     $query->where('document_type_id',"<>", 39);
+            // })
             ->sorted('asc'); 
         
         $child = $this->model->with(['document', 'office', 'receivedBy', 'releasedBy'])
-            ->whereHas('document', function ($query) {
-                $query->where('document_type_id',"<>", 39);
-            })
+            // ->whereHas('document', function ($query) {
+            //     $query->where('document_type_id',"<>", 39);
+            // })
             ->barcode($barcode)
             ->sorted('asc');
 

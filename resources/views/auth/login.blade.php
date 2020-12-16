@@ -10,7 +10,7 @@
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>{{ config('app.name', 'Document Tracker') }}</title>
+  <title>Document Tracker</title>
 
   <!-- Styles -->
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -20,19 +20,20 @@
     div.main {
       background: #0264d6;
       /* Old browsers */
-      background: -moz-radial-gradient(center, ellipse cover, #0264d6 1%, #1c2b5a 100%);
+      background: -moz-radial-gradient(center, ellipse cover, #754306 1%, #1c2b5a 150%);
       /* FF3.6+ */
-      background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%, #0264d6), color-stop(100%, #1c2b5a));
+      background: -webkit-gradient(radial, center center, 0px, center center, 150%, color-stop(1%, #0264d6), color-stop(100%, #1c2b5a));
       /* Chrome,Safari4+ */
-      background: -webkit-radial-gradient(center, ellipse cover, #0264d6 1%, #1c2b5a 100%);
+      background: -webkit-radial-gradient(center, ellipse cover, #754306 1%, #1c2b5a 150%);
       /* Chrome10+,Safari5.1+ */
-      background: -o-radial-gradient(center, ellipse cover, #0264d6 1%, #1c2b5a 100%);
+      background: -o-radial-gradient(center, ellipse cover, #754306 1%, #1c2b5a 150%);
       /* Opera 12+ */
-      background: -ms-radial-gradient(center, ellipse cover, #0264d6 1%, #1c2b5a 100%);
+      background: -ms-radial-gradient(center, ellipse cover, #754306 1%, #1c2b5a 150%);
       /* IE10+ */
-      background: radial-gradient(ellipse at center, #0264d6 1%, #1c2b5a 100%);
+      background: radial-gradient(ellipse at center, #754306 1%, #1c2b5a 150%);
       /* W3C */
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0264d6', endColorstr='#1c2b5a', GradientType=1);
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#754306 ', endColorstr='#1c2b5a',
+      GradientType=1);
       /* IE6-9 fallback on horizontal gradient */
       height: calc(100vh);
       width: 100%;
