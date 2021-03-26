@@ -1,5 +1,31 @@
 <template>
     <div class="container">
+        <div class="grid-content">
+            <h4>Work Summary</h4>
+            <label for="">From : </label><input type="date" v-model="work_summary_filter.from" @change="get_work_summary()">
+            <label for="">To : </label><input type="date" v-model="work_summary_filter.to" @change="get_work_summary()">
+            <div class="row text-center mt-2" v-if="Object.keys(work_stat).length !== 0">
+                <div class="col-4">
+                    <div class="alert alert-secondary">
+                        <small>Total Received</small>
+                        <h4 v-html="work_stat.received"></h4>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="alert alert-secondary">
+                        <small>Total Released</small>
+                        <h4 v-html="work_stat.released"></h4>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="alert alert-secondary">
+                        <small>Total Returned</small>
+                        <h4 v-html="work_stat.returned"></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
         <el-row :gutter="20">
             <el-col :span="5">
                 <div class="grid-content">
@@ -81,7 +107,12 @@ export default {
                 document_type_id: ""
             },
             subDocuments: [],
-            process: []
+            process: [],
+            work_summary_filter: {
+                from: "",
+                to: "",
+            },
+            work_stat: {}
         };
     },
 
@@ -117,6 +148,12 @@ export default {
                 "0123456789abcdefghijklmnopqrstuvwxyz" +
                     Date.now()
             );
+        },
+        get_work_summary() {
+            var self = this
+            axios.post('/get_work_summary', this.work_summary_filter ).then( response => {
+                self.work_stat = response.data
+            })
         }
     }
 };

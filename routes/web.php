@@ -72,3 +72,5 @@ Route::post('seen', "UpdateController@seen");
 Route::get('seen-badge', "UpdateController@seenBadge");
 Route::resource('updates', 'UpdateController');
 Route::post('versions', "UpdateController@getVersion");
+
+Route::post('get_work_summary', 'RouteController@get_work_summary')->name('get_work_summary');

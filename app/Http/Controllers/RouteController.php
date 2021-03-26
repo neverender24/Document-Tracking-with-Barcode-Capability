@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Document;
 use App\Route;
+use App\Document;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RouteController extends Controller
 {
@@ -269,6 +270,29 @@ class RouteController extends Controller
             ->paginate($length);
 
         return ['data' => $data, 'draw' => $request->draw];
+    }
+
+    public function get_work_summary(Request $request) {
+        $from = $request->from;
+        $to = $request->to;
+        $data = [];
+
+        if ($from != $to) {
+            $received = $this->model->where('receive_by', auth()->user()->id)->whereDate('receive_at', '>=', $from)->whereDate('receive_at', '<=', $to)->count();
+            $released = $this->model->where('released_by', auth()->user()->id)->whereDate('release_at', '>=', $from)->whereDate('release_at', '<=', $to)->count();
+            $returned = $this->model->where('released_by', auth()->user()->id)->where('remarks','like', "%return%")->whereDate('release_at', '>=', $from)->whereDate('release_at', '<=', $to)->count();            
+        } else {
+            $received = $this->model->where('receive_by', auth()->user()->id)->whereDate('receive_at', $from)->count();
+            $released = $this->model->where('released_by', auth()->user()->id)->whereDate('release_at', $from)->count();
+            $returned = $this->model->where('released_by', auth()->user()->id)->where('remarks', 'like', "%return%")->whereDate('release_at', $from)->count();
+        }
+
+        $data["received"] = $received;
+        $data["released"] = $released;
+        $data["returned"] = $returned;
+
+        return response()->json($data);
+
     }
 
 
