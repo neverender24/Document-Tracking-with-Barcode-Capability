@@ -278,9 +278,24 @@ class RouteController extends Controller
         $data = [];
 
         if ($from != $to) {
-            $received = $this->model->where('receive_by', auth()->user()->id)->whereDate('receive_at', '>=', $from)->whereDate('receive_at', '<=', $to)->count();
-            $released = $this->model->where('released_by', auth()->user()->id)->whereDate('release_at', '>=', $from)->whereDate('release_at', '<=', $to)->count();
-            $returned = $this->model->where('released_by', auth()->user()->id)->where('remarks','like', "%return%")->whereDate('release_at', '>=', $from)->whereDate('release_at', '<=', $to)->count();            
+            $received = $this->model
+                            ->where('receive_by', auth()->user()->id)
+                            ->whereDate('receive_at', '>=', $from)
+                            ->whereDate('receive_at', '<=', $to)
+                            ->count();
+
+            $released = $this->model
+                            ->where('released_by', auth()->user()->id)
+                            ->whereDate('release_at', '>=', $from)
+                            ->whereDate('release_at', '<=', $to)
+                            ->count();
+
+            $returned = $this->model
+                            ->where('released_by', auth()->user()->id)
+                            ->where('remarks','like', "%return%")
+                            ->whereDate('release_at', '>=', $from)
+                            ->whereDate('release_at', '<=', $to)
+                            ->count();            
         } else {
             $received = $this->model->where('receive_by', auth()->user()->id)->whereDate('receive_at', $from)->count();
             $released = $this->model->where('released_by', auth()->user()->id)->whereDate('release_at', $from)->count();
@@ -295,5 +310,14 @@ class RouteController extends Controller
 
     }
 
+
+    public function get_all_routes() {
+        return DB::select('SELECT documents.document_title, barcode,routes.receive_at, routes.release_at
+            from routes 
+            LEFT JOIN documents on routes.barcode = documents.document_code
+            WHERE routes.release_to = 8 and DATE(routes.receive_at) between "2019-01-18" AND "2021-03-18"
+            group by barcode
+            order by  barcode, routes.id');
+    }
 
 }

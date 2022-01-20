@@ -29,6 +29,7 @@ let Release = require('./components/route/release.vue');
 let ReleasedDocuments = require('./components/reports/ReleasedDocuments.vue');
 let ReceivedDocuments = require('./components/reports/ReceivedDocuments.vue');
 let UnactedDocuments = require('./components/reports/UnactedDocuments.vue');
+let Summary = require('./components/reports/Summary.vue');
 
 // Settings
 let ChangePassword = require('./components/change_password.vue');
@@ -49,6 +50,7 @@ const routes = [
   { path: '/change-password', component: ChangePassword },
   { path: '/add-notes', component: AddNotes },
   { path: '/generate-barcodes', component: GenerateBarcodes },
+  { path: '/summary', component: Summary },
 ]
 
 const router = new VueRouter({ 

@@ -42,6 +42,10 @@
                         >Reports</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <router-link
+                                to="/summary"
+                                class="dropdown-item"
+                            >Summary</router-link>
+                            <router-link
                                 to="/released-documents"
                                 class="dropdown-item"
                             >Released Documents</router-link>

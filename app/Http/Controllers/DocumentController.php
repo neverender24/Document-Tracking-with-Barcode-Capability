@@ -323,5 +323,15 @@ class DocumentController extends Controller
         return $route;
     }
 
+    public function approve_po(Request $request)
+    {
+        $route = $this->model->where('id', $request->document_id)->first();
+        $route->update([
+            "approved_po" => $request->approved_po
+        ]);
+
+        return $route;
+    }
+
     
 }

@@ -40,6 +40,9 @@ Route::get('unacted_documents', "RouteController@unacted_documents")->name('unac
 //file
 Route::post('file_document', 'DocumentController@file_document')->name('file_document');
 
+//approve PO
+Route::post('approve_po', 'DocumentController@approve_po')->name('approve_po');
+
 //calculate time
 Route::get('calculate-time', "DocumentController@calculateTime");
 
@@ -74,3 +77,5 @@ Route::resource('updates', 'UpdateController');
 Route::post('versions', "UpdateController@getVersion");
 
 Route::post('get_work_summary', 'RouteController@get_work_summary')->name('get_work_summary');
+
+Route::post('get_all_routes', 'RouteController@get_all_routes');
