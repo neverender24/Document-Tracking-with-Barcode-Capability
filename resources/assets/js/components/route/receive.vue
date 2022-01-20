@@ -14,7 +14,7 @@
              v-focus
         >
         </div>
-        <div class="col-md-8">
+        <div class="col-md-6">
             <div class="input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">
@@ -36,6 +36,9 @@
             </select>
         </div>
         </div>
+            <div class="col-md-2">
+                <input type="date" class="form-control" v-model="tableData.date_received" @change="initReceive()">
+            </div>
     </div>
         
         <hr />

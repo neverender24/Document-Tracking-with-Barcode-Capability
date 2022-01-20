@@ -81,6 +81,8 @@ class RouteController extends Controller
     {
         $length = $request->length;
         $searchValue = $request->search;
+        $dateReceived = $request->date_received;
+
 
         $index = $this->model->with(['document', 'office', 'receivedBy', 'releasedBy'])
             ->notNull()
@@ -88,9 +90,14 @@ class RouteController extends Controller
             ->whereRaw('Date(receive_at) = CURDATE()')
             ->orderBy('routes.id', 'desc');
 
+        if ($dateReceived) {
+            $index->whereDate('receive_at', $dateReceived);
+        }
+
         if ($searchValue) {
-            $index->where(function ($query) use ($searchValue) {
-                $query->orWhere('document_code', 'LIKE', '%' . $searchValue . '%');
+            $index->whereHas('document',function ($query) use ($searchValue) {
+                $query->where('document_code', 'LIKE', '%' . $searchValue . '%')
+                    ->orWhere('document_title', 'LIKE', '%' . $searchValue . '%');
             });
         }
 
