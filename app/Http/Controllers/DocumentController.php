@@ -325,13 +325,25 @@ class DocumentController extends Controller
 
     public function approve_po(Request $request)
     {
+
+
         $route = $this->model->where('id', $request->document_id)->first();
+        $appo = "";
+
+        if ( $request->approved_po == 1 ) {
+            $appo = now();    
+        } else {
+            $appo = NULL;
+        }
+
         $route->update([
-            "approved_po" => $request->approved_po
+            "approved_po" => $appo
         ]);
 
         return $route;
     }
+
+    
 
     
 }

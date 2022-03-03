@@ -5,9 +5,13 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
-        documents: {}
+        documents: {},
+        summaryFromTo: {}
     },
-    computed: {
-        
+    getters: {},
+    mutations: {
+        setFromTo(state, payload) {
+            state.summaryFromTo = payload
+        },
     }
 })

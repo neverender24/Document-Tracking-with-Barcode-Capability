@@ -1,9 +1,15 @@
 <template>
     <div class="container">
+       
         <div class="grid-content">
-            <h4>Work Summary</h4>
+
+            <h4>Transaction Summary | <small>Select date range and view more details of your office transactions.</small></h4>
             <label for="">From : </label><input type="date" v-model="work_summary_filter.from" @change="get_work_summary()">
             <label for="">To : </label><input type="date" v-model="work_summary_filter.to" @change="get_work_summary()">
+            <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
+              <span class="sr-only">Loading...</span>
+            </div>
+
             <div class="row text-center mt-2" v-if="Object.keys(work_stat).length !== 0">
                 <div class="col-4">
                     <div class="alert alert-secondary">
@@ -22,6 +28,12 @@
                         <small>Total Returned</small>
                         <h4 v-html="work_stat.returned"></h4>
                     </div>
+                </div>
+                <div class="col-2 text-left">
+                    <p @click="viewTransactionDetails()" class="text-primary" style="cursor:pointer;">View details</p>
+                </div>
+                <div class="col-2 text-left">
+                    <p @click="viewTimeSummary()" class="text-primary" style="cursor:pointer;">View Time Summary</p>
                 </div>
             </div>
         </div>
@@ -76,6 +88,9 @@
                 <el-button type="primary" @click="openAddDocument=false">Close</el-button>
             </span>
         </el-dialog>
+
+        <transaction-details v-if="showTransactionModal" :fromTo="work_summary_filter" @modal_close="transactionDetailsModalClose()"></transaction-details>
+        <time-summary v-if="showTimeModal" :fromTo="work_summary_filter" @modal_close="timeModalClose()"></time-summary>
     </div>
 </template>
 
@@ -85,13 +100,17 @@ import MyDocuments from "./../document/MyDocuments.vue";
 import ReturnedDocuments from "./../document/ReturnedDocuments.vue";
 import AllDocuments from "./../document/AllDocuments.vue";
 import AddDocument from "./../document/create.vue";
+import TransactionDetails from "./../document/TransactionDetailsModal";
+import TimeSummary from "./../document/TimeSummaryModal";
 
 export default {
     components: {
         MyDocuments,
         AllDocuments,
         ReturnedDocuments,
-        AddDocument
+        AddDocument,
+        TransactionDetails,
+        TimeSummary
     },
     data() {
         return {
@@ -112,7 +131,10 @@ export default {
                 from: "",
                 to: "",
             },
-            work_stat: {}
+            work_stat: {},
+            showTransactionModal: false,
+            showTimeModal: false,
+            loading: false
         };
     },
 
@@ -150,10 +172,32 @@ export default {
             );
         },
         get_work_summary() {
+
+            if (this.work_summary_filter.from!="" && this.work_summary_filter.to!="") {
+                this.loading = true
+            }
+            
             var self = this
             axios.post('/get_work_summary', this.work_summary_filter ).then( response => {
                 self.work_stat = response.data
+                this.loading = false
             })
+        },
+
+        viewTransactionDetails() {
+            this.showTransactionModal = true
+        },
+
+        viewTimeSummary() {
+             this.showTimeModal = true
+        },
+
+        transactionDetailsModalClose() {
+            this.showTransactionModal = false
+        },
+
+        timeModalClose() {
+            this.showTimeModal = false
         }
     }
 };

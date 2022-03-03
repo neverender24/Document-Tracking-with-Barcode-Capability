@@ -9,7 +9,7 @@ class AddPoApprovedTag extends Migration
     public function up()
     {
         Schema::table('documents', function (Blueprint $table) {
-            $table->integer('approved_po')->nullable();
+            $table->datetime('approved_po')->nullable();
         });
     }
 

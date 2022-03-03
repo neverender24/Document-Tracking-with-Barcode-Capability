@@ -8,7 +8,9 @@ import locale from 'element-ui/lib/locale/lang/en'
 import 'vue-search-select/dist/VueSearchSelect.css'
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import VueBarcode from '@xkeshi/vue-barcode';
-
+import {
+  store
+} from './store/store'
 
 Vue.use(ElementUI, { locale })
 Vue.use(VueRouter)
@@ -76,5 +78,6 @@ const app = new Vue({
       }
 	  },
     components: {Navbar, FastTrack, QrTrack},
+    store: store,
     
 });

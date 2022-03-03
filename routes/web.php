@@ -45,6 +45,7 @@ Route::post('approve_po', 'DocumentController@approve_po')->name('approve_po');
 
 //calculate time
 Route::get('calculate-time', "DocumentController@calculateTime");
+Route::post('get-time-summary', "RouteController@getTimeSummary");
 
 Route::post('get-subdocument', "DocumentController@getSubDocument");
 
@@ -79,3 +80,5 @@ Route::post('versions', "UpdateController@getVersion");
 Route::post('get_work_summary', 'RouteController@get_work_summary')->name('get_work_summary');
 
 Route::post('get_all_routes', 'RouteController@get_all_routes');
+
+Route::post('getTransactionDetails', 'RouteController@getTransactionDetails')->name('getTransactionDetails');

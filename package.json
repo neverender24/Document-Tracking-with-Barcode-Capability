@@ -29,6 +29,7 @@
     "babel-preset-es2015": "^6.24.1",
     "element-ui": "^2.4.6",
     "font-awesome": "^4.7.0",
+    "paginationjs": "^2.1.5",
     "vue-barcode": "^1.1.0",
     "vue-moment": "^4.0.0",
     "vue-router": "^3.0.1",
