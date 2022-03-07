@@ -431,6 +431,8 @@ class RouteController extends Controller
         } else {
             $data = $data->where(function ($query) {
                 $query->where('routes.office_id', auth()->user()->office_id);
+                $query->orWhere('routes.release_to', auth()->user()->office_id);
+                
             });
         }
 
