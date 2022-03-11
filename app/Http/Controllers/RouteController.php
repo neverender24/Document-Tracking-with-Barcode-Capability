@@ -424,7 +424,7 @@ class RouteController extends Controller
             ->leftJoin('documents', 'routes.barcode', '=', 'documents.document_code')
             ->leftJoin('document_types', 'documents.document_type_id', '=', 'document_types.id');
 
-        if ($scope == 1) {
+        if ($scope == 1) { // entire process
             $data = $data->where(function ($query) {
                 $query->where('documents.office_id', auth()->user()->office_id);
             });
@@ -576,7 +576,7 @@ class RouteController extends Controller
         $dtF = new \DateTime('@0');
         $dtT = new \DateTime("@$seconds");
 
-        return $dtF->diff($dtT)->format('%ad, %hh, %im, %ss');
+        return $dtF->diff($dtT)->format('%aD, %hH, %iM, %sS');
     }
 
     public function get_all_routes()

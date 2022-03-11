@@ -12,9 +12,6 @@
             <div class="card">
               <div class="card-header">
                 <div class="row">
-                  <div class="col-2">
-                    <h5>Filter:</h5>
-                  </div>
                   <div class="col-4">
                     <select
                         v-model="selectedDocumentType"
@@ -37,7 +34,12 @@
                       <option value="2">Office Exclusive</option>
                     </select>
                   </div>
-                </div>
+                  <div class="col-2">
+                    <download-excel class= "btn btn-sm btn-primary btn-block" :data="excelData">
+                      Export
+                    </download-excel>
+                  </div>
+                </div> 
               </div>
               <div class="card-body" :class="{'text-center': loading}">
                 <div class="spinner-border" role="status" v-if="loading">
@@ -46,7 +48,7 @@
                 <table v-else class="table table-hover table-striped table-sm">
                   <thead>
                     <tr>
-                        <td>Barcode</td>
+                        <td>Barcode</td>  
                         <td>Document Title</td>
                         <td>Office Time</td>
                         <td>Travel Time</td>
@@ -76,7 +78,7 @@
             <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="modal_close()">Close</button>
           </div>
         </div>
-      </div>
+      </div> 
     </div>
 </template>
 <style>
@@ -111,6 +113,7 @@ export default {
             selectedDocumentType: 0,
             selectedScope: 1,
             barcode: "",
+            excelData:[]
         }
     },
 
@@ -136,6 +139,27 @@ export default {
 
             axios.post('get-time-summary', payload).then(response => {
               this.data = response.data
+
+
+              this.excelData = _.cloneDeep(response.data)
+              var vm = this
+
+              _.forEach(this.excelData, function(value, index) {
+                var officeTime = value.officeTime.split(',')
+                var travelTime = value.officeTime.split(',')
+                  vm.excelData[index].barcode = value.barcode
+                  vm.excelData[index].title = value.title
+                  vm.excelData[index].officeTimeDays = officeTime[0].replace('D', '')
+                  vm.excelData[index].officeTimeHours = officeTime[1].replace('H', '')
+                  vm.excelData[index].officeTimeMinutes = officeTime[2].replace('M', '')
+                  vm.excelData[index].officeTimeSeconds = officeTime[3].replace('S', '')
+                  vm.excelData[index].officeTime = value.officeTime
+                  vm.excelData[index].travelTimeDays = travelTime[0].replace('D', '')
+                  vm.excelData[index].travelTimeHours = travelTime[1].replace('H', '')
+                  vm.excelData[index].travelTimeMinutes = travelTime[2].replace('M', '')
+                  vm.excelData[index].travelTimeSeconds = travelTime[3].replace('S', '')
+              })
+
               this.loading = false
             })
         },

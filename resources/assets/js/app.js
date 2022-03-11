@@ -12,6 +12,10 @@ import {
   store
 } from './store/store'
 
+import JsonExcel from "vue-json-excel";
+
+Vue.component("downloadExcel", JsonExcel);
+
 Vue.use(ElementUI, { locale })
 Vue.use(VueRouter)
 Vue.use(require('vue-moment'));
