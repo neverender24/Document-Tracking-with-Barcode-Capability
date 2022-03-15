@@ -48,6 +48,7 @@
                 <table v-else class="table table-hover table-striped table-sm">
                   <thead>
                     <tr>
+                        <td>Created</td>  
                         <td>Barcode</td>  
                         <td>Document Title</td>
                         <td>Office Time</td>
@@ -56,6 +57,7 @@
                   </thead>
                   <tbody>
                     <tr v-for="item in data">
+                        <td>{{ item['created'] }}</td>
                         <td>{{ item['barcode'] }}</td>
                         <td class="w-50">
                           <div class="expanded-text">
@@ -145,19 +147,17 @@ export default {
               var vm = this
 
               _.forEach(this.excelData, function(value, index) {
-                var officeTime = value.officeTime.split(',')
-                var travelTime = value.officeTime.split(',')
+                var officeTime = value.officeTime.split(':')
+                var travelTime = value.travelTime.split(':')
                   vm.excelData[index].barcode = value.barcode
                   vm.excelData[index].title = value.title
-                  vm.excelData[index].officeTimeDays = officeTime[0].replace('D', '')
-                  vm.excelData[index].officeTimeHours = officeTime[1].replace('H', '')
-                  vm.excelData[index].officeTimeMinutes = officeTime[2].replace('M', '')
-                  vm.excelData[index].officeTimeSeconds = officeTime[3].replace('S', '')
+                  vm.excelData[index].officeTimeHours = officeTime[0]
+                  vm.excelData[index].officeTimeMinutes = officeTime[1]
+                  vm.excelData[index].officeTimeSeconds = officeTime[2]
                   vm.excelData[index].officeTime = value.officeTime
-                  vm.excelData[index].travelTimeDays = travelTime[0].replace('D', '')
-                  vm.excelData[index].travelTimeHours = travelTime[1].replace('H', '')
-                  vm.excelData[index].travelTimeMinutes = travelTime[2].replace('M', '')
-                  vm.excelData[index].travelTimeSeconds = travelTime[3].replace('S', '')
+                  vm.excelData[index].travelTimeHours = travelTime[0]
+                  vm.excelData[index].travelTimeMinutes = travelTime[1]
+                  vm.excelData[index].travelTimeSeconds = travelTime[2]
               })
 
               this.loading = false

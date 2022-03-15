@@ -449,9 +449,17 @@ class RouteController extends Controller
         $data = $data->whereDate('receive_at', '>=', $from)
             ->whereDate('receive_at', '<=', $to)
             ->whereNotNull('receive_at')
+            ->select(
+                DB::raw('DATE(documents.created_at) as created'),
+                'barcode',
+                'receive_at',
+                'release_at',
+                'document_title'
+            )
             ->orderBy('barcode')
             ->orderBy('routes.id')
-            ->limit(1000)
+            ->orderBy('documents.created_at')
+            // ->limit(1000)
             ->get();
 
         $totalSeconds = 0;
@@ -519,7 +527,7 @@ class RouteController extends Controller
                     $toText2 = $this->secondsToTime($totalTravelDays);
 
                     array_push($perBarcode, [
-
+                        "created" => $data[$key]['created'],
                         "barcode" => $currentBarcode,
                         "title" => $data[$key]['document_title'],
                         "officeTime" => $toText,
@@ -555,7 +563,7 @@ class RouteController extends Controller
                 $toText2 = $this->secondsToTime($totalTravelDays);
 
                 array_push($perBarcode, [
-
+                    "created" => $data[$key]['created'],
                     "barcode" => $currentBarcode,
                     "title" => $data[$key]['document_title'],
                     "officeTime" => $toText,
@@ -573,10 +581,12 @@ class RouteController extends Controller
 
     public function secondsToTime($seconds)
     {
-        $dtF = new \DateTime('@0');
-        $dtT = new \DateTime("@$seconds");
+        // $dtF = new \DateTime('@0');
+        // $dtT = new \DateTime("@$seconds");
 
-        return $dtF->diff($dtT)->format('%aD, %hH, %iM, %sS');
+        // return $dtF->diff($dtT)->format('%aD, %hH, %iM, %sS');
+        return gmdate('H:i:s', $seconds);
+
     }
 
     public function get_all_routes()
