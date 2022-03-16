@@ -1,14 +1,28 @@
 <template>
     <div class="container">
        
-        <div class="grid-content">
+        <div class="card p-2">
 
             <h4>Transaction Summary | <small>Select date range and view more details of your office transactions.</small></h4>
-            <label for="">From : </label><input type="date" v-model="work_summary_filter.from" @change="get_work_summary()">
-            <label for="">To : </label><input type="date" v-model="work_summary_filter.to" @change="get_work_summary()">
-            <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
-              <span class="sr-only">Loading...</span>
+            <div class="row">
+                <div class="col-2">
+                   From<input type="date" v-model="work_summary_filter.from" @change="get_work_summary()" class="form-control form-control-sm">
+                </div>
+                <div class="col-2">
+                    To<input type="date" v-model="work_summary_filter.to" @change="get_work_summary()" class="form-control form-control-sm">
+                </div>
+                <div class="col-2">
+                    Filter by
+                    <select v-model="work_summary_filter.isOffice" @change="get_work_summary()" class="form-control form-control-sm">
+                        <option value="1" selected>User</option>
+                        <option value="2">Office</option>
+                    </select>
+                </div>
+                <div class="spinner-border spinner-border-sm" role="status" v-if="loading" style="margin-top: 30px;">
+                <span class="sr-only">Loading...</span>
+                </div>
             </div>
+
 
             <div class="row text-center mt-2" v-if="Object.keys(work_stat).length !== 0">
                 <div class="col-4">
@@ -130,6 +144,7 @@ export default {
             work_summary_filter: {
                 from: "",
                 to: "",
+                isOffice: 1
             },
             work_stat: {},
             showTransactionModal: false,

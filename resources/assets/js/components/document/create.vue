@@ -176,6 +176,8 @@
                     </div>
                 </div>
                 <!-- End detail form -->
+                
+                <fa v-if="faForm" @setDocumentTitle="setDocumentTitle"></fa>
 
                 <div class="form-group">
                     <textarea
@@ -209,11 +211,13 @@
 <script>
 import { ModelSelect } from "vue-search-select";
 import {Helpers} from "../helpers/helpers.js";
+import Fa from "../document/documentTypes/fa"
 
 export default {
     props: ["list", "subDocuments", "process"],
     components: {
-        ModelSelect
+        ModelSelect,
+        Fa
     },
     data() {
         return {
@@ -222,6 +226,7 @@ export default {
             document_type: {},
             loading: false,
             payrollForm: false,
+            faForm: false,
             payrollFormInputs: {
                 payrollType: "",
                 month: "",
@@ -420,6 +425,9 @@ export default {
                 // payroll
                 this.payrollForm = true;
                 this.generatePayrollTitle();
+            } else if(document_type_id ==  40) {
+                //fa
+                 this.faForm = true;
             } else {
                 this.payrollForm = false;
                 this.list.document_title = "";
@@ -438,6 +446,10 @@ export default {
                 "; ";
 
             return this.removeChars(title);
+        },
+
+        setDocumentTitle(evt) {
+            this.list.document_title = evt
         }
     }
 };

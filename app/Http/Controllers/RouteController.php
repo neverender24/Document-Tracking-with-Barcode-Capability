@@ -286,24 +286,52 @@ class RouteController extends Controller
     {
         $from = $request->from;
         $to = $request->to;
+        $isOffice = $request->isOffice;
         $data = [];
 
         if ($from != $to) {
-            $received = $this->model
-                ->where('receive_by', auth()->user()->id)
-                ->whereDate('receive_at', '>=', $from)
+            $received = $this->model;
+                if ($isOffice == 1) {
+                    $received = $received->where('receive_by', auth()->user()->id);
+                } else {
+                    $received = $received->where(function ($query) {
+                        $query->where('routes.office_id', auth()->user()->office_id);
+                        $query->orWhere('routes.release_to', auth()->user()->office_id);
+                
+                    });
+                }                
+                    
+                $received = $received->whereDate('receive_at', '>=', $from)
                 ->whereDate('receive_at', '<=', $to)
                 ->count();
 
-            $released = $this->model
-                ->where('released_by', auth()->user()->id)
-                ->whereDate('release_at', '>=', $from)
+            $released = $this->model;
+                if ($isOffice == 1) {
+                    $released = $released->where('released_by', auth()->user()->id);
+                } else {
+                    $released = $released->where(function ($query) {
+                        $query->where('routes.office_id', auth()->user()->office_id);
+                        $query->orWhere('routes.release_to', auth()->user()->office_id);
+                
+                    });
+                }
+            
+                $released = $released->whereDate('release_at', '>=', $from)
                 ->whereDate('release_at', '<=', $to)
                 ->count();
 
-            $returned = $this->model
-                ->where('released_by', auth()->user()->id)
-                ->where('remarks', 'like', "%return%")
+            $returned = $this->model;
+                if ($isOffice == 1) {
+                    $returned = $returned->where('released_by', auth()->user()->id);
+                } else {
+                    $returned = $returned->where(function ($query) {
+                        $query->where('routes.office_id', auth()->user()->office_id);
+                        $query->orWhere('routes.release_to', auth()->user()->office_id);
+                
+                    });
+                }
+            
+                $returned = $returned->where('remarks', 'like', "%return%")
                 ->whereDate('release_at', '>=', $from)
                 ->whereDate('release_at', '<=', $to)
                 ->count();
