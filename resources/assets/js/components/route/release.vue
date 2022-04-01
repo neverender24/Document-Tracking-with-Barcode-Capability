@@ -199,7 +199,6 @@
 
 <script>
 import { ModelSelect } from "vue-search-select";
-import VueBarcode from "vue-barcode";
 
 export default {
     data() {

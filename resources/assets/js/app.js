@@ -6,7 +6,7 @@ import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import locale from 'element-ui/lib/locale/lang/en'
 import 'vue-search-select/dist/VueSearchSelect.css'
-import CKEditor from '@ckeditor/ckeditor5-vue';
+// import CKEditor from '@ckeditor/ckeditor5-vue';
 import VueBarcode from '@xkeshi/vue-barcode';
 import {
   store
@@ -19,7 +19,7 @@ Vue.component("downloadExcel", JsonExcel);
 Vue.use(ElementUI, { locale })
 Vue.use(VueRouter)
 Vue.use(require('vue-moment'));
-Vue.use( CKEditor );
+// Vue.use( CKEditor );
 Vue.component(VueBarcode.name, VueBarcode);
 
 Vue.config.productionTip = false
