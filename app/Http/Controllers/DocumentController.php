@@ -99,10 +99,10 @@ class DocumentController extends Controller
         $index = $this->model->with(['routes', 'documentType'])
             ->where(function($q) use($user){
                 $q->where('office_id', $user)
-                ->orWhereHas('routes', function ($query) use ($user) {
-                    $query->where('office_id', $user)
-                        ->orWhere('release_to', $user);
-                });
+                    ->orWhereHas('routes', function ($query) use ($user) {
+                        $query->where('office_id', $user)
+                            ->orWhere('release_to', $user);
+                    });
             });
 
         $index = $this->searchFilter($index, $request->search, $request->length);
@@ -128,7 +128,7 @@ class DocumentController extends Controller
             });
         }
 
-        $index = $index->orderBy('created_at', 'desc')->paginate($length);
+        $index = $index->orderBy('created_at', 'desc')->simplePaginate($length);
 
         return $index;
     }
