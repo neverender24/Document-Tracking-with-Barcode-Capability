@@ -1,17 +1,16 @@
 <template>
     <div class="container">
-       
         <div class="card p-2">
 
             <h4>Transaction Summary | <small>Select date range and view more details of your office transactions.</small></h4>
             <div class="row">
-                <div class="col-2">
+                <div class="col-md-2">
                    From<input type="date" v-model="work_summary_filter.from" @change="get_work_summary()" class="form-control form-control-sm">
                 </div>
-                <div class="col-2">
+                <div class="col-md-2">
                     To<input type="date" v-model="work_summary_filter.to" @change="get_work_summary()" class="form-control form-control-sm">
                 </div>
-                <div class="col-2">
+                <div class="col-md-2">
                     Filter by
                     <select v-model="work_summary_filter.isOffice" @change="get_work_summary()" class="form-control form-control-sm">
                         <option value="1" selected>User</option>
@@ -25,28 +24,28 @@
 
 
             <div class="row text-center mt-2" v-if="Object.keys(work_stat).length !== 0">
-                <div class="col-4">
+                <div class="col-md-4">
                     <div class="alert alert-secondary">
                         <small>Total Received</small>
                         <h4 v-html="work_stat.received"></h4>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-md-4">
                     <div class="alert alert-secondary">
                         <small>Total Released</small>
                         <h4 v-html="work_stat.released"></h4>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-md-4">
                     <div class="alert alert-secondary">
                         <small>Total Returned</small>
                         <h4 v-html="work_stat.returned"></h4>
                     </div>
                 </div>
-                <div class="col-2 text-left">
+                <div class="col-md-2 text-left">
                     <p @click="viewTransactionDetails()" class="text-primary" style="cursor:pointer;">View details</p>
                 </div>
-                <div class="col-2 text-left">
+                <div class="col-md-2 text-left">
                     <p @click="viewTimeSummary()" class="text-primary" style="cursor:pointer;">View Time Summary</p>
                 </div>
             </div>

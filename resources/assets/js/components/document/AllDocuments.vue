@@ -23,24 +23,26 @@
             </select>
         </div>
 
-        <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
-            <tbody>
-                <tr
-                    v-for="(item,index) in documents"
-                    :key="item.document_code"
-                    @click="getRoute(item.document_code)"
-                >
-                    <!-- <td>{{ secondsToHms(item.routes.map(fields).reduce(sum, 0)) }}</td> -->
-                    <td>{{ calc(item.routes, index) }}</td>
-                    <td>{{ item.document_code }}</td>
-                    <td>{{ item.document_title }}</td>
-                    <td style="text-align:center;"
-                        v-html="identifyType(item.document_type_id, item.document_type.document_type_prefix)"
-                    ></td>
-                    <td>{{ item.created_at | moment("MMM-DD-YY hh:mmA") }}</td>
-                </tr>
-            </tbody>
-        </datatable>
+        <div class="table-responsive">
+            <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
+                <tbody>
+                    <tr
+                        v-for="(item,index) in documents"
+                        :key="item.document_code"
+                        @click="getRoute(item.document_code)"
+                    >
+                        <!-- <td>{{ secondsToHms(item.routes.map(fields).reduce(sum, 0)) }}</td> -->
+                        <td>{{ calc(item.routes, index) }}</td>
+                        <td>{{ item.document_code }}</td>
+                        <td>{{ item.document_title }}</td>
+                        <td style="text-align:center;"
+                            v-html="identifyType(item.document_type_id, item.document_type.document_type_prefix)"
+                        ></td>
+                        <td>{{ item.created_at | moment("MMM-DD-YY hh:mmA") }}</td>
+                    </tr>
+                </tbody>
+            </datatable>
+        </div>
         <div class="py-3 d-flex flex-row align-items-center justify-content-between">
 			<pagination
 				:pagination="pagination"
@@ -50,7 +52,7 @@
 			<p>{{ pagination.from }} to {{pagination.to}} of {{ pagination.total }} entries</p>
 		</div>
 
-        <el-dialog title="ROUTES" custom-class="routeModal" :visible.sync="openRoutes" width="85%">
+        <el-dialog title="ROUTES" custom-class="routeModal" :visible.sync="openRoutes" width="100%">
             <route-index :routes="routeData" @deleteRoute="getRoute" :title="routeTitle"></route-index>
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="openRoutes = false">Close</el-button>

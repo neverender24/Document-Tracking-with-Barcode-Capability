@@ -12,7 +12,7 @@
             <div class="card">
               <div class="card-header">
                 <div class="row">
-                  <div class="col-4">
+                  <div class="col-md-4">
                     <select
                         v-model="selectedDocumentType"
                         class="form-control form-control-sm border-secondary"
@@ -25,16 +25,16 @@
                         >{{ value.document_type }}</option>
                     </select>
                   </div>
-                  <div class="col-3">
+                  <div class="col-md-3">
                     <input type="text" class="form-control form-control-sm border-secondar" v-model="barcode" @change="getDetails()" placeholder="Search barcode...">
                   </div>
-                  <div class="col-3">
+                  <div class="col-md-3">
                     <select class="form-control form-control-sm border-secondary" v-model="selectedScope" @change="getDetails()">
                       <option value="1" selected>Entire Process</option>
                       <option value="2">Office Exclusive</option>
                     </select>
                   </div>
-                  <div class="col-2">
+                  <div class="col-md-2">
                     <download-excel class= "btn btn-sm btn-primary btn-block" :data="excelData">
                       Export
                     </download-excel>
@@ -42,36 +42,38 @@
                 </div> 
               </div>
               <div class="card-body" :class="{'text-center': loading}">
-                <div class="spinner-border" role="status" v-if="loading">
-                  <span class="sr-only">Loading...</span>
+                <div class="table-responsive">
+                  <div class="spinner-border" role="status" v-if="loading">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <table v-else class="table table-hover table-striped table-sm">
+                    <thead>
+                      <tr>
+                          <td>Created</td>
+                          <td>Barcode</td>
+                          <td>Document Title</td>
+                          <td>Office Time</td>
+                          <td>Travel Time</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in data">
+                          <td>{{ item['created'] }}</td>
+                          <td>{{ item['barcode'] }}</td>
+                          <td class="w-50">
+                            <div class="expanded-text">
+                              <p class="text">
+                                <span class="short-name">{{ item['title'].substring(0,40) }}</span>
+                                <span class="longer-name">{{ item['title']}}</span>
+                              </p>
+                            </div>
+                          </td>
+                          <td v-html="item['officeTime']"></td>
+                          <td>{{ item['travelTime'] }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-                <table v-else class="table table-hover table-striped table-sm">
-                  <thead>
-                    <tr>
-                        <td>Created</td>  
-                        <td>Barcode</td>  
-                        <td>Document Title</td>
-                        <td>Office Time</td>
-                        <td>Travel Time</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="item in data">
-                        <td>{{ item['created'] }}</td>
-                        <td>{{ item['barcode'] }}</td>
-                        <td class="w-50">
-                          <div class="expanded-text">
-                            <p class="text">
-                              <span class="short-name">{{ item['title'].substring(0,40) }}</span>
-                              <span class="longer-name">{{ item['title']}}</span>
-                            </p>
-                          </div>
-                        </td>
-                        <td v-html="item['officeTime']"></td>
-                        <td>{{ item['travelTime'] }}</td>
-                    </tr>
-                  </tbody>
-                </table>
               </div>
             </div>
             <hr>
