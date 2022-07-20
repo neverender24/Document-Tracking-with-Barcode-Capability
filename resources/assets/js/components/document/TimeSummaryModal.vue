@@ -30,7 +30,7 @@
                   </div>
                   <div class="col-md-3">
                     <select class="form-control form-control-sm border-secondary" v-model="selectedScope" @change="getDetails()">
-                      <option value="1" selected>Entire Process</option>
+                      <!-- <option value="1" selected>Entire Process</option> -->
                       <option value="2">Office Exclusive</option>
                     </select>
                   </div>
@@ -63,7 +63,7 @@
                           <td class="w-50">
                             <div class="expanded-text">
                               <p class="text">
-                                <span class="short-name">{{ item['title'].substring(0,40) }}</span>
+                                <span class="short-name">{{ item['title'] }}</span>
                                 <span class="longer-name">{{ item['title']}}</span>
                               </p>
                             </div>
@@ -115,7 +115,7 @@ export default {
             loading: false,
             documentType: {},
             selectedDocumentType: 0,
-            selectedScope: 1,
+            selectedScope: 2,
             barcode: "",
             excelData:[]
         }

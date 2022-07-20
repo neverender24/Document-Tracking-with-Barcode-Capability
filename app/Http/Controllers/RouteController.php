@@ -291,47 +291,47 @@ class RouteController extends Controller
 
         if ($from != $to) {
             $received = $this->model;
-                if ($isOffice == 1) {
-                    $received = $received->where('receive_by', auth()->user()->id);
-                } else {
-                    $received = $received->where(function ($query) {
-                        $query->where('routes.office_id', auth()->user()->office_id);
-                        $query->orWhere('routes.release_to', auth()->user()->office_id);
-                
-                    });
-                }                
-                    
-                $received = $received->whereDate('receive_at', '>=', $from)
+            if ($isOffice == 1) {
+                $received = $received->where('receive_by', auth()->user()->id);
+            } else {
+                $received = $received->where(function ($query) {
+                    $query->where('routes.office_id', auth()->user()->office_id);
+                    $query->orWhere('routes.release_to', auth()->user()->office_id);
+
+                });
+            }
+
+            $received = $received->whereDate('receive_at', '>=', $from)
                 ->whereDate('receive_at', '<=', $to)
                 ->count();
 
             $released = $this->model;
-                if ($isOffice == 1) {
-                    $released = $released->where('released_by', auth()->user()->id);
-                } else {
-                    $released = $released->where(function ($query) {
-                        $query->where('routes.office_id', auth()->user()->office_id);
-                        $query->orWhere('routes.release_to', auth()->user()->office_id);
-                
-                    });
-                }
-            
-                $released = $released->whereDate('release_at', '>=', $from)
+            if ($isOffice == 1) {
+                $released = $released->where('released_by', auth()->user()->id);
+            } else {
+                $released = $released->where(function ($query) {
+                    $query->where('routes.office_id', auth()->user()->office_id);
+                    $query->orWhere('routes.release_to', auth()->user()->office_id);
+
+                });
+            }
+
+            $released = $released->whereDate('release_at', '>=', $from)
                 ->whereDate('release_at', '<=', $to)
                 ->count();
 
             $returned = $this->model;
-                if ($isOffice == 1) {
-                    $returned = $returned->where('released_by', auth()->user()->id);
-                } else {
-                    $returned = $returned->where(function ($query) {
-                        $query->where('routes.office_id', auth()->user()->office_id);
-                        $query->orWhere('routes.release_to', auth()->user()->office_id);
-                
-                    });
-                }
-            
-                $returned = $returned->where('remarks', 'like', "%return%")
+            if ($isOffice == 1) {
+                $returned = $returned->where('released_by', auth()->user()->id);
+            } else {
+                $returned = $returned->where(function ($query) {
+                    $query->where('routes.office_id', auth()->user()->office_id);
+                    $query->orWhere('routes.release_to', auth()->user()->office_id);
+
+                });
+            }
+
+            $returned = $returned->where('remarks', 'like', "%return%")
                 ->whereDate('release_at', '>=', $from)
                 ->whereDate('release_at', '<=', $to)
                 ->count();
@@ -460,7 +460,7 @@ class RouteController extends Controller
             $data = $data->where(function ($query) {
                 $query->where('routes.office_id', auth()->user()->office_id);
                 $query->orWhere('routes.release_to', auth()->user()->office_id);
-                
+
             });
         }
 
@@ -471,24 +471,32 @@ class RouteController extends Controller
         }
 
         if ($barcode) {
-            $data = $data->where('routes.barcode','like', "%".$barcode);
+            $data = $data->where('routes.barcode', 'like', "%" . $barcode);
         }
 
-        $data = $data->whereDate('receive_at', '>=', $from)
-            ->whereDate('receive_at', '<=', $to)
-            ->whereNotNull('receive_at')
+        // $data = $data->where('routes.barcode', 'like', "%" . "o3kapdw6");
+
+        $data = $data
+            ->whereMonth('routes.created_at', '>=', Carbon::parse($from)->month)
+            ->whereMonth('routes.created_at', '<=', Carbon::parse($to)->month)
+            ->whereYear('routes.created_at', '>=', Carbon::parse($from)->year)
+            ->whereYear('routes.created_at', '<=', Carbon::parse($to)->year)
+            // ->whereNotNull('receive_at')
             ->select(
                 DB::raw('DATE(documents.created_at) as created'),
                 'barcode',
                 'receive_at',
                 'release_at',
-                'document_title'
+                'document_title',
+                'release_to'
             )
             ->orderBy('barcode')
             ->orderBy('routes.id')
             ->orderBy('documents.created_at')
             // ->limit(1000)
             ->get();
+
+        // return $data;
 
         $totalSeconds = 0;
         $perBarcode = [];
@@ -497,50 +505,92 @@ class RouteController extends Controller
 
         $totalTravelDays = 0;
         $countSimilarRows = 0;
+        if ($scope == 2) {
+            foreach ($data as $key => $val) {
+                $currentBarcode = $data[$key]['barcode'];
 
-        foreach ($data as $key => $val) {
-            $currentBarcode = $data[$key]['barcode'];
-            
-            $currentRow = Carbon::parse($data[$key]['receive_at']);
-            $received = Carbon::parse($data[$key]['receive_at']);
-            $released = Carbon::parse($data[$key]['release_at']);
+                $currentRow = Carbon::parse($data[$key]['receive_at']);
+                $received = Carbon::parse($data[$key]['receive_at']);
+                $released = Carbon::parse($data[$key]['release_at']);
+                $to = $data[$key]['release_to'];
 
-            if (isset($data[$key + 1])) { //kung naa pay next record
+                // if ($to == auth()->user()->office_id) {
 
-                $nextBarcode = $data[$key + 1]['barcode'];
+                if (isset($data[$key + 1])) { //kung naa pay next record
 
-                if (isset($data[$key - 1])) {
-                    $prevBarcode = $data[$key - 1]['barcode'];
+                    $nextBarcode = $data[$key + 1]['barcode'];
 
-                    if ($currentBarcode == $nextBarcode && $currentBarcode == $prevBarcode) {
-                        $countSimilarRows++;
+                    if (isset($data[$key - 1])) {
+                        $prevBarcode = $data[$key - 1]['barcode'];
+
+                        if ($currentBarcode == $nextBarcode && $currentBarcode == $prevBarcode) {
+                            $countSimilarRows++;
+                        }
                     }
-                }
 
-                if ($currentBarcode == $nextBarcode) {
+                    if ($currentBarcode == $nextBarcode) {
 
-                    $totalTravelDays += $received->diffInSeconds($released);
+                        if ($to == auth()->user()->office_id) {
+                            $totalTravelDays += $received->diffInSeconds($released);
 
-                    $nextRow = Carbon::parse($data[$key + 1]['release_at']);
+                            $nextRow = Carbon::parse($data[$key + 1]['release_at']);
 
-                    //witout weekends
-                    $totalDays = $nextRow->diffInDaysFiltered(function (Carbon $date) {
-                        return !$date->isWeekend();
-                    }, $currentRow);
+                            //witout weekends
+                            $totalDays = $nextRow->diffInDaysFiltered(function (Carbon $date) {
+                                return !$date->isWeekend();
+                            }, $currentRow);
 
-                    //withweekends
-                    $totalDaysOnly += $nextRow->diffInDays($currentRow);
+                            //withweekends
+                            $totalDaysOnly += $nextRow->diffInDays($currentRow);
 
-                    //seconds with weekends
-                    $totalSeconds += $nextRow->diffInSeconds($currentRow);
+                            //seconds with weekends
+                            $totalSeconds += $nextRow->diffInSeconds($currentRow);
+                        }
+
+                    } else {
+                        $totalTravelDays += $received->diffInSeconds($released);
+
+                        $totalDays = $totalDays * 86400; //86400 total seconds in a day
+                        $totalDaysOnly = $totalDaysOnly * 86400;
+
+                        $diff = $totalSeconds - $totalDaysOnly; //get the decimals
+
+                        if ($totalDays == 86400) {
+                            $totalSeconds = $diff;
+                        } else {
+                            $totalSeconds = $totalDays + $diff;
+                        }
+
+                        $toText = $this->secondsToTime($totalSeconds);
+                        if ($totalSeconds == 0 && $scope == 1) {
+                            $toText = "<div class='badge badge-sm badge-warning'>Not yet received</div>";
+                        }
+                        $toText2 = $this->secondsToTime($totalTravelDays);
+
+                        array_push($perBarcode, [
+                            "created" => $data[$key]['created'],
+                            "barcode" => $currentBarcode,
+                            "title" => $data[$key]['document_title'],
+                            "officeTime" => $toText,
+                            "travelTime" => $toText2,
+
+                        ]);
+
+                        $totalSeconds = 0;
+                        $totalDays = 0;
+                        $totalDaysOnly = 0;
+                        $totalTravelDays = 0;
+                    }
 
                 } else {
+                    // if ($to == auth()->user()->office_id) {
                     $totalTravelDays += $received->diffInSeconds($released);
 
-                    $totalDays = $totalDays * 86400; //86400 total seconds in a day
+                    $totalDays = $totalDays * 86400;
                     $totalDaysOnly = $totalDaysOnly * 86400;
 
                     $diff = $totalSeconds - $totalDaysOnly; //get the decimals
+                    // }
 
                     if ($totalDays == 86400) {
                         $totalSeconds = $diff;
@@ -552,6 +602,7 @@ class RouteController extends Controller
                     if ($totalSeconds == 0 && $scope == 1) {
                         $toText = "<div class='badge badge-sm badge-warning'>Not yet received</div>";
                     }
+
                     $toText2 = $this->secondsToTime($totalTravelDays);
 
                     array_push($perBarcode, [
@@ -562,46 +613,121 @@ class RouteController extends Controller
                         "travelTime" => $toText2,
 
                     ]);
-
-                    $totalSeconds = 0;
-                    $totalDays = 0;
-                    $totalDaysOnly = 0;
-                    $totalTravelDays = 0;
                 }
 
-            } else {
-                $totalTravelDays += $received->diffInSeconds($released);
+                $countSimilarRows = 0;
 
-                $totalDays = $totalDays * 86400;
-                $totalDaysOnly = $totalDaysOnly * 86400;
-
-                $diff = $totalSeconds - $totalDaysOnly; //get the decimals
-
-                if ($totalDays == 86400) {
-                    $totalSeconds = $diff;
-                } else {
-                    $totalSeconds = $totalDays + $diff;
-                }
-
-                $toText = $this->secondsToTime($totalSeconds);
-                if ($totalSeconds == 0 && $scope == 1) {
-                    $toText = "<div class='badge badge-sm badge-warning'>Not yet received</div>";
-                }
-
-                $toText2 = $this->secondsToTime($totalTravelDays);
-
-                array_push($perBarcode, [
-                    "created" => $data[$key]['created'],
-                    "barcode" => $currentBarcode,
-                    "title" => $data[$key]['document_title'],
-                    "officeTime" => $toText,
-                    "travelTime" => $toText2,
-
-                ]);
             }
+        }
 
-            $countSimilarRows = 0;
+        if ($scope == 1) {
+            foreach ($data as $key => $val) {
+                $currentBarcode = $data[$key]['barcode'];
 
+                $currentRow = Carbon::parse($data[$key]['receive_at']);
+                $received = Carbon::parse($data[$key]['receive_at']);
+                $released = Carbon::parse($data[$key]['release_at']);
+
+                if (isset($data[$key + 1])) { //kung naa pay next record
+
+                    $nextBarcode = $data[$key + 1]['barcode'];
+
+                    if (isset($data[$key - 1])) {
+                        $prevBarcode = $data[$key - 1]['barcode'];
+
+                        if ($currentBarcode == $nextBarcode && $currentBarcode == $prevBarcode) {
+                            $countSimilarRows++;
+                        }
+                    }
+
+                    if ($currentBarcode == $nextBarcode) {
+
+                                $totalTravelDays += $received->diffInSeconds($released);
+
+                                $nextRow = Carbon::parse($data[$key + 1]['release_at']);
+
+                                //witout weekends
+                                $totalDays = $nextRow->diffInDaysFiltered(function (Carbon $date) {
+                                    return !$date->isWeekend();
+                                }, $currentRow);
+
+                                //withweekends
+                                $totalDaysOnly += $nextRow->diffInDays($currentRow);
+
+                                //seconds with weekends
+                                $totalSeconds += $nextRow->diffInSeconds($currentRow);
+
+                    } else {
+                        $totalTravelDays += $received->diffInSeconds($released);
+
+                        $totalDays = $totalDays * 86400; //86400 total seconds in a day
+                        $totalDaysOnly = $totalDaysOnly * 86400;
+
+                        $diff = $totalSeconds - $totalDaysOnly; //get the decimals
+
+                        if ($totalDays == 86400) {
+                            $totalSeconds = $diff;
+                        } else {
+                            $totalSeconds = $totalDays + $diff;
+                        }
+
+                        $toText = $this->secondsToTime($totalSeconds);
+                        if ($totalSeconds == 0 && $scope == 1) {
+                            $toText = "<div class='badge badge-sm badge-warning'>Not yet received</div>";
+                        }
+                        $toText2 = $this->secondsToTime($totalTravelDays);
+
+                        array_push($perBarcode, [
+                            "created" => $data[$key]['created'],
+                            "barcode" => $currentBarcode,
+                            "title" => $data[$key]['document_title'],
+                            "officeTime" => $toText,
+                            "travelTime" => $toText2,
+
+                        ]);
+
+                        $totalSeconds = 0;
+                        $totalDays = 0;
+                        $totalDaysOnly = 0;
+                        $totalTravelDays = 0;
+                    }
+
+                } else {
+                    // if ($to == auth()->user()->office_id) {
+                    $totalTravelDays += $received->diffInSeconds($released);
+
+                    $totalDays = $totalDays * 86400;
+                    $totalDaysOnly = $totalDaysOnly * 86400;
+
+                    $diff = $totalSeconds - $totalDaysOnly; //get the decimals
+                    // }
+
+                    if ($totalDays == 86400) {
+                        $totalSeconds = $diff;
+                    } else {
+                        $totalSeconds = $totalDays + $diff;
+                    }
+
+                    $toText = $this->secondsToTime($totalSeconds);
+                    if ($totalSeconds == 0 && $scope == 1) {
+                        $toText = "<div class='badge badge-sm badge-warning'>Not yet received</div>";
+                    }
+
+                    $toText2 = $this->secondsToTime($totalTravelDays);
+
+                    array_push($perBarcode, [
+                        "created" => $data[$key]['created'],
+                        "barcode" => $currentBarcode,
+                        "title" => $data[$key]['document_title'],
+                        "officeTime" => $toText,
+                        "travelTime" => $toText2,
+
+                    ]);
+                }
+
+                $countSimilarRows = 0;
+
+            }
         }
 
         return $perBarcode;
