@@ -444,6 +444,7 @@ class RouteController extends Controller
 
         $from = $request->range['from'];
         $to = $request->range['to'];
+        $to2 = $to;
         $documentType = $request->documentType;
         $scope = $request->scope;
         $barcode = $request->barcode;
@@ -483,7 +484,7 @@ class RouteController extends Controller
             ->whereYear('routes.created_at', '<=', Carbon::parse($to)->year)
             // ->whereNotNull('receive_at')
             ->select(
-                DB::raw('DATE(documents.created_at) as created'),
+                DB::raw('DATE(routes.created_at) as created'),
                 'barcode',
                 'receive_at',
                 'release_at',
@@ -729,8 +730,22 @@ class RouteController extends Controller
 
             }
         }
+        
 
-        return $perBarcode;
+        $fin = [];
+
+        $startDate = Carbon::createFromFormat('Y-m-d', $from)->subDay();
+        $endDate = Carbon::createFromFormat('Y-m-d', $to2);
+        foreach($perBarcode as $item) {
+
+            if (Carbon::parse($item['created'])->between($startDate, $endDate)) {
+                array_push($fin, $item);
+            }
+        }
+
+        return $fin;
+
+
     }
 
     public function secondsToTime($seconds)
