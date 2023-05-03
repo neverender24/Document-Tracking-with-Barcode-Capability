@@ -39,6 +39,7 @@ class DocumentController extends Controller
     /**
      * get all returned documents of the logged-in user only.
      * dili makita ang uban documents maski kauban clag office
+     * 
      *
      * @param Request $request
      * @return void
