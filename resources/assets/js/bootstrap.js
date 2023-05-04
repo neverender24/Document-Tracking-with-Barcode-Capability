@@ -30,6 +30,18 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //   'X-CSRF-TOKEN': window.Laravel.csrfToken,
 //   'X-Requested-With': 'XMLHttpRequest'
 // };
+
+// window.axios.defaults.headers.common = {
+//     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+//     'X-Requested-With': 'XMLHttpRequest' 
+// };
+
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just
