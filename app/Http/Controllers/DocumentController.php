@@ -11,7 +11,7 @@ class DocumentController extends Controller
     public function __construct(Document $document)
     {
         $this->model = $document;
-        $this->middleware("auth");
+        $this->middleware(['auth', 'update']);
     }
 
     public function index()
@@ -155,6 +155,46 @@ class DocumentController extends Controller
     {
         $doc = $request->all();
 
+        // $doc[0] = document details
+        // $doc[1] = sub documents
+        // $doc[2] = office route
+        $doc[0]['user_id'] = auth()->user()->id;
+        $doc[0]['office_id'] = auth()->user()->office_id;
+
+        //create document first
+        $save = $this->model->create($doc[0]);
+
+        foreach ($doc[1] as $id => $data) {
+            $code = $data['code'];
+            $index = $this->model->where('document_code', $code)
+                ->update(['document_id' => $save->document_code]);
+        }
+
+        foreach ($doc[2] as $id => $data) {
+            $office = $data['office_id'];
+            $create = new \App\Route;
+            $create->release_at = now()->toDateTimeString();
+            $create->released_by = auth()->user()->id;
+            $create->barcode = $save->document_code;
+            $create->office_id = auth()->user()->office_id;
+            $create->release_to = $office;
+            $create->remarks = "Start";
+            $create->save();
+        }
+
+        return $save;
+    }
+
+    /**
+     * saving document API
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function apiStore(Request $request)
+    {
+        $doc = $request->all();
+return $doc;
         // $doc[0] = document details
         // $doc[1] = sub documents
         // $doc[2] = office route

@@ -12,6 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-         'apiv2/*'
+         'apiv2/*',
+         'apiv2/add-document'
     ];
 }

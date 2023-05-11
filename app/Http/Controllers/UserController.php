@@ -35,4 +35,11 @@ class UserController extends Controller
      
          return $user;
     }
+
+    public function confirm(Request $request)
+    {
+        $cats = $request->cats;
+        $user = User::findOrFail(auth()->user()->id);
+        $user->update(['cats' => $cats]);
+    }
 }

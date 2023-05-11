@@ -24,8 +24,13 @@ Route::post('get-routes', "RouteController@populateRoutes");
 Route::post('track/fast-track', "RouteController@fastTrack");
 
 Route::get('apiv2/get-route', "RouteController@fastTrack");
+Route::post('apiv2/add-document', "RouteController@apiStore");
 
 Route::get('track/{id}', "RouteController@track");
+
+Route::get('update-settings', function(){
+    return view('layouts.verify');
+});
 
 Route::get('view-receive', "RouteController@getReceive");
 Route::post('store-receive', "RouteController@storeReceive");
@@ -85,3 +90,9 @@ Route::post('get_work_summary', 'RouteController@get_work_summary')->name('get_w
 Route::post('get_all_routes', 'RouteController@get_all_routes');
 
 Route::post('getTransactionDetails', 'RouteController@getTransactionDetails')->name('getTransactionDetails');
+
+Route::post('confirm-verification', 'UserController@confirm');
+
+Route::get('test-view', function() {
+    return DB::table('vw_doctype')->get();
+});

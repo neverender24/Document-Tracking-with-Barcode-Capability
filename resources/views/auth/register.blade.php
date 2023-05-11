@@ -26,6 +26,20 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="cats" class="col-md-4 col-form-label text-md-right">{{ __('CATS #') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="cats" type="text" class="form-control{{ $errors->has('cats') ? ' is-invalid' : '' }}" name="cats" value="{{ old('cats') }}" required>
+
+                                @if ($errors->has('cats'))
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('cats') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
                             <div class="col-md-6">

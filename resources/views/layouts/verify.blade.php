@@ -11,12 +11,15 @@
                     <path
                         d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z" />
                 </svg>
-                One Time Verification Notice</h3>
+                Document Tracking System Verification Notice</h3>
+                <div class="alert alert-info">
+                    We need you to update some information regarding your account. Please provide the following in order to proceed.
+                </div>
         </div>
         <div class="col-12">
             <div class="form-group">
                 <label>Enter Cats #</label>
-                <input type="text" class="form-control mb-2" id="cats" />
+                <input type="text" class="form-control mb-2 col-2" id="cats" />
                 <button type="button" class="btn btn-primary" id="verify">
                     Check then Verify
                 </button>
@@ -38,11 +41,11 @@
             $('#verify').click(function() {
                 loading()
                 let cats = $('#cats').val();
-                axios.post(`http://192.168.9.101:91/api/PersonnelNames?empl_id=${cats}`).then(response => {
+                axios.get(`http://ems.dvodeoro.ph/employeesData?cats=${cats}`).then(response => {
                     
-                    var fullname = response.data.employee_name
+                    var fullname = response.data.first_name + " " + response.data.last_name
                     
-                    let text = "You are " + response.data.employee_name + "? If YES, press OK then verify. If NO, Press cancel and contact PICTO to verify.";
+                    let text = "You are " + fullname + "? If YES, press OK then verify. If NO, Press cancel and contact PICTO to verify.";
                     if (confirm(text) == true) {
                         let text = "By clicking OK you are confirming that the information that provided is true."
                         if (confirm(text) == true) {
@@ -51,13 +54,13 @@
                                 fullname: fullname
                             }).then(response=> {
                                 location.href = "/"
-                                alert('Account is verified, If you want to change the Name displayed in the printout you can go to Display Options in Settings')
+                                alert('Account is verified and updated.')
                             })
                         } else {
                             alert('Verification cancelled')
                         }
                     } else {
-
+                         alert('Verification cancelled')
                     }
                     unloading()
                 }).catch( error => {

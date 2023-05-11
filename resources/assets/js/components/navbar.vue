@@ -177,7 +177,7 @@ export default {
             axios
                 .post("logout")
                 .then(response => {
-                    window.location.href = "";
+                    window.location.href = "/login";
                 })
                 .catch(error => (this.errors = error.response.data.errors));
         },
