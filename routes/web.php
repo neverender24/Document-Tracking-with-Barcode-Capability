@@ -45,6 +45,12 @@ Route::get('released-documents', "RouteController@releasedDocuments");
 Route::get('received-documents', "RouteController@receivedDocuments");
 Route::get('unacted_documents', "RouteController@unacted_documents")->name('unacted_documents');
 
+//user related
+Route::get('users', "UserController@index");
+Route::post('user', "UserController@setActiveStatus");
+Route::post('user-reset', "UserController@resetPassword");
+
+
 //file
 Route::post('file_document', 'DocumentController@file_document')->name('file_document');
 

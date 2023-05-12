@@ -41,6 +41,8 @@ let Summary = require('./components/reports/Summary.vue');
 let ChangePassword = require('./components/change_password.vue');
 let GenerateBarcodes = require('./components/generate_barcodes.vue');
 let AddNotes = require('./components/add_notes.vue');
+let Users = require('./components/Users.vue');
+let Office = require('./components/Office/Office.vue');
 
 let Updates = require('./components/document/Updates.vue');
 
@@ -60,6 +62,8 @@ const routes = [
   { path: '/generate-barcodes', component: GenerateBarcodes },
   { path: '/summary', component: Summary },
   { path: '/update-settings', component: Updates },
+  { path: '/users', component: Users },
+  { path: '/office', component: Office },
 ]
 
 const router = new VueRouter({ 

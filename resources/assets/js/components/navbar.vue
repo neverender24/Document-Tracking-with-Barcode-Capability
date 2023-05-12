@@ -71,6 +71,8 @@
                             aria-expanded="false"
                         >Settings</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <!-- <router-link to="/offices" class="dropdown-item" v-if="isAdmin">Manage Offices</router-link> -->
+                            <router-link to="/users" class="dropdown-item" v-if="isAdmin">Manage Users</router-link>
                             <a href="register" class="dropdown-item" v-if="isAdmin">Register</a>
                             <router-link to="/change-password" class="dropdown-item">Change Password</router-link>
                             <router-link to="/add-notes" class="dropdown-item" v-if="isAdmin">Add Notes</router-link>
