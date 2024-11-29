@@ -124,7 +124,7 @@ class DocumentController extends Controller
         if ($searchValue) {
             $index->where(function ($query) use ($searchValue) {
                 $query->orWhere('document_code', 'LIKE', '%' . $searchValue . '%')
-                    ->orWhere('document_id', 'LIKE', '%' . $searchValue . '%')
+                    //->orWhere('document_id', 'LIKE', '%' . $searchValue . '%')
                     ->orWhere('document_title', 'LIKE', '%' . $searchValue . '%');
             });
         }
