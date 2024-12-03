@@ -17,4 +17,12 @@ mix.js([
     ], 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css')
      .extract(['jquery', 'bootstrap', 'vue', 'lodash', 'element-ui', 'vue-barcode', 'vue-search-select'])
-     .version();
+     .version()
+     .sourceMaps()
+     .webpackConfig({
+      resolve: {
+          alias: {
+              'vue$': 'vue/dist/vue.esm.js', // Use Vue's runtime + compiler build
+          },
+      },
+  });
