@@ -102,7 +102,8 @@ class DocumentController extends Controller
                 $q->where('office_id', $user)
                     ->orWhereHas('routes', function ($query) use ($user) {
                         $query->where('office_id', $user)
-                            ->orWhere('release_to', $user);
+                            ->orWhere('release_to', $user)
+                            ;
                     });
             });
 
@@ -123,10 +124,16 @@ class DocumentController extends Controller
     {
         if ($searchValue) {
             $index->where(function ($query) use ($searchValue) {
-                $query->orWhere('document_code', 'LIKE', '%' . $searchValue . '%')
+                // $query->where('document_code', 'LIKE', '%' . $searchValue . '%')
+                //     //->orWhere('document_id', 'LIKE', '%' . $searchValue . '%')
+                //     ->orWhere('document_title', 'LIKE', '%' . $searchValue . '%');
+                    
+                    $query->whereRaw("MATCH(document_title, document_code) AGAINST (? IN NATURAL LANGUAGE MODE)", [$searchValue]);
                     //->orWhere('document_id', 'LIKE', '%' . $searchValue . '%')
-                    ->orWhere('document_title', 'LIKE', '%' . $searchValue . '%');
-            });
+                    // ->orWhere('document_title', 'LIKE', '%' . $searchValue . '%');
+            })
+            
+            ;
         }
 
         $index = $index->orderBy('created_at', 'desc')->simplePaginate($length);

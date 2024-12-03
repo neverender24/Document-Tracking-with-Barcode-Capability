@@ -2,10 +2,13 @@
 
 namespace App;
 
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 
 class Document extends Model
 {
+    use Searchable;
+    
     protected $fillable = [
         'document_title', 
         'document_code', 
