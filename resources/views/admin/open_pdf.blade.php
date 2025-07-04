@@ -3,6 +3,7 @@
 <style>
     body {
         background-color: #fff;
+        margin-top: -50px;
     }
 
     .nopadding {

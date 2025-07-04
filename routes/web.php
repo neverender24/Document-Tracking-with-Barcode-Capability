@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\DB;
 Auth::routes();
 
 Route::get('/', 'DocumentController@index');
@@ -102,3 +102,31 @@ Route::post('confirm-verification', 'UserController@confirm');
 Route::get('test-view', function() {
     return DB::table('vw_doctype')->get();
 });
+
+Route::get('/api/received-not-acted', function() {
+
+    $subQuery = DB::table('routes')
+    ->select(DB::raw('MAX(id) as max_id'))
+    ->groupBy('barcode');
+
+    $received_not_acted = \App\Route::joinSub($subQuery, 'latest', function ($join) {
+        $join->on('routes.id', '=', 'latest.max_id');
+    })
+    ->where('routes.office_id', 8)
+    ->whereNull('routes.receive_at')
+    ->count();
+
+    $received_and_released = \App\Route::joinSub($subQuery, 'latest', function ($join) {
+        $join->on('routes.id', '=', 'latest.max_id');
+    })
+    ->where('routes.office_id', 8)
+    ->whereNotNull('routes.receive_at')
+    ->whereNotNull('routes.release_at')
+    ->count();
+
+    return [
+        'received_not_acted' => $received_not_acted,
+        'received_and_released' => $received_and_released,
+    ];
+});
+
